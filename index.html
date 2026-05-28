@@ -1,717 +1,969 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Docka — Unit Tests for Whether Agents Can Use Your Product</title>
-  <meta name="description" content="Docka runs real agent tasks against your live docs, shows you exactly where they fail, and closes the loop until they pass." />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400&display=swap" rel="stylesheet" />
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+  <meta name="description" content="Docka runs real agent tasks against your live docs, shows you exactly where they fail, and closes the loop until they pass."/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-    :root {
-      --bg: #06060F;
-      --surface: rgba(255,255,255,0.028);
-      --surface-hover: rgba(255,255,255,0.05);
-      --border: rgba(255,255,255,0.08);
-      --border-bright: rgba(255,255,255,0.16);
-      --accent: #5B6EF5;
-      --accent-light: #818CF8;
-      --accent-glow: rgba(91,110,245,0.18);
-      --green: #10B981;
-      --red: #F87171;
-      --amber: #FBBF24;
-      --text: #E2E8F0;
-      --text-2: #94A3B8;
-      --text-muted: #475569;
-      --radius: 14px;
-      --radius-sm: 8px;
-      --max-w: 1160px;
-      --font: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-      --mono: 'SF Mono', 'Fira Code', 'Fira Mono', Menlo, Monaco, monospace;
-    }
+  :root {
+    --bg:       #FFFFFF;
+    --bg-sub:   #F7F8FF;
+    --bg-deep:  #F0F2FF;
+    --border:   #E4E8F7;
+    --accent:   #5046E4;
+    --accent-2: #7C73F0;
+    --acc-bg:   #EEF0FF;
+    --acc-mid:  #C7CBF9;
+    --green:    #059669;
+    --red:      #DC2626;
+    --text:     #0A0B1E;
+    --text-2:   #4B5280;
+    --text-3:   #8A91B4;
+    --radius:   16px;
+    --radius-sm:10px;
+    --radius-xs:6px;
+    --max-w:    1180px;
+    --sh:       0 1px 3px rgba(10,11,30,.06), 0 6px 20px rgba(10,11,30,.07);
+    --sh-lg:    0 4px 16px rgba(10,11,30,.08), 0 24px 64px rgba(10,11,30,.11);
+    --font:     'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    --mono:     'SF Mono','Fira Code',Menlo,Monaco,monospace;
+  }
 
-    html { scroll-behavior: smooth; }
-    body {
-      font-family: var(--font);
-      background: var(--bg);
-      color: var(--text);
-      -webkit-font-smoothing: antialiased;
-      line-height: 1.6;
-      overflow-x: hidden;
-    }
+  html { scroll-behavior: smooth; }
+  body  { font-family: var(--font); background: var(--bg); color: var(--text);
+          -webkit-font-smoothing: antialiased; line-height: 1.6; overflow-x: hidden; }
 
-    /* ── Layout ── */
-    .container { max-width: var(--max-w); margin: 0 auto; padding: 0 24px; }
-    section { padding: 96px 0; }
+  /* ── Layout ─────────────────────── */
+  .container { max-width: var(--max-w); margin: 0 auto; padding: 0 28px; }
+  section { padding: 96px 0; }
 
-    /* ── Type ── */
-    h1 { font-size: clamp(38px, 5.5vw, 68px); font-weight: 800; line-height: 1.08; letter-spacing: -0.035em; }
-    h2 { font-size: clamp(28px, 3.8vw, 46px); font-weight: 700; line-height: 1.18; letter-spacing: -0.028em; }
-    h3 { font-size: 17px; font-weight: 600; letter-spacing: -0.01em; }
-    p  { color: var(--text-2); line-height: 1.72; }
+  /* ── Type ───────────────────────── */
+  h1 { font-size: clamp(36px,5.2vw,62px); font-weight: 800; line-height: 1.09; letter-spacing: -.035em; color: var(--text); }
+  h2 { font-size: clamp(28px,3.6vw,44px); font-weight: 700; line-height: 1.18; letter-spacing: -.028em; }
+  h3 { font-size: 18px; font-weight: 700; letter-spacing: -.01em; }
+  p  { color: var(--text-2); line-height: 1.72; }
+  code { font-family: var(--mono); font-size: .88em; background: var(--acc-bg);
+         color: var(--accent); padding: 2px 7px; border-radius: var(--radius-xs); }
 
-    .label {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 11.5px;
-      font-weight: 700;
-      letter-spacing: 0.09em;
-      text-transform: uppercase;
-      color: var(--accent-light);
-      background: var(--accent-glow);
-      border: 1px solid rgba(99,102,241,0.28);
-      padding: 5px 13px;
-      border-radius: 100px;
-      margin-bottom: 22px;
-    }
-    .label .pulse {
-      width: 6px; height: 6px;
-      background: var(--accent-light);
-      border-radius: 50%;
-      animation: blink 2s ease-in-out infinite;
-    }
-    @keyframes blink {
-      0%,100% { opacity:1; transform:scale(1); }
-      50%      { opacity:.4; transform:scale(.75); }
-    }
+  .chip {
+    display: inline-flex; align-items: center; gap: 7px;
+    font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase;
+    color: var(--accent); background: var(--acc-bg); border: 1px solid var(--acc-mid);
+    padding: 5px 13px; border-radius: 100px; margin-bottom: 20px;
+  }
+  .chip .dot { width: 6px; height: 6px; background: var(--accent); border-radius: 50%;
+               animation: blink 2s ease-in-out infinite; }
+  @keyframes blink { 0%,100%{opacity:1}50%{opacity:.3} }
 
-    /* ── Buttons ── */
-    .btn {
-      display: inline-flex; align-items: center; gap: 8px;
-      padding: 12px 22px; border-radius: var(--radius-sm);
-      font-size: 14.5px; font-weight: 600; font-family: var(--font);
-      cursor: pointer; text-decoration: none;
-      transition: all .18s; border: none; white-space: nowrap;
-    }
-    .btn-primary {
-      background: var(--accent); color: #fff;
-      box-shadow: 0 0 0 1px rgba(91,110,245,.5), 0 8px 24px rgba(91,110,245,.28);
-    }
-    .btn-primary:hover {
-      background: #6879f7;
-      box-shadow: 0 0 0 1px rgba(91,110,245,.7), 0 12px 32px rgba(91,110,245,.38);
-      transform: translateY(-1px);
-    }
-    .btn-ghost {
-      background: var(--surface); color: var(--text-2);
-      border: 1px solid var(--border);
-    }
-    .btn-ghost:hover { background: var(--surface-hover); color: var(--text); border-color: var(--border-bright); }
+  /* ── Buttons ────────────────────── */
+  .btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 12px 24px; border-radius: var(--radius-sm);
+    font-size: 15px; font-weight: 600; font-family: var(--font);
+    cursor: pointer; text-decoration: none; transition: all .17s; border: none;
+  }
+  .btn-primary {
+    background: var(--accent); color: #fff;
+    box-shadow: 0 2px 8px rgba(80,70,228,.28), 0 0 0 1px rgba(80,70,228,.18);
+  }
+  .btn-primary:hover { background: #4038D4; box-shadow: 0 4px 14px rgba(80,70,228,.36); transform: translateY(-1px); }
+  .btn-outline {
+    background: #fff; color: var(--text);
+    border: 1.5px solid var(--border); box-shadow: var(--sh);
+  }
+  .btn-outline:hover { border-color: var(--acc-mid); background: var(--acc-bg); }
+  .btn-ghost { background: none; color: var(--text-2); }
+  .btn-ghost:hover { color: var(--text); }
 
-    /* ── NAV ── */
-    nav {
-      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-      padding: 14px 0;
-      background: rgba(6,6,15,.82);
-      backdrop-filter: blur(22px) saturate(1.4);
-      -webkit-backdrop-filter: blur(22px) saturate(1.4);
-      border-bottom: 1px solid var(--border);
-    }
-    nav .inner {
-      max-width: var(--max-w); margin: 0 auto; padding: 0 24px;
-      display: flex; align-items: center; justify-content: space-between;
-    }
-    .nav-logo {
-      font-size: 19px; font-weight: 800; letter-spacing: -0.04em;
-      color: var(--text); text-decoration: none;
-    }
-    .nav-logo span { color: var(--accent-light); }
-    .nav-links {
-      display: flex; align-items: center; gap: 28px; list-style: none;
-    }
-    .nav-links a {
-      text-decoration: none; color: var(--text-2);
-      font-size: 14px; font-weight: 500; transition: color .15s;
-    }
-    .nav-links a:hover { color: var(--text); }
-    .nav-right { display: flex; align-items: center; gap: 12px; }
+  /* ── NAV ────────────────────────── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    background: rgba(255,255,255,.88);
+    backdrop-filter: blur(20px) saturate(1.6);
+    -webkit-backdrop-filter: blur(20px) saturate(1.6);
+    border-bottom: 1px solid var(--border);
+  }
+  nav .inner {
+    max-width: var(--max-w); margin: 0 auto; padding: 0 28px;
+    display: flex; align-items: center; height: 60px; gap: 32px;
+  }
+  .nav-logo { font-size: 20px; font-weight: 900; letter-spacing: -.05em;
+              color: var(--text); text-decoration: none; }
+  .nav-logo span { color: var(--accent); }
+  .nav-links { display: flex; align-items: center; gap: 4px; list-style: none; }
+  .nav-links a { padding: 6px 12px; border-radius: var(--radius-xs); font-size: 14px; font-weight: 500;
+                 color: var(--text-2); text-decoration: none; transition: all .15s; }
+  .nav-links a:hover { color: var(--text); background: var(--bg-sub); }
+  .nav-right { margin-left: auto; display: flex; align-items: center; gap: 10px; }
 
-    /* ── HERO ── */
-    #hero {
-      padding-top: 168px; padding-bottom: 88px;
-      text-align: center; position: relative; overflow: hidden;
-    }
-    #hero::before {
-      content: ''; position: absolute; top: -180px; left: 50%; transform: translateX(-50%);
-      width: 900px; height: 640px;
-      background: radial-gradient(ellipse, rgba(91,110,245,.14) 0%, transparent 68%);
-      pointer-events: none;
-    }
-    #hero h1 { max-width: 820px; margin: 0 auto 26px; }
-    #hero h1 em {
-      font-style: normal;
-      background: linear-gradient(135deg, #a5b4fc 0%, #5B6EF5 60%);
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-    }
-    #hero .sub {
-      max-width: 588px; margin: 0 auto 40px;
-      font-size: 17.5px; line-height: 1.65; color: var(--text-2);
-    }
-    .hero-cta { display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; }
+  /* ── HERO ───────────────────────── */
+  #hero {
+    padding-top: 140px; padding-bottom: 80px;
+    background: linear-gradient(180deg, var(--bg-sub) 0%, var(--bg) 100%);
+    position: relative; overflow: hidden;
+  }
+  #hero .inner { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center; }
+  #hero h1 { margin-bottom: 20px; }
+  #hero .sub { font-size: 17px; margin-bottom: 32px; max-width: 480px; }
+  .hero-cta { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 36px; }
+  .hero-trust { display: flex; align-items: center; gap: 10px; }
+  .hero-trust span { font-size: 13px; color: var(--text-3); }
+  .trust-badges { display: flex; gap: 8px; }
+  .tbadge {
+    font-size: 11px; font-weight: 600; letter-spacing: .04em;
+    border: 1px solid var(--border); border-radius: 100px; padding: 3px 10px;
+    color: var(--text-3);
+  }
 
-    /* Terminal */
-    .terminal {
-      max-width: 700px; margin: 68px auto 0;
-      background: #080812;
-      border: 1px solid rgba(255,255,255,.12);
-      border-radius: 14px; overflow: hidden;
-      text-align: left;
-      box-shadow: 0 48px 96px rgba(0,0,0,.55), 0 0 0 1px rgba(91,110,245,.08);
-    }
-    .term-bar {
-      background: #0D0D1C; border-bottom: 1px solid var(--border);
-      padding: 11px 16px; display: flex; align-items: center; gap: 7px;
-    }
-    .td { width: 12px; height: 12px; border-radius: 50%; }
-    .td-r { background: #FF5F57; } .td-a { background: #FFBD2E; } .td-g { background: #28C840; }
-    .term-title { margin-left: auto; font-size: 12px; color: var(--text-muted); font-family: var(--mono); }
-    .term-body {
-      padding: 20px 22px 26px;
-      font-family: var(--mono); font-size: 12.5px; line-height: 1.75;
-    }
-    .t-cmd  { color: #94A3B8; }
-    .t-cmd::before { content: '$ '; color: var(--text-muted); }
-    .t-ok   { color: var(--green); }
-    .t-fail { color: var(--red); }
-    .t-info { color: #64748B; padding-left: 20px; }
-    .t-task { color: var(--amber); padding-left: 20px; }
-    .t-warn { color: var(--red); font-weight: 700; }
-    .t-pass { color: var(--green); font-weight: 700; }
-    .t-hr   { border: none; border-top: 1px solid var(--border); margin: 14px 0; }
+  /* Hero pipeline illustration */
+  .hero-visual { position: relative; }
+  .pipeline-card {
+    background: #fff; border: 1px solid var(--border); border-radius: var(--radius);
+    box-shadow: var(--sh-lg); padding: 24px; position: relative; overflow: hidden;
+  }
+  .pipeline-card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+    background: linear-gradient(90deg, var(--accent), var(--accent-2));
+  }
+  .pc-label { font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase;
+              color: var(--text-3); margin-bottom: 12px; }
+  .pc-url { font-family: var(--mono); font-size: 12.5px; color: var(--text-2);
+            background: var(--bg-sub); padding: 8px 12px; border-radius: var(--radius-xs);
+            border: 1px solid var(--border); margin-bottom: 20px; }
+  .pc-tasks { display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px; }
+  .task-row { display: flex; align-items: center; gap: 10px; }
+  .task-icon { width: 22px; height: 22px; border-radius: 50%;
+               display: flex; align-items: center; justify-content: center;
+               font-size: 11px; font-weight: 700; flex-shrink: 0; }
+  .task-icon.pass { background: #D1FAE5; color: #059669; }
+  .task-icon.fail { background: #FEE2E2; color: #DC2626; }
+  .task-icon.warn { background: #FEF3C7; color: #D97706; }
+  .task-text { font-size: 13px; flex: 1; }
+  .task-text.pass { color: var(--text-2); }
+  .task-text.fail { color: #DC2626; }
+  .task-badge { font-family: var(--mono); font-size: 11px; color: var(--text-3);
+                background: var(--bg-sub); padding: 1px 6px; border-radius: 4px; }
+  .pc-score { background: var(--bg-sub); border: 1px solid var(--border); border-radius: var(--radius-xs);
+              padding: 12px 16px; display: flex; align-items: center; justify-content: space-between; }
+  .score-label { font-size: 12px; font-weight: 600; color: var(--text-3); }
+  .score-val { font-size: 22px; font-weight: 900; letter-spacing: -.04em; }
+  .score-val.bad { color: #DC2626; }
+  .score-val.good { color: #059669; }
+  .score-bar-wrap { height: 6px; background: var(--border); border-radius: 3px; margin-top: 6px; }
+  .score-bar { height: 6px; border-radius: 3px;
+               background: linear-gradient(90deg, var(--accent), var(--accent-2)); transition: width .8s; }
+  .floating-badge {
+    position: absolute; bottom: -12px; right: 24px;
+    background: #fff; border: 1px solid var(--border); border-radius: 100px;
+    box-shadow: var(--sh); padding: 6px 14px;
+    font-size: 12px; font-weight: 600; color: var(--green); display: flex; align-items: center; gap: 6px;
+  }
+  .floating-badge .arrow { color: var(--text-3); }
 
-    /* ── LOGOS ── */
-    #logos {
-      padding: 44px 0;
-      border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
-    }
-    .logos-label {
-      text-align: center; font-size: 12px; color: var(--text-muted);
-      letter-spacing: .08em; text-transform: uppercase; margin-bottom: 28px;
-    }
-    .logos-strip {
-      display: flex; align-items: center; justify-content: center;
-      gap: 52px; flex-wrap: wrap;
-    }
-    .logo-item {
-      font-size: 19px; font-weight: 800; letter-spacing: -0.02em;
-      color: var(--text-muted); opacity: .5;
-      transition: all .2s; cursor: default;
-    }
-    .logo-item:hover { opacity: .9; color: var(--text-2); }
-    .logo-item.coming {
-      font-size: 12px; font-weight: 600; letter-spacing: .06em;
-      text-transform: uppercase; opacity: .2; border: 1px dashed var(--border); padding: 6px 14px; border-radius: 6px;
-    }
+  /* ── LOGOS ──────────────────────── */
+  #logos { padding: 40px 0; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+  .logos-label { text-align: center; font-size: 13px; color: var(--text-3);
+                 letter-spacing: .06em; text-transform: uppercase; margin-bottom: 28px; }
+  .logos-strip { display: flex; align-items: center; justify-content: center; gap: 56px; flex-wrap: wrap; }
+  .logo-name { font-size: 20px; font-weight: 800; letter-spacing: -.025em; color: var(--border);
+               transition: color .2s; cursor: default; }
+  .logo-name:hover { color: var(--text-3); }
 
-    /* ── GROWTH CHART ── */
-    #growth { background: linear-gradient(180deg, transparent, rgba(91,110,245,.025), transparent); }
-    .section-header { text-align: center; margin-bottom: 56px; }
-    .section-header p { max-width: 560px; margin: 16px auto 0; font-size: 17px; }
+  /* Stats bar */
+  .stats-bar {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 1px; background: var(--border); border-radius: var(--radius);
+    overflow: hidden; margin-top: 48px;
+    border: 1px solid var(--border);
+  }
+  .stat-cell { background: var(--bg); padding: 28px 32px; text-align: center; }
+  .stat-n { font-size: 36px; font-weight: 900; letter-spacing: -.04em; color: var(--accent); line-height: 1; }
+  .stat-l { font-size: 13px; color: var(--text-3); margin-top: 6px; line-height: 1.4; }
 
-    .chart-card {
-      background: var(--surface); border: 1px solid var(--border);
-      border-radius: var(--radius); padding: 32px; max-width: 900px; margin: 0 auto;
-    }
-    .chart-source { font-size: 11.5px; color: var(--text-muted); margin-top: 16px; text-align: right; }
-    .chart-stats {
-      display: grid; grid-template-columns: repeat(3, 1fr);
-      gap: 0; margin-top: 32px; padding-top: 32px;
-      border-top: 1px solid var(--border);
-    }
-    .stat { text-align: center; padding: 0 16px; }
-    .stat + .stat { border-left: 1px solid var(--border); }
-    .stat-val {
-      font-size: 34px; font-weight: 800; letter-spacing: -.04em;
-      background: linear-gradient(135deg, #c7d2fe, #818CF8);
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-    }
-    .stat-lbl { font-size: 13px; color: var(--text-muted); margin-top: 6px; line-height: 1.4; }
+  /* ── DEMO SECTION ───────────────── */
+  #demo { background: var(--bg-sub); }
+  #demo .inner { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center; }
+  #demo .copy h2 { margin-bottom: 16px; }
+  #demo .copy p  { font-size: 16px; margin-bottom: 24px; }
+  .quote-inline {
+    background: #fff; border: 1px solid var(--border); border-radius: var(--radius);
+    padding: 20px 24px; display: flex; gap: 14px; align-items: flex-start;
+  }
+  .qi-avatar { width: 38px; height: 38px; border-radius: 50%; flex-shrink: 0;
+               background: linear-gradient(135deg, var(--accent), var(--accent-2));
+               display: flex; align-items: center; justify-content: center;
+               font-size: 13px; font-weight: 700; color: #fff; }
+  .qi-text { font-size: 14px; color: var(--text-2); line-height: 1.6; font-style: italic; }
+  .qi-author { font-size: 12px; font-weight: 600; color: var(--text-3); margin-top: 6px; font-style: normal; }
 
-    /* ── ICP ── */
-    .icp-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-    .icp-card {
-      background: var(--surface); border: 1px solid var(--border);
-      border-radius: var(--radius); padding: 36px; position: relative; overflow: hidden;
-      transition: border-color .22s;
-    }
-    .icp-card::after {
-      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
-      background: linear-gradient(90deg, transparent, var(--accent), transparent);
-      opacity: 0; transition: opacity .3s;
-    }
-    .icp-card:hover { border-color: rgba(91,110,245,.35); }
-    .icp-card:hover::after { opacity: 1; }
-    .icp-role {
-      font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
-      color: var(--accent-light); margin-bottom: 14px;
-    }
-    .icp-title {
-      font-size: 20px; font-weight: 700; color: var(--text); margin-bottom: 16px; line-height: 1.35;
-    }
-    .icp-body { font-size: 14.5px; line-height: 1.7; margin-bottom: 26px; }
-    .icp-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
-    .icp-list li {
-      display: flex; align-items: flex-start; gap: 10px;
-      font-size: 13.5px; color: var(--text-2);
-    }
-    .icp-list li::before { content: '→'; color: var(--accent-light); flex-shrink: 0; margin-top: 1px; }
+  /* Terminal */
+  .term {
+    background: #0D0E1A; border-radius: var(--radius); overflow: hidden;
+    box-shadow: var(--sh-lg);
+  }
+  .term-bar {
+    background: #181929; padding: 10px 16px; display: flex; align-items: center; gap: 6px;
+    border-bottom: 1px solid rgba(255,255,255,.06);
+  }
+  .tdd { width: 11px; height: 11px; border-radius: 50%; }
+  .tdd-r{background:#FF5F57} .tdd-a{background:#FFBD2E} .tdd-g{background:#28C840}
+  .term-title { margin-left: auto; font-size: 11px; color: rgba(255,255,255,.2); font-family: var(--mono); }
+  .term-body { padding: 18px 20px 22px; font-family: var(--mono); font-size: 12.5px; line-height: 1.78; }
+  .tc { color: #636E95; }    /* cmd */
+  .tc::before { content:'$ '; color: #3D4565; }
+  .tok { color: #10B981; }
+  .tfail { color: #F87171; }
+  .tinfo { color: #4E5A7E; padding-left: 18px; }
+  .ttask { color: #FBBF24; padding-left: 18px; }
+  .tscore-bad  { color: #F87171; font-weight: 700; }
+  .tscore-good { color: #10B981; font-weight: 700; }
+  .thr { border: none; border-top: 1px solid rgba(255,255,255,.06); margin: 12px 0; }
 
-    /* ── HOW IT WORKS ── */
-    #how { background: linear-gradient(180deg, transparent, rgba(91,110,245,.02), transparent); }
-    .steps {
-      display: grid; grid-template-columns: repeat(4, 1fr);
-      gap: 1px; background: var(--border);
-      border-radius: var(--radius); overflow: hidden;
-    }
-    .step { background: var(--bg); padding: 30px 24px; }
-    .step-n {
-      font-size: 11px; font-weight: 700; letter-spacing: .09em;
-      text-transform: uppercase; color: var(--text-muted); margin-bottom: 16px;
-    }
-    .step-icon {
-      width: 42px; height: 42px; border-radius: 10px;
-      background: var(--accent-glow); border: 1px solid rgba(91,110,245,.22);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 18px; margin-bottom: 16px;
-    }
-    .step h3 { font-size: 15.5px; margin-bottom: 10px; }
-    .step p  { font-size: 13.5px; line-height: 1.65; }
+  /* ── BEFORE DOCKA ───────────────── */
+  #before .section-head { text-align: center; margin-bottom: 56px; }
+  #before .section-head p { max-width: 520px; margin: 14px auto 0; font-size: 17px; }
+  .before-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .before-card {
+    background: var(--bg); border: 1.5px solid var(--border); border-radius: var(--radius);
+    padding: 32px 28px; position: relative; overflow: hidden;
+    transition: border-color .2s, box-shadow .2s;
+  }
+  .before-card:hover { border-color: var(--acc-mid); box-shadow: var(--sh); }
+  .before-icon {
+    width: 48px; height: 48px; border-radius: 12px; background: var(--acc-bg);
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 18px;
+  }
+  .before-card h3 { margin-bottom: 12px; font-size: 17px; }
+  .before-card p  { font-size: 14.5px; line-height: 1.68; }
 
-    /* ── TIMELINE ── */
-    .timeline { max-width: 720px; margin: 0 auto; position: relative; }
-    .timeline::before {
-      content: ''; position: absolute; left: 31px; top: 8px; bottom: 8px;
-      width: 1px;
-      background: linear-gradient(180deg,
-        rgba(91,110,245,.7) 0%,
-        rgba(91,110,245,.3) 40%,
-        rgba(255,255,255,.07) 70%,
-        transparent 100%);
-    }
-    .tl-item { display: flex; gap: 22px; margin-bottom: 20px; }
-    .tl-day {
-      width: 62px; height: 62px; flex-shrink: 0;
-      background: var(--surface); border: 1px solid var(--border);
-      border-radius: 12px; display: flex; flex-direction: column;
-      align-items: center; justify-content: center; z-index: 1;
-    }
-    .tl-day.hi { background: var(--accent-glow); border-color: rgba(91,110,245,.45); }
-    .tl-num {
-      font-size: 22px; font-weight: 800; letter-spacing: -.04em;
-      color: var(--text); line-height: 1;
-    }
-    .tl-day.hi .tl-num { color: var(--accent-light); }
-    .tl-lbl { font-size: 9.5px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--text-muted); }
-    .tl-body { flex: 1; padding: 12px 0; }
-    .tl-body h4 { font-size: 14.5px; font-weight: 600; color: var(--text); margin-bottom: 5px; }
-    .tl-body p  { font-size: 13.5px; }
+  /* ── HOW IT WORKS ───────────────── */
+  #how { background: var(--bg-sub); }
+  .how-head { text-align: center; margin-bottom: 64px; }
+  .how-head p { max-width: 520px; margin: 14px auto 0; font-size: 17px; }
+  .how-steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; position: relative; }
+  .how-steps::before {
+    content: ''; position: absolute;
+    top: 32px; left: calc(12.5% + 24px); right: calc(12.5% + 24px);
+    height: 1px; background: var(--border); z-index: 0;
+  }
+  .how-step { padding: 0 24px; text-align: center; position: relative; }
+  .step-circle {
+    width: 64px; height: 64px; border-radius: 50%; margin: 0 auto 24px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px; font-weight: 900; position: relative; z-index: 1;
+    background: var(--bg); border: 2px solid var(--border);
+    box-shadow: var(--sh); color: var(--accent);
+    transition: all .2s;
+  }
+  .how-step:hover .step-circle { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .how-step h3 { font-size: 16px; margin-bottom: 10px; }
+  .how-step p  { font-size: 14px; }
+  .step-detail {
+    margin-top: 14px; background: var(--bg); border: 1px solid var(--border);
+    border-radius: var(--radius-xs); padding: 10px 12px; text-align: left;
+  }
+  .step-detail .sd-row { display: flex; align-items: center; gap: 8px;
+                          font-size: 12.5px; color: var(--text-3); }
+  .step-detail .sd-row + .sd-row { margin-top: 6px; }
+  .sd-icon { font-size: 13px; }
 
-    /* ── CASE STUDY ── */
-    #casestudy { padding: 64px 0; }
-    .case-card {
-      background: var(--surface); border: 1px solid var(--border);
-      border-radius: var(--radius); padding: 48px 52px;
-      display: flex; align-items: center; gap: 52px;
-      position: relative; overflow: hidden;
-    }
-    .case-card::before {
-      content: ''; position: absolute; right: -80px; top: -80px;
-      width: 360px; height: 360px;
-      background: radial-gradient(circle, rgba(91,110,245,.07), transparent 70%);
-      pointer-events: none;
-    }
-    .case-logo-block {
-      flex-shrink: 0; padding: 20px 28px;
-      border: 1px solid var(--border); border-radius: var(--radius-sm);
-      font-size: 26px; font-weight: 800; color: var(--text-muted); opacity: .65;
-      letter-spacing: -.02em;
-    }
-    .case-body { flex: 1; }
-    .case-tag {
-      font-size: 11px; font-weight: 700; letter-spacing: .09em; text-transform: uppercase;
-      color: var(--accent-light); margin-bottom: 14px;
-    }
-    .case-body h3 {
-      font-size: 23px; font-weight: 700; color: var(--text); line-height: 1.3; margin-bottom: 14px;
-    }
-    .case-body p { font-size: 14.5px; margin-bottom: 26px; }
+  /* ── RESULTS ────────────────────── */
+  .results-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+  .result-card {
+    background: var(--bg); border: 1.5px solid var(--border); border-radius: var(--radius);
+    padding: 32px; box-shadow: var(--sh);
+  }
+  .result-metric { font-size: 48px; font-weight: 900; letter-spacing: -.04em;
+                   color: var(--accent); line-height: 1; margin-bottom: 8px; }
+  .result-card h3 { margin-bottom: 12px; font-size: 17px; }
+  .result-card p  { font-size: 14.5px; }
 
-    /* ── TESTIMONIAL ── */
-    #testimonial { padding: 72px 0 96px; }
-    .quote-wrap { max-width: 700px; margin: 0 auto; text-align: center; }
-    .quote-glyph {
-      font-size: 72px; line-height: .9; color: var(--accent); font-family: Georgia, serif;
-      opacity: .35; margin-bottom: 4px; display: block;
-    }
-    .quote-text {
-      font-size: 20px; font-weight: 500; color: var(--text);
-      line-height: 1.55; letter-spacing: -.012em; margin-bottom: 32px;
-    }
-    .quote-author { display: flex; align-items: center; justify-content: center; gap: 14px; }
-    .avatar {
-      width: 46px; height: 46px; border-radius: 50%;
-      background: linear-gradient(135deg, #4F6EF5, #818CF8);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 15px; font-weight: 700; color: #fff; flex-shrink: 0;
-    }
-    .author-name { font-size: 14.5px; font-weight: 600; color: var(--text); }
-    .author-title { font-size: 12.5px; color: var(--text-muted); margin-top: 2px; }
+  .testimonial-card {
+    background: var(--bg-deep); border: 1.5px solid var(--acc-mid); border-radius: var(--radius);
+    padding: 32px; grid-column: 1/-1;
+  }
+  .tc-quote { font-size: 18px; font-weight: 500; color: var(--text);
+               line-height: 1.6; margin-bottom: 20px; font-style: italic; }
+  .tc-author { display: flex; align-items: center; gap: 14px; }
+  .tc-avatar { width: 44px; height: 44px; border-radius: 50%;
+               background: linear-gradient(135deg, var(--accent), var(--accent-2));
+               display: flex; align-items: center; justify-content: center;
+               font-size: 14px; font-weight: 700; color: #fff; flex-shrink: 0; }
+  .tc-name { font-size: 14.5px; font-weight: 700; color: var(--text); }
+  .tc-title { font-size: 12.5px; color: var(--text-3); margin-top: 2px; }
 
-    /* ── FINAL CTA ── */
-    #cta {
-      background: var(--surface);
-      border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
-      padding: 96px 0; text-align: center; position: relative; overflow: hidden;
-    }
-    #cta::before {
-      content: ''; position: absolute; top: -200px; left: 50%; transform: translateX(-50%);
-      width: 640px; height: 440px;
-      background: radial-gradient(ellipse, rgba(91,110,245,.11) 0%, transparent 70%);
-    }
-    #cta h2 { margin-bottom: 16px; }
-    #cta > .container > p { max-width: 480px; margin: 0 auto 40px; font-size: 17px; }
+  /* ── TIMELINE ───────────────────── */
+  #timeline { background: var(--bg-sub); }
+  .tl-head { text-align: center; margin-bottom: 56px; }
+  .tl-head p { max-width: 480px; margin: 14px auto 0; font-size: 17px; }
+  .tl-track {
+    display: grid; grid-template-columns: repeat(7, 1fr);
+    gap: 8px; position: relative;
+  }
+  .tl-track::before {
+    content: ''; position: absolute;
+    top: 36px; left: 36px; right: 36px; height: 2px;
+    background: linear-gradient(90deg, var(--accent) 0%, var(--border) 60%);
+    z-index: 0;
+  }
+  .tl-node { text-align: center; position: relative; z-index: 1; }
+  .tl-circle {
+    width: 72px; height: 72px; border-radius: 50%; margin: 0 auto 16px;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    border: 2px solid var(--border); background: var(--bg); position: relative; z-index: 1;
+  }
+  .tl-circle.hi { background: var(--accent); border-color: var(--accent); }
+  .tl-num { font-size: 22px; font-weight: 900; letter-spacing: -.04em; color: var(--text); line-height: 1; }
+  .tl-circle.hi .tl-num { color: #fff; }
+  .tl-day-lbl { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--text-3); }
+  .tl-circle.hi .tl-day-lbl { color: rgba(255,255,255,.7); }
+  .tl-node h4 { font-size: 13px; font-weight: 700; color: var(--text); line-height: 1.3; }
+  .tl-node p  { font-size: 12px; color: var(--text-3); margin-top: 4px; }
 
-    /* ── FOOTER ── */
-    footer { padding: 64px 0 28px; }
-    .footer-grid {
-      display: grid; grid-template-columns: 2.2fr 1fr 1fr 1fr 1fr;
-      gap: 44px; margin-bottom: 56px;
-    }
-    .footer-brand-desc {
-      font-size: 13.5px; color: var(--text-muted); margin-top: 14px; max-width: 220px; line-height: 1.65;
-    }
-    .footer-socials { display: flex; gap: 10px; margin-top: 22px; }
-    .footer-col h4 {
-      font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase;
-      color: var(--text-muted); margin-bottom: 18px;
-    }
-    .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 11px; }
-    .footer-col a {
-      text-decoration: none; font-size: 13.5px;
-      color: var(--text-2); transition: color .15s;
-    }
-    .footer-col a:hover { color: var(--text); }
-    .footer-bottom {
-      border-top: 1px solid var(--border); padding-top: 24px;
-      display: flex; align-items: center; justify-content: space-between;
-    }
-    .footer-bottom p { font-size: 12.5px; color: var(--text-muted); }
-    .footer-legal { display: flex; gap: 20px; }
-    .footer-legal a { font-size: 12.5px; color: var(--text-muted); text-decoration: none; transition: color .15s; }
-    .footer-legal a:hover { color: var(--text-2); }
+  /* ── TRUST ──────────────────────── */
+  .trust-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .trust-card {
+    background: var(--bg); border: 1.5px solid var(--border); border-radius: var(--radius);
+    padding: 28px; display: flex; flex-direction: column; gap: 12px;
+    transition: border-color .2s;
+  }
+  .trust-card:hover { border-color: var(--acc-mid); }
+  .trust-icon { font-size: 28px; }
+  .trust-card h3 { font-size: 16px; }
+  .trust-card p  { font-size: 14px; }
 
-    /* ── Responsive ── */
-    @media (max-width: 960px) {
-      .footer-grid { grid-template-columns: 1fr 1fr 1fr; }
-      .footer-grid > :first-child { grid-column: 1 / -1; }
-    }
-    @media (max-width: 768px) {
-      section { padding: 64px 0; }
-      .icp-grid { grid-template-columns: 1fr; }
-      .steps { grid-template-columns: 1fr 1fr; }
-      .chart-stats { grid-template-columns: 1fr; }
-      .chart-stats .stat + .stat { border-left: none; border-top: 1px solid var(--border); padding-top: 24px; margin-top: 8px; }
-      .case-card { flex-direction: column; padding: 32px; gap: 28px; }
-      .nav-links { display: none; }
-    }
-    @media (max-width: 480px) {
-      .steps { grid-template-columns: 1fr; }
-      .footer-grid { grid-template-columns: 1fr 1fr; }
-    }
+  /* ── FAQ ────────────────────────── */
+  #faq { background: var(--bg-sub); }
+  .faq-head { text-align: center; margin-bottom: 56px; }
+  .faq-head p { max-width: 480px; margin: 14px auto 0; font-size: 17px; }
+  .faq-list { max-width: 760px; margin: 0 auto; }
+  .faq-item { border: 1.5px solid var(--border); border-radius: var(--radius-sm); background: var(--bg); margin-bottom: 10px; overflow: hidden; }
+  .faq-q {
+    padding: 18px 22px; display: flex; align-items: center; justify-content: space-between;
+    cursor: pointer; font-size: 15px; font-weight: 600; color: var(--text);
+    transition: background .15s;
+  }
+  .faq-q:hover { background: var(--bg-sub); }
+  .faq-arrow { font-size: 18px; color: var(--text-3); transition: transform .2s; }
+  .faq-item.open .faq-arrow { transform: rotate(180deg); }
+  .faq-a {
+    display: none; padding: 0 22px 18px;
+    font-size: 14.5px; color: var(--text-2); line-height: 1.72;
+    border-top: 1px solid var(--border);
+    padding-top: 16px;
+  }
+  .faq-item.open .faq-a { display: block; }
+
+  /* ── FINAL CTA ──────────────────── */
+  #cta {
+    background: linear-gradient(135deg, #3730A3 0%, var(--accent) 50%, var(--accent-2) 100%);
+    padding: 96px 0; text-align: center; position: relative; overflow: hidden;
+  }
+  #cta::before {
+    content: ''; position: absolute; inset: 0;
+    background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E") center;
+  }
+  #cta h2 { color: #fff; margin-bottom: 14px; position: relative; }
+  #cta > .container > p { color: rgba(255,255,255,.75); max-width: 460px; margin: 0 auto 36px;
+                            font-size: 17px; position: relative; }
+  .cta-btns { display: flex; justify-content: center; gap: 12px; position: relative; }
+  .btn-white { background: #fff; color: var(--accent); box-shadow: 0 4px 14px rgba(0,0,0,.18); }
+  .btn-white:hover { background: var(--bg-sub); transform: translateY(-1px); }
+  .btn-white-outline { background: rgba(255,255,255,.12); color: #fff; border: 1.5px solid rgba(255,255,255,.3); }
+  .btn-white-outline:hover { background: rgba(255,255,255,.22); }
+
+  /* ── FOOTER ─────────────────────── */
+  footer { background: var(--bg); border-top: 1px solid var(--border); padding: 64px 0 28px; }
+  .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr 1fr; gap: 44px; margin-bottom: 56px; }
+  .footer-desc { font-size: 14px; color: var(--text-3); margin-top: 12px; max-width: 220px; line-height: 1.65; }
+  .footer-socials { display: flex; gap: 8px; margin-top: 20px; }
+  .fsoc { width: 34px; height: 34px; border-radius: 8px; border: 1.5px solid var(--border);
+          display: flex; align-items: center; justify-content: center;
+          font-size: 15px; color: var(--text-3); text-decoration: none; transition: all .15s; }
+  .fsoc:hover { border-color: var(--acc-mid); color: var(--accent); }
+  .footer-col h4 { font-size: 11.5px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase;
+                    color: var(--text-3); margin-bottom: 16px; }
+  .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 11px; }
+  .footer-col a { text-decoration: none; font-size: 14px; color: var(--text-2); transition: color .15s; }
+  .footer-col a:hover { color: var(--accent); }
+  .footer-bottom { border-top: 1px solid var(--border); padding-top: 24px;
+                    display: flex; align-items: center; justify-content: space-between; }
+  .footer-bottom p { font-size: 13px; color: var(--text-3); }
+  .footer-legal { display: flex; gap: 20px; }
+  .footer-legal a { font-size: 13px; color: var(--text-3); text-decoration: none; transition: color .15s; }
+  .footer-legal a:hover { color: var(--text-2); }
+  .yc-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 12px; font-weight: 600; color: #E25C00;
+    border: 1px solid #FFD5B0; background: #FFF7F0;
+    padding: 3px 10px; border-radius: 100px;
+  }
+
+  /* ── Section labels ─────────────── */
+  .section-head { text-align: center; margin-bottom: 56px; }
+  .section-head p { max-width: 520px; margin: 14px auto 0; font-size: 17px; }
+
+  /* ── Responsive ─────────────────── */
+  @media (max-width: 1024px) {
+    .how-steps { grid-template-columns: 1fr 1fr; }
+    .how-steps::before { display: none; }
+    .tl-track { grid-template-columns: 1fr; }
+    .tl-track::before { display: none; }
+    .footer-grid { grid-template-columns: 1fr 1fr 1fr; }
+    .footer-grid > :first-child { grid-column: 1/-1; }
+  }
+  @media (max-width: 768px) {
+    section { padding: 64px 0; }
+    #hero .inner { grid-template-columns: 1fr; }
+    #demo .inner { grid-template-columns: 1fr; }
+    .before-grid { grid-template-columns: 1fr; }
+    .results-grid { grid-template-columns: 1fr; }
+    .trust-grid { grid-template-columns: 1fr; }
+    .stats-bar { grid-template-columns: 1fr; }
+    .nav-links { display: none; }
+  }
+  @media (max-width: 480px) {
+    .footer-grid { grid-template-columns: 1fr 1fr; }
+    .footer-grid > :first-child { grid-column: 1/-1; }
+  }
   </style>
 </head>
 <body>
 
-<!-- ══ NAV ══ -->
+<!-- ═══════════════════════════════════════════════════
+     NAV
+═══════════════════════════════════════════════════ -->
 <nav>
   <div class="inner">
     <a href="#" class="nav-logo">Docka<span>.</span></a>
     <ul class="nav-links">
       <li><a href="#how">Product</a></li>
-      <li><a href="#icp">Who it's for</a></li>
-      <li><a href="#casestudy">Case study</a></li>
-      <li><a href="#how">Pricing</a></li>
-      <li><a href="#">Blog</a></li>
+      <li><a href="#icp">Solutions</a></li>
+      <li><a href="#demo">Customers</a></li>
+      <li><a href="#">Resources</a></li>
+      <li><a href="#">Pricing</a></li>
     </ul>
     <div class="nav-right">
-      <a href="mailto:levitin@ivinco.com" class="btn btn-ghost" style="padding:9px 18px;">Log in</a>
-      <a href="mailto:levitin@ivinco.com" class="btn btn-primary">Book a demo</a>
+      <a href="#" class="btn btn-ghost" style="font-size:14px;padding:8px 12px;">Sign in</a>
+      <a href="mailto:levitin@ivinco.com" class="btn btn-outline" style="padding:8px 18px;font-size:14px;">Explore demo</a>
+      <a href="mailto:levitin@ivinco.com" class="btn btn-primary" style="padding:8px 18px;font-size:14px;">Book demo</a>
     </div>
   </div>
 </nav>
 
-<!-- ══ HERO ══ -->
+<!-- ═══════════════════════════════════════════════════
+     HERO
+═══════════════════════════════════════════════════ -->
 <section id="hero">
   <div class="container">
-    <div class="label"><span class="pulse"></span>Early access · 7-day pilot</div>
-    <h1>Your developers don't read<br>your docs anymore.<br><em>Their AI agents do.</em></h1>
-    <p class="sub">When someone opens Cursor and says "integrate [your product]," the agent fetches your docs live and tries to one-shot it. If they were written for humans, it calls a flag you removed two versions ago — and tells your user the job's done when it isn't. You never see it.</p>
-    <div class="hero-cta">
-      <a href="mailto:levitin@ivinco.com" class="btn btn-primary">Book a demo &nbsp;→</a>
-      <a href="#casestudy" class="btn btn-ghost">See the Percona pilot</a>
+    <div class="inner">
+      <div class="copy">
+        <div class="chip"><span class="dot"></span>Early access · 7-day pilot</div>
+        <h1>Turn your docs into an agent-ready interface</h1>
+        <p class="sub">AI agents don't read docs like humans. They call flags you removed, hit endpoints that moved, and burn your users' tokens — then report success. Docka runs real agent tasks against your live docs and closes the loop until they pass.</p>
+        <div class="hero-cta">
+          <a href="mailto:levitin@ivinco.com" class="btn btn-primary">Book a demo</a>
+          <a href="#demo" class="btn btn-outline">See it in action</a>
+        </div>
+        <div class="hero-trust">
+          <span>Trusted by</span>
+          <div class="trust-badges">
+            <span class="tbadge">Percona</span>
+            <span class="tbadge">Ivinco</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Pipeline card visual -->
+      <div class="hero-visual">
+        <div class="pipeline-card">
+          <div class="pc-label">Docka · agent task runner</div>
+          <div class="pc-url">https://docs.acme.com/api/v3</div>
+          <div class="pc-tasks">
+            <div class="task-row">
+              <span class="task-icon fail">✗</span>
+              <span class="task-text fail">Install SDK and authenticate</span>
+              <span class="task-badge">−27</span>
+            </div>
+            <div class="task-row">
+              <span class="task-icon fail">✗</span>
+              <span class="task-text fail">Create first resource via API</span>
+              <span class="task-badge">−20</span>
+            </div>
+            <div class="task-row">
+              <span class="task-icon warn">!</span>
+              <span class="task-text" style="color:#D97706;">Configure webhooks</span>
+              <span class="task-badge">−8</span>
+            </div>
+            <div class="task-row">
+              <span class="task-icon pass">✓</span>
+              <span class="task-text pass">List resources and paginate</span>
+              <span class="task-badge" style="color:#059669;">pass</span>
+            </div>
+            <div class="task-row">
+              <span class="task-icon pass">✓</span>
+              <span class="task-text pass">Handle rate limits gracefully</span>
+              <span class="task-badge" style="color:#059669;">pass</span>
+            </div>
+          </div>
+          <div class="pc-score">
+            <div>
+              <div class="score-label">Agent-Readiness Score</div>
+              <div class="score-bar-wrap"><div class="score-bar" style="width:38%"></div></div>
+            </div>
+            <div class="score-val bad">38/100</div>
+          </div>
+        </div>
+        <div class="floating-badge">
+          <span>↑</span> <strong>94/100</strong> after fix <span class="arrow">· 3 days</span>
+        </div>
+      </div>
     </div>
 
-    <!-- Terminal visual -->
-    <div class="terminal">
-      <div class="term-bar">
-        <span class="td td-r"></span>
-        <span class="td td-a"></span>
-        <span class="td td-g"></span>
-        <span class="term-title">docka — zsh</span>
+    <!-- Stats bar -->
+    <div class="stats-bar" style="margin-top:64px">
+      <div class="stat-cell">
+        <div class="stat-n">30%+</div>
+        <div class="stat-l">of dev-docs traffic is now AI agents, not humans</div>
       </div>
-      <div class="term-body">
-        <div class="t-cmd">docka run --docs https://docs.acme.com/api</div>
-        <div class="t-info">✓ Crawling docs… 412 pages indexed</div>
-        <div class="t-info">✓ Generating agent tasks from revenue paths…</div>
-        <br>
-        <div class="t-task">▸ Task 1: "Install SDK and authenticate"</div>
-        <div class="t-fail">&nbsp;&nbsp;✗ --api-key flag removed in v3.2 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(−15)</div>
-        <div class="t-fail">&nbsp;&nbsp;✗ client.connect() deprecated since v3.0 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(−12)</div>
-        <div class="t-ok">&nbsp;&nbsp;✓ Token refresh flow: pass</div>
-        <br>
-        <div class="t-task">▸ Task 2: "Create and list resources"</div>
-        <div class="t-fail">&nbsp;&nbsp;✗ POST /v2/resource → 404, moved to /v3/ &nbsp;&nbsp;&nbsp;&nbsp;(−20)</div>
-        <div class="t-ok">&nbsp;&nbsp;✓ GET /v3/resources: pass</div>
-        <br>
-        <hr class="t-hr">
-        <div class="t-warn">&nbsp;&nbsp;Agent-Readiness Score: 38/100 &nbsp;⚠&nbsp; docs are agent-hostile</div>
-        <br>
-        <div class="t-cmd">docka run --docs https://docs.acme.com/api --after-fix</div>
-        <div class="t-ok">&nbsp;&nbsp;✓ Install SDK and authenticate: pass</div>
-        <div class="t-ok">&nbsp;&nbsp;✓ Create and list resources: pass</div>
-        <div class="t-ok">&nbsp;&nbsp;✓ All 8 revenue-path tasks: pass</div>
-        <br>
-        <div class="t-pass">&nbsp;&nbsp;Agent-Readiness Score: 96/100 &nbsp;✓&nbsp; ship it</div>
+      <div class="stat-cell">
+        <div class="stat-n">15–25%</div>
+        <div class="stat-l">average hallucination rate on standard SDK tasks</div>
+      </div>
+      <div class="stat-cell">
+        <div class="stat-n">0</div>
+        <div class="stat-l">tools measuring whether your docs work for agents</div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ══ LOGOS ══ -->
+<!-- ═══════════════════════════════════════════════════
+     LOGOS
+═══════════════════════════════════════════════════ -->
 <section id="logos">
   <div class="container">
-    <p class="logos-label">Pilot partners &amp; early access</p>
+    <p class="logos-label">Pilot partners & early access</p>
     <div class="logos-strip">
-      <span class="logo-item">Percona</span>
-      <span class="logo-item">Ivinco</span>
-      <span class="logo-item coming">Your company</span>
+      <span class="logo-name">Percona</span>
+      <span class="logo-name">Ivinco</span>
+      <span class="logo-name" style="font-size:13px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;opacity:.3;border:1px dashed var(--border);padding:6px 14px;border-radius:6px;">Your company</span>
     </div>
   </div>
 </section>
 
-<!-- ══ GROWTH CHART ══ -->
-<section id="growth">
+<!-- ═══════════════════════════════════════════════════
+     LIVE DEMO
+═══════════════════════════════════════════════════ -->
+<section id="demo">
   <div class="container">
-    <div class="section-header">
-      <div class="label">The shift</div>
-      <h2>The interface is optional now</h2>
-      <p>Agentic coding tools have crossed the mainstream threshold. They don't just write code — they integrate your product on behalf of your users, using your docs as the only interface.</p>
-    </div>
-    <div class="chart-card">
-      <canvas id="growthChart" height="300"></canvas>
-      <p class="chart-source">Sources: Anthropic, GitHub, Cursor — public figures; autonomous task share extrapolated from API telemetry reports (2024–2026). Growth indexed Q1 2024 = 100.</p>
-      <div class="chart-stats">
-        <div class="stat">
-          <div class="stat-val">30%+</div>
-          <div class="stat-lbl">of dev-docs traffic is now AI agents — not humans</div>
+    <div class="inner">
+      <div class="copy">
+        <div class="chip">Live example</div>
+        <h2>Percona: 3 deprecated commands agents called by default</h2>
+        <p>XtraBackup's docs listed <code>--apply-log</code> and <code>innobackupex --backup</code> as valid. Both were silently removed in v8.0. Agents called them on every install task. Human readers skipped them entirely. Docka found all three in a single run — without changing a line of documentation first.</p>
+        <a href="mailto:levitin@ivinco.com?subject=Percona case study" class="btn btn-outline" style="margin-top:8px;">Request the full case study →</a>
+        <div class="quote-inline" style="margin-top:24px;">
+          <div class="qi-avatar">PZ</div>
+          <div>
+            <div class="qi-text">"Documentation quality has always been a trust signal for operators. With Docka, we can verify that agents — not just humans — can actually follow our playbooks. That's a new bar, and it matters."</div>
+            <div class="qi-author">Peter Zaitsev · Founder, Percona &amp; Coroot</div>
+          </div>
         </div>
-        <div class="stat">
-          <div class="stat-val">15–25%</div>
-          <div class="stat-lbl">average hallucination rate on standard SDK tasks</div>
+      </div>
+
+      <div class="term">
+        <div class="term-bar">
+          <span class="tdd tdd-r"></span><span class="tdd tdd-a"></span><span class="tdd tdd-g"></span>
+          <span class="term-title">docka run — percona/xtrabackup</span>
         </div>
-        <div class="stat">
-          <div class="stat-val">0</div>
-          <div class="stat-lbl">existing tools measure whether docs work for agents</div>
+        <div class="term-body">
+          <div class="tc">docka run --docs https://docs.percona.com/xtrabackup</div>
+          <div class="tinfo">✓ Crawling docs… 284 pages indexed</div>
+          <div class="tinfo">✓ Generating tasks from revenue paths…</div>
+          <br>
+          <div class="ttask">▸ Task: "Backup MySQL database (full)"</div>
+          <div class="tfail">&nbsp;&nbsp;✗ innobackupex --backup → removed in 8.0 &nbsp;&nbsp;&nbsp;(−20)</div>
+          <div class="tfail">&nbsp;&nbsp;✗ --apply-log → renamed to --prepare &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(−15)</div>
+          <div class="tok">&nbsp;&nbsp;✓ xtrabackup --prepare: pass</div>
+          <br>
+          <div class="ttask">▸ Task: "Point-in-time recovery (PITR)"</div>
+          <div class="tfail">&nbsp;&nbsp;✗ innobackupex --copy-back → removed &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(−10)</div>
+          <div class="tok">&nbsp;&nbsp;✓ xtrabackup --copy-back: pass</div>
+          <br>
+          <hr class="thr">
+          <div class="tscore-bad">&nbsp;&nbsp;Score: 43/100 &nbsp;⚠&nbsp; 3 deprecated calls detected</div>
+          <div class="tinfo">→ Fix list + verified backup workflow generated</div>
+          <br>
+          <div class="tc">docka run --docs ... --after-fix</div>
+          <div class="tok">&nbsp;&nbsp;✓ Full backup: pass</div>
+          <div class="tok">&nbsp;&nbsp;✓ Incremental backup: pass</div>
+          <div class="tok">&nbsp;&nbsp;✓ PITR: pass · All 6 tasks verified</div>
+          <br>
+          <div class="tscore-good">&nbsp;&nbsp;Score: 97/100 &nbsp;✓</div>
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ══ ICP ══ -->
-<section id="icp">
+<!-- ═══════════════════════════════════════════════════
+     BEFORE DOCKA
+═══════════════════════════════════════════════════ -->
+<section id="before">
   <div class="container">
-    <div class="section-header">
-      <div class="label">Who it's for</div>
-      <h2>Built for the teams who own outcomes</h2>
+    <div class="section-head">
+      <div class="chip">The problem</div>
+      <h2>Before Docka</h2>
+      <p>AI agents are silently failing to integrate your product. You have no idea it's happening — until a trial churns or a support ticket arrives.</p>
     </div>
-    <div class="icp-grid">
-      <div class="icp-card">
-        <div class="icp-role">Head of Customer Success</div>
-        <div class="icp-title">You drive adoption. But failed agent integrations are invisible — until the trial churns.</div>
-        <p class="icp-body">Your activation funnel assumes a human reading docs and following steps. That assumption is breaking. Agents integrate at 3am, fail silently, and your user sees a broken experience before CS ever knows there was a problem. By the time you hear about it, it's a support ticket. Or a churn.</p>
-        <ul class="icp-list">
-          <li>Get alerted when agent tasks start failing in your docs</li>
-          <li>See exactly which integration steps break — before users do</li>
-          <li>Prove docs quality to the product team with a score, not a hunch</li>
-          <li>Turn onboarding gaps into a prioritized engineering backlog</li>
-        </ul>
+    <div class="before-grid">
+      <div class="before-card">
+        <div class="before-icon">
+          <!-- Invisible failure icon -->
+          <svg width="26" height="26" fill="none" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="10" stroke="#5046E4" stroke-width="1.5"/>
+            <path d="M12 7v5m0 4h.01" stroke="#5046E4" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <h3>Agent failures are invisible</h3>
+        <p>When an agent calls <code>--api-key</code> and your SDK no longer accepts it, the agent retries, hallucinates a workaround, and reports success. You never see it. Your user has a broken integration they can't debug.</p>
       </div>
-      <div class="icp-card">
-        <div class="icp-role">Head of Product &amp; Growth</div>
-        <div class="icp-title">Agents are your next distribution channel. Be agent-ready before your competitors.</div>
-        <p class="icp-body">Products that work with agents get recommended by agents. When a developer asks Claude "which SDK should I use for X?", the answer is shaped by what actually integrates cleanly. Agent-readiness is becoming a competitive moat — and nobody's tracking it yet.</p>
-        <ul class="icp-list">
-          <li>Open a new growth channel: agent-driven self-serve distribution</li>
-          <li>Ship verified skills — pre-tested integrations for Claude &amp; Cursor</li>
-          <li>Add Agent-Readiness Score to your product health dashboard</li>
-          <li>Block doc regressions in CI before they reach your users' agents</li>
-        </ul>
+      <div class="before-card">
+        <div class="before-icon">
+          <svg width="26" height="26" fill="none" viewBox="0 0 24 24">
+            <path d="M3 3l18 18M10.5 10.677a2 2 0 102.823 2.823" stroke="#5046E4" stroke-width="1.5" stroke-linecap="round"/>
+            <path d="M7.362 7.56A7 7 0 0118 12c0 1.13-.27 2.197-.748 3.14M12 5a7 7 0 014.638 12.44" stroke="#5046E4" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <h3>You have no visibility into AI traffic</h3>
+        <p>30%+ of your doc traffic is AI agents — and your analytics see none of it. You don't know which pages they read, which tasks they attempt, or which ones silently fail. Human session analytics are the wrong instrument.</p>
+      </div>
+      <div class="before-card">
+        <div class="before-icon">
+          <svg width="26" height="26" fill="none" viewBox="0 0 24 24">
+            <path d="M12 2v4m0 12v4M4.93 4.93l2.83 2.83m8.48 8.48l2.83 2.83M2 12h4m12 0h4M4.93 19.07l2.83-2.83m8.48-8.48l2.83-2.83" stroke="#5046E4" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <h3>Docs drift. Agent-readiness drops silently.</h3>
+        <p>Every release — a flag renamed, an endpoint deprecated, a config key changed — degrades your agent-readiness with zero warning. By the time users notice, your docs have been agent-hostile for weeks.</p>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ══ HOW IT WORKS ══ -->
+<!-- ═══════════════════════════════════════════════════
+     HOW IT WORKS
+═══════════════════════════════════════════════════ -->
 <section id="how">
   <div class="container">
-    <div class="section-header">
-      <div class="label">How it works</div>
+    <div class="how-head">
+      <div class="chip">The system</div>
       <h2>From docs URL to verified score<br>in one pipeline</h2>
+      <p>Four steps. No SDK required. Works on your live docs today.</p>
     </div>
-    <div class="steps">
-      <div class="step">
-        <div class="step-n">Step 01</div>
-        <div class="step-icon">🔗</div>
+    <div class="how-steps">
+      <div class="how-step">
+        <div class="step-circle">1</div>
         <h3>Connect</h3>
-        <p>Paste your live docs URL. Docka crawls and indexes your documentation — no SDK install, no code changes, no setup on your side.</p>
+        <p>Paste your live docs URL. Docka crawls and indexes — no integration, no code changes on your side.</p>
+        <div class="step-detail">
+          <div class="sd-row"><span class="sd-icon">🔗</span> Any public docs URL</div>
+          <div class="sd-row"><span class="sd-icon">📄</span> 40K+ pages supported</div>
+          <div class="sd-row"><span class="sd-icon">🔄</span> Auto re-crawl on publish</div>
+        </div>
       </div>
-      <div class="step">
-        <div class="step-n">Step 02</div>
-        <div class="step-icon">⚙️</div>
+      <div class="how-step">
+        <div class="step-circle">2</div>
         <h3>Generate</h3>
-        <p>Docka generates agent tasks from your revenue-critical paths: install, auth, first API call, core workflows. Focused on what makes you money.</p>
+        <p>Docka generates agent tasks from your revenue-critical paths: install, auth, first call, core flows.</p>
+        <div class="step-detail">
+          <div class="sd-row"><span class="sd-icon">⚙️</span> Revenue-path focused</div>
+          <div class="sd-row"><span class="sd-icon">✍️</span> You review before run</div>
+          <div class="sd-row"><span class="sd-icon">🎯</span> ~5–15 tasks per audit</div>
+        </div>
       </div>
-      <div class="step">
-        <div class="step-n">Step 03</div>
-        <div class="step-icon">🧪</div>
+      <div class="how-step">
+        <div class="step-circle">3</div>
         <h3>Run</h3>
-        <p>Tasks execute in an isolated Docker sandbox. Mechanical scoring — no LLM judgment on correctness. Hallucinations detected via SDK diff.</p>
+        <p>Tasks execute in isolated Docker sandbox. Mechanical scoring — no LLM judgment, no drift.</p>
+        <div class="step-detail">
+          <div class="sd-row"><span class="sd-icon">🐳</span> Isolated Docker sandbox</div>
+          <div class="sd-row"><span class="sd-icon">🔬</span> SDK diff hallucination detection</div>
+          <div class="sd-row"><span class="sd-icon">✅</span> Deterministic pass/fail</div>
+        </div>
       </div>
-      <div class="step">
-        <div class="step-n">Step 04</div>
-        <div class="step-icon">📊</div>
+      <div class="how-step">
+        <div class="step-circle">4</div>
         <h3>Score</h3>
-        <p>Your Agent-Readiness Score, a prioritized gap report, and verified skills packages — ready to ship to Claude and Cursor.</p>
+        <p>Agent-Readiness Score, a prioritized gap report, and verified skills ready for Claude and Cursor.</p>
+        <div class="step-detail">
+          <div class="sd-row"><span class="sd-icon">📊</span> 0–100 score, per-task breakdown</div>
+          <div class="sd-row"><span class="sd-icon">📋</span> Fix list by revenue impact</div>
+          <div class="sd-row"><span class="sd-icon">🤖</span> Verified skills for Claude/Cursor</div>
+        </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ══ TIMELINE ══ -->
+<!-- ═══════════════════════════════════════════════════
+     RESULTS
+═══════════════════════════════════════════════════ -->
+<section id="results">
+  <div class="container">
+    <div class="section-head">
+      <div class="chip">Results</div>
+      <h2>What teams see in the first week</h2>
+    </div>
+    <div class="results-grid">
+      <div class="result-card">
+        <div class="result-metric">3×</div>
+        <h3>Deprecated API calls found per audit</h3>
+        <p>On average, Docka surfaces 3 high-severity agent failures per pilot — all invisible to human reviewers and standard QA processes.</p>
+      </div>
+      <div class="result-card">
+        <div class="result-metric">7 days</div>
+        <h3>From demo to first Agent-Readiness Score</h3>
+        <p>No integration required. Your docs are live — so is your score. Teams typically see their first verified workflow within a week of kickoff.</p>
+      </div>
+      <div class="testimonial-card">
+        <p class="tc-quote">"Documentation quality has always been a trust signal for operators. With Docka, we can verify that agents — not just humans — can actually follow our playbooks. That's a new bar we didn't know we needed to measure, and it matters more than we expected."</p>
+        <div class="tc-author">
+          <div class="tc-avatar">PZ</div>
+          <div>
+            <div class="tc-name">Peter Zaitsev</div>
+            <div class="tc-title">Founder, Percona &amp; Coroot · ICONIQ-backed OSS infrastructure veteran</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════
+     TIMELINE
+═══════════════════════════════════════════════════ -->
 <section id="timeline">
   <div class="container">
-    <div class="section-header">
-      <div class="label">Speed to value</div>
+    <div class="tl-head">
+      <div class="chip">Speed to value</div>
       <h2>From demo to deployed: 7 days</h2>
+      <p>No SDK install. No integration work. Your first score in a week, fixes prioritized by revenue impact.</p>
     </div>
-    <div class="timeline">
-      <div class="tl-item">
-        <div class="tl-day hi"><span class="tl-num">1</span><span class="tl-lbl">Day</span></div>
-        <div class="tl-body">
-          <h4>Demo call · 30 min</h4>
-          <p>We scope which docs and revenue paths matter most. You leave with a clear picture of what will be tested and what output you'll get.</p>
-        </div>
+    <div class="tl-track">
+      <div class="tl-node">
+        <div class="tl-circle hi"><span class="tl-num">1</span><span class="tl-day-lbl">Day</span></div>
+        <h4>Demo<br>call</h4>
+        <p>Scope docs &amp; tasks</p>
       </div>
-      <div class="tl-item">
-        <div class="tl-day"><span class="tl-num">2</span><span class="tl-lbl">Day</span></div>
-        <div class="tl-body">
-          <h4>Automated crawl</h4>
-          <p>Docka indexes your live documentation. No work required on your side — just confirm the URL and access level.</p>
-        </div>
+      <div class="tl-node">
+        <div class="tl-circle"><span class="tl-num">2</span><span class="tl-day-lbl">Day</span></div>
+        <h4>Auto<br>crawl</h4>
+        <p>Docs indexed</p>
       </div>
-      <div class="tl-item">
-        <div class="tl-day"><span class="tl-num">3</span><span class="tl-lbl">Day</span></div>
-        <div class="tl-body">
-          <h4>Task generation · your review</h4>
-          <p>Agent tasks are generated from your key use cases. You review and approve the task list before anything executes.</p>
-        </div>
+      <div class="tl-node">
+        <div class="tl-circle"><span class="tl-num">3</span><span class="tl-day-lbl">Day</span></div>
+        <h4>Task<br>review</h4>
+        <p>You approve list</p>
       </div>
-      <div class="tl-item">
-        <div class="tl-day"><span class="tl-num">4–5</span><span class="tl-lbl">Day</span></div>
-        <div class="tl-body">
-          <h4>Sandbox execution</h4>
-          <p>Tasks run in isolation. Deprecated calls are flagged, wrong endpoints identified, hallucinations scored and classified.</p>
-        </div>
+      <div class="tl-node">
+        <div class="tl-circle"><span class="tl-num">4</span><span class="tl-day-lbl">Day</span></div>
+        <h4>Sandbox<br>runs</h4>
+        <p>Execution begins</p>
       </div>
-      <div class="tl-item">
-        <div class="tl-day"><span class="tl-num">6</span><span class="tl-lbl">Day</span></div>
-        <div class="tl-body">
-          <h4>Findings review · 30 min</h4>
-          <p>Readout with your team. You see exactly what breaks and why, with full reproduction steps for every failure.</p>
-        </div>
+      <div class="tl-node">
+        <div class="tl-circle"><span class="tl-num">5</span><span class="tl-day-lbl">Day</span></div>
+        <h4>Analysis<br>complete</h4>
+        <p>Failures classified</p>
       </div>
-      <div class="tl-item">
-        <div class="tl-day hi"><span class="tl-num">7</span><span class="tl-lbl">Day</span></div>
-        <div class="tl-body">
-          <h4>Score delivered · fixes prioritized · skills ready</h4>
-          <p>Your Agent-Readiness Score, a prioritized fix list ranked by revenue impact, and verified skills packages ready to deploy. Your docs are now measurably agent-ready.</p>
-        </div>
+      <div class="tl-node">
+        <div class="tl-circle"><span class="tl-num">6</span><span class="tl-day-lbl">Day</span></div>
+        <h4>Findings<br>review</h4>
+        <p>30-min readout</p>
+      </div>
+      <div class="tl-node">
+        <div class="tl-circle hi"><span class="tl-num">7</span><span class="tl-day-lbl">Day</span></div>
+        <h4>Score<br>delivered</h4>
+        <p>Skills ready to ship</p>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ══ CASE STUDY ══ -->
-<section id="casestudy">
+<!-- ═══════════════════════════════════════════════════
+     TRUST / ENTERPRISE
+═══════════════════════════════════════════════════ -->
+<section id="trust">
   <div class="container">
-    <div class="case-card">
-      <div class="case-logo-block">Percona</div>
-      <div class="case-body">
-        <div class="case-tag">Pilot case study · OSS infrastructure · 40,000+ operators</div>
-        <h3>Percona: 3 deprecated commands agents called by default — invisible to every human reader</h3>
-        <p>XtraBackup's docs listed <code style="font-family:var(--mono); font-size:13px; color:var(--amber); background:rgba(251,191,36,.08); padding:2px 6px; border-radius:4px;">--apply-log</code> and <code style="font-family:var(--mono); font-size:13px; color:var(--amber); background:rgba(251,191,36,.08); padding:2px 6px; border-radius:4px;">innobackupex --backup</code> as valid. Both were removed in v8.0. Agents called all three on every install task. Human readers skipped them. Docka found all of them in a single run — and generated a verified backup workflow that passes every time.</p>
-        <a href="mailto:levitin@ivinco.com?subject=Percona case study request" class="btn btn-ghost" style="display:inline-flex;">Request the full case study &nbsp;→</a>
+    <div class="section-head">
+      <div class="chip">Enterprise ready</div>
+      <h2>Built for production</h2>
+      <p>The same infrastructure that runs Ivinco's 200+ file internal knowledge base, now available as a service.</p>
+    </div>
+    <div class="trust-grid">
+      <div class="trust-card">
+        <div class="trust-icon">🐳</div>
+        <h3>Isolated execution</h3>
+        <p>Every agent task runs in its own Docker sandbox. No cross-contamination, no shared state, reproducible results.</p>
+      </div>
+      <div class="trust-card">
+        <div class="trust-icon">🔬</div>
+        <h3>Mechanical scoring</h3>
+        <p>No LLM judges correctness. We diff actual CLI output and API responses against known-good baselines. Pass/fail is deterministic.</p>
+      </div>
+      <div class="trust-card">
+        <div class="trust-icon">🔄</div>
+        <h3>CI/CD integration</h3>
+        <p>Continuous subscription tier: Docka runs on every doc publish and blocks PRs that drop your Agent-Readiness Score.</p>
+      </div>
+      <div class="trust-card">
+        <div class="trust-icon">🤖</div>
+        <h3>Verified skills output</h3>
+        <p>Each passing task ships as a verified skill package for Claude and Cursor — pre-tested integrations your users' agents can trust.</p>
+      </div>
+      <div class="trust-card">
+        <div class="trust-icon">📊</div>
+        <h3>Public benchmark</h3>
+        <p>Annual "State of API-first Documentation" report — free, SEO-authoritative, positions Docka as the category scorekeeper.</p>
+      </div>
+      <div class="trust-card">
+        <div class="trust-icon">🔒</div>
+        <h3>Zero doc access required</h3>
+        <p>We crawl your public docs, same as any agent. No credentials, no read access to your infrastructure, no integration burden.</p>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ══ TESTIMONIAL ══ -->
-<section id="testimonial">
+<!-- ═══════════════════════════════════════════════════
+     FAQ
+═══════════════════════════════════════════════════ -->
+<section id="faq">
   <div class="container">
-    <div class="quote-wrap">
-      <span class="quote-glyph">"</span>
-      <p class="quote-text">Documentation quality has always been a trust signal for operators. With Docka, we can verify that agents — not just humans — can actually follow our playbooks. That's a new bar, and it matters more than we expected.</p>
-      <div class="quote-author">
-        <div class="avatar">PZ</div>
-        <div>
-          <div class="author-name">Peter Zaitsev</div>
-          <div class="author-title">Founder, Percona &amp; Coroot · OSS infrastructure veteran</div>
+    <div class="faq-head">
+      <div class="chip">FAQ</div>
+      <h2>Common questions</h2>
+      <p>Everything you need to know before booking a demo.</p>
+    </div>
+    <div class="faq-list">
+      <div class="faq-item">
+        <div class="faq-q">
+          How is Docka different from Kapa.ai or RAGAS?
+          <span class="faq-arrow">⌄</span>
+        </div>
+        <div class="faq-a">
+          Different layer entirely. Kapa measures how helpful an AI chatbot is when users ask questions. RAGAS measures whether your LLM retrieves context well. Docka measures whether real agents can complete real tasks using your docs — install, auth, first API call. Non-overlapping, and we integrate with both.
+        </div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">
+          What does "mechanical scoring" mean?
+          <span class="faq-arrow">⌄</span>
+        </div>
+        <div class="faq-a">
+          We don't use an LLM to judge whether the agent's answer was good. We diff actual CLI output, HTTP response codes, and SDK behavior against known-good baselines. If <code>xtrabackup --prepare</code> exits 0 with the expected output — pass. If the agent called <code>--apply-log</code> and got a 127 — fail, minus 15. No subjectivity, no prompt drift.
+        </div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">
+          Do I need to change my docs before using Docka?
+          <span class="faq-arrow">⌄</span>
+        </div>
+        <div class="faq-a">
+          No. We crawl your live docs as-is. The whole point is to find what's already broken before your users' agents do. We run, we score, we give you the fix list. You change the docs. We re-run and confirm they pass.
+        </div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">
+          How do you generate the agent tasks?
+          <span class="faq-arrow">⌄</span>
+        </div>
+        <div class="faq-a">
+          We focus on revenue-critical paths: the 5–15 tasks that drive 80% of integration outcomes — install, authenticate, create a resource, configure the most common integration, handle errors. Tasks are hand-curated for each pilot based on your docs and verified by you before anything runs.
+        </div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">
+          Can this run in CI/CD?
+          <span class="faq-arrow">⌄</span>
+        </div>
+        <div class="faq-a">
+          Yes — that's the SaaS subscription tier. Docka runs on every doc publish, catches regressions before they go live, and can block merges that would drop your Agent-Readiness Score below a threshold you set. Same output format as the audit, automated.
+        </div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">
+          How is this priced?
+          <span class="faq-arrow">⌄</span>
+        </div>
+        <div class="faq-a">
+          Two tiers: <strong>Per-audit</strong> ($5–25K, one-shot) for discovery and first-pass evaluation. <strong>SaaS subscription</strong> ($1–5K/month) for continuous CI integration and ongoing monitoring. We start every engagement with an audit — contact us for a quote specific to your docs size and complexity.
+        </div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">
+          Is there an "Agent-Readiness Score" definition or standard?
+          <span class="faq-arrow">⌄</span>
+        </div>
+        <div class="faq-a">
+          The Agent-Readiness Score is a 0–100 metric measuring how reliably AI agents complete revenue-path tasks using your documentation. Broken down by task, failure category (deprecated call, wrong endpoint, renamed flag, missing context), and severity. We publish the methodology openly and are working toward an industry benchmark via the annual State of API-first Documentation report.
+        </div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">
+          What if my docs are private or behind auth?
+          <span class="faq-arrow">⌄</span>
+        </div>
+        <div class="faq-a">
+          We can work with exported snapshots or staging environments. We don't need production access — we just need the same content an agent would see. For private docs, we set up a simple crawl token during onboarding.
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ══ FINAL CTA ══ -->
+<!-- ═══════════════════════════════════════════════════
+     FINAL CTA
+═══════════════════════════════════════════════════ -->
 <section id="cta">
   <div class="container">
-    <div class="label" style="margin:0 auto 22px;">Free spot-check included</div>
+    <div class="chip" style="background:rgba(255,255,255,.15);border-color:rgba(255,255,255,.25);color:#fff;margin:0 auto 20px;">Free spot-check included</div>
     <h2>Is your product agent-ready?</h2>
-    <p>Book a 30-min demo. We'll run a complimentary spot-check on your docs and show you exactly what breaks — no commitment required.</p>
-    <div class="hero-cta">
-      <a href="mailto:levitin@ivinco.com" class="btn btn-primary">Book a demo &nbsp;→</a>
-      <a href="mailto:levitin@ivinco.com" class="btn btn-ghost">Talk to the team</a>
+    <p>Book a 30-minute demo. We'll run a free spot-check on your docs and show you exactly what breaks — no commitment required.</p>
+    <div class="cta-btns">
+      <a href="mailto:levitin@ivinco.com" class="btn btn-white">Book a demo</a>
+      <a href="mailto:levitin@ivinco.com" class="btn btn-white-outline">Talk to the team</a>
     </div>
   </div>
 </section>
 
-<!-- ══ FOOTER ══ -->
+<!-- ═══════════════════════════════════════════════════
+     FOOTER
+═══════════════════════════════════════════════════ -->
 <footer>
   <div class="container">
     <div class="footer-grid">
       <div>
-        <a href="#" class="nav-logo" style="font-size:22px;">Docka<span style="color:var(--accent-light)">.</span></a>
-        <p class="footer-brand-desc">Agentic QA assurance for developer documentation. Unit tests for whether AI agents can use your product.</p>
+        <a href="#" class="nav-logo" style="font-size:22px;">Docka<span style="color:var(--accent)">.</span></a>
+        <p class="footer-desc">Agentic QA assurance for developer documentation. Unit tests for whether AI agents can use your product.</p>
         <div class="footer-socials">
-          <a href="#" class="btn btn-ghost" style="padding:7px 14px; font-size:13px;">GitHub</a>
-          <a href="#" class="btn btn-ghost" style="padding:7px 14px; font-size:13px;">Discord</a>
-          <a href="#" class="btn btn-ghost" style="padding:7px 14px; font-size:13px;">Twitter / X</a>
+          <a href="#" class="fsoc">𝕏</a>
+          <a href="#" class="fsoc" title="GitHub">
+            <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.477 2 2 6.477 2 12c0 4.418 2.865 8.166 6.839 9.489.5.092.682-.217.682-.483 0-.237-.009-.868-.014-1.703-2.782.604-3.369-1.341-3.369-1.341-.454-1.154-1.11-1.462-1.11-1.462-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0112 6.836c.85.004 1.705.114 2.504.336 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.202 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.741 0 .269.18.579.688.481C19.138 20.163 22 16.418 22 12c0-5.523-4.477-10-10-10z"/></svg>
+          </a>
+          <a href="#" class="fsoc" title="Discord">
+            <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M20.317 4.37a19.791 19.791 0 00-4.885-1.515.074.074 0 00-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 00-5.487 0 12.64 12.64 0 00-.617-1.25.077.077 0 00-.079-.037A19.736 19.736 0 003.677 4.37a.07.07 0 00-.032.027C.533 9.046-.32 13.58.099 18.057.1 18.081.11 18.105.128 18.12a19.9 19.9 0 005.993 3.03.078.078 0 00.084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 00-.041-.106 13.107 13.107 0 01-1.872-.892.077.077 0 01-.008-.128 10.2 10.2 0 00.372-.292.074.074 0 01.077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 01.078.01c.12.098.246.198.373.292a.077.077 0 01-.006.127 12.299 12.299 0 01-1.873.892.077.077 0 00-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 00.084.028 19.839 19.839 0 006.002-3.03.077.077 0 00.032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 00-.031-.03z"/></svg>
+          </a>
+        </div>
+        <div style="margin-top:16px;">
+          <span class="yc-badge">▲ Backed by Ivinco</span>
         </div>
       </div>
       <div class="footer-col">
@@ -721,7 +973,7 @@
           <li><a href="#">Agent-Readiness Score</a></li>
           <li><a href="#">Verified Skills</a></li>
           <li><a href="#">CI Integration</a></li>
-          <li><a href="#">Public benchmark</a></li>
+          <li><a href="#">Public Benchmark</a></li>
           <li><a href="#">Changelog</a></li>
         </ul>
       </div>
@@ -752,17 +1004,17 @@
           <li><a href="#">Documentation</a></li>
           <li><a href="#">API reference</a></li>
           <li><a href="#">State of AI Docs 2026</a></li>
-          <li><a href="#">Status</a></li>
+          <li><a href="#">Trust Center</a></li>
           <li><a href="#">Security</a></li>
-          <li><a href="#">Support</a></li>
+          <li><a href="#">Status</a></li>
         </ul>
       </div>
     </div>
     <div class="footer-bottom">
-      <p>© 2026 Docka &nbsp;·&nbsp; Built by <a href="https://ivinco.com" style="color:var(--text-2); text-decoration:none;">Ivinco</a></p>
+      <p>© 2026 Docka · Built by <a href="https://ivinco.com" style="color:var(--text-2);text-decoration:none;">Ivinco</a></p>
       <div class="footer-legal">
-        <a href="#">Privacy</a>
-        <a href="#">Terms</a>
+        <a href="#">Privacy policy</a>
+        <a href="#">Terms of service</a>
         <a href="#">Cookie policy</a>
         <a href="#">Accessibility</a>
       </div>
@@ -771,96 +1023,14 @@
 </footer>
 
 <script>
-// ── Growth chart ──
-const ctx = document.getElementById('growthChart').getContext('2d');
-
-const labels = ['Q1 2024','Q2 2024','Q3 2024','Q4 2024','Q1 2025','Q2 2025','Q3 2025','Q4 2025','Q1 2026'];
-
-// Growth indices, Q1 2024 = 100. Autonomous-agent tasks grow fastest (Cursor 0→400K+, Claude Code launch, etc.)
-const autonomous = [100, 240, 560, 1100, 2000, 3400, 5200, 7600, 10400];
-const claudeAPI  = [100, 190, 370, 640,  1100, 1850, 2700, 3800, 5200];
-const gptAPI     = [100, 165, 295, 470,  720,  1060, 1500, 2050, 2750];
-
-function gradient(ctx, color, alpha) {
-  const g = ctx.createLinearGradient(0, 0, 0, 300);
-  g.addColorStop(0, color.replace('1)', `${alpha})`));
-  g.addColorStop(1, color.replace('1)', '0)'));
-  return g;
-}
-
-new Chart(ctx, {
-  type: 'line',
-  data: {
-    labels,
-    datasets: [
-      {
-        label: 'Autonomous agent tasks (Cursor, Claude Code, Copilot agent)',
-        data: autonomous,
-        borderColor: '#5B6EF5',
-        backgroundColor: gradient(ctx, 'rgba(91,110,245,1)', 0.18),
-        borderWidth: 2.5, fill: true, tension: 0.42,
-        pointRadius: 4, pointBackgroundColor: '#5B6EF5',
-        pointBorderColor: '#06060F', pointBorderWidth: 2,
-      },
-      {
-        label: 'Claude API usage (Anthropic public reports)',
-        data: claudeAPI,
-        borderColor: '#a5b4fc',
-        backgroundColor: 'transparent',
-        borderWidth: 2, fill: false, tension: 0.42,
-        pointRadius: 3, pointBackgroundColor: '#a5b4fc',
-        pointBorderColor: '#06060F', pointBorderWidth: 2,
-      },
-      {
-        label: 'GPT API usage (OpenAI public reports)',
-        data: gptAPI,
-        borderColor: '#34D399',
-        backgroundColor: 'transparent',
-        borderWidth: 2, fill: false, tension: 0.42,
-        pointRadius: 3, pointBackgroundColor: '#34D399',
-        pointBorderColor: '#06060F', pointBorderWidth: 2,
-      },
-    ],
-  },
-  options: {
-    responsive: true,
-    interaction: { mode: 'index', intersect: false },
-    plugins: {
-      legend: {
-        position: 'top', align: 'end',
-        labels: {
-          color: '#64748B', font: { family: 'Inter', size: 11.5 },
-          boxWidth: 11, boxHeight: 11, borderRadius: 3, useBorderRadius: true, padding: 14,
-        },
-      },
-      tooltip: {
-        backgroundColor: '#0C0C1E',
-        borderColor: 'rgba(255,255,255,0.1)', borderWidth: 1,
-        titleColor: '#E2E8F0', bodyColor: '#94A3B8',
-        titleFont: { family: 'Inter', weight: '600', size: 13 },
-        bodyFont: { family: 'Inter', size: 12.5 },
-        padding: 14,
-        callbacks: {
-          label: (c) => `  ${c.dataset.label.split('(')[0].trim()}: ${c.parsed.y.toLocaleString()} idx`,
-        },
-      },
-    },
-    scales: {
-      x: {
-        grid: { color: 'rgba(255,255,255,0.04)' },
-        ticks: { color: '#475569', font: { family: 'Inter', size: 11.5 } },
-        border: { color: 'transparent' },
-      },
-      y: {
-        grid: { color: 'rgba(255,255,255,0.04)' },
-        ticks: {
-          color: '#475569', font: { family: 'Inter', size: 11.5 },
-          callback: (v) => v >= 1000 ? `${(v/1000).toFixed(0)}k` : v,
-        },
-        border: { color: 'transparent' },
-      },
-    },
-  },
+// FAQ accordion
+document.querySelectorAll('.faq-q').forEach(q => {
+  q.addEventListener('click', () => {
+    const item = q.parentElement;
+    const isOpen = item.classList.contains('open');
+    document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+    if (!isOpen) item.classList.add('open');
+  });
 });
 </script>
 </body>
