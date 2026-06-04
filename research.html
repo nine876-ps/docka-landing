@@ -1,0 +1,1124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Agent-Readiness Research — Docka</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #FFFFFF;
+  --bg-sub: #F7F8FF;
+  --bg-deep: #F0F2FF;
+  --border: #E4E8F7;
+  --accent: #5046E4;
+  --accent-2: #7C73F0;
+  --acc-bg: #EEF0FF;
+  --acc-mid: #C7CBF9;
+  --text: #0A0B1E;
+  --text-2: #4B5280;
+  --text-3: #8A91B4;
+  --red: #EF4444;
+  --orange: #F97316;
+  --yellow: #EAB308;
+  --green: #22C55E;
+  --green-bg: #F0FDF4;
+  --red-bg: #FEF2F2;
+  --orange-bg: #FFF7ED;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Inter', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+/* NAV */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  background: rgba(255,255,255,0.95);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  height: 60px;
+  display: flex; align-items: center;
+  padding: 0 24px;
+  gap: 20px;
+}
+.nav-logo {
+  font-weight: 700; font-size: 17px; color: var(--text);
+  text-decoration: none; display: flex; align-items: center; gap: 8px;
+}
+.nav-logo span { color: var(--accent); }
+.nav-back {
+  font-size: 13px; color: var(--text-2); text-decoration: none;
+  display: flex; align-items: center; gap: 4px;
+  padding: 4px 10px; border-radius: 6px;
+  border: 1px solid var(--border);
+  transition: all 0.15s;
+}
+.nav-back:hover { background: var(--bg-sub); color: var(--text); }
+.nav-spacer { flex: 1; }
+.nav-label {
+  font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase;
+  color: var(--text-3); padding: 4px 10px; background: var(--bg-sub);
+  border-radius: 6px; border: 1px solid var(--border);
+}
+
+/* LAYOUT */
+.page {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 88px 24px 80px;
+}
+
+/* HERO */
+.hero {
+  padding: 48px 0 40px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 40px;
+}
+.hero-tag {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 12px; font-weight: 600; letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--accent);
+  background: var(--acc-bg); border-radius: 20px;
+  padding: 4px 12px; margin-bottom: 16px;
+}
+.hero h1 {
+  font-size: 40px; font-weight: 700; line-height: 1.1;
+  letter-spacing: -0.02em; margin-bottom: 16px;
+}
+.hero p {
+  font-size: 17px; color: var(--text-2); max-width: 640px;
+  margin-bottom: 32px; line-height: 1.65;
+}
+.stats-row {
+  display: flex; gap: 40px; flex-wrap: wrap;
+}
+.stat { display: flex; flex-direction: column; gap: 2px; }
+.stat-num { font-size: 28px; font-weight: 700; color: var(--accent); line-height: 1; }
+.stat-label { font-size: 13px; color: var(--text-2); }
+
+/* FRAMEWORK */
+.framework-section {
+  background: var(--bg-sub);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 28px 32px;
+  margin-bottom: 40px;
+}
+.framework-section h2 {
+  font-size: 18px; font-weight: 700; margin-bottom: 8px;
+}
+.framework-section p {
+  font-size: 14px; color: var(--text-2); margin-bottom: 20px;
+}
+.dims {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;
+}
+.dim {
+  background: var(--bg); border: 1px solid var(--border);
+  border-radius: 10px; padding: 16px 18px;
+}
+.dim-header {
+  display: flex; align-items: center; gap: 8px;
+  margin-bottom: 8px;
+}
+.dim-badge {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px; font-weight: 600;
+  padding: 2px 8px; border-radius: 4px;
+  background: var(--acc-bg); color: var(--accent);
+}
+.dim-title { font-size: 14px; font-weight: 600; }
+.dim-weight { font-size: 12px; color: var(--text-3); }
+.dim p { font-size: 13px; color: var(--text-2); }
+
+/* CATEGORIES */
+.categories-section { margin-bottom: 40px; }
+.categories-section h2 {
+  font-size: 20px; font-weight: 700; margin-bottom: 20px;
+}
+.cats-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;
+}
+.cat-card {
+  border-radius: 12px; padding: 20px 22px;
+  border: 1px solid;
+}
+.cat-card.a { background: var(--red-bg); border-color: #FECACA; }
+.cat-card.b { background: var(--orange-bg); border-color: #FED7AA; }
+.cat-card.c { background: #FFFBEB; border-color: #FDE68A; }
+.cat-card h3 {
+  font-size: 13px; font-weight: 700; letter-spacing: 0.06em;
+  text-transform: uppercase; margin-bottom: 6px;
+}
+.cat-card.a h3 { color: #DC2626; }
+.cat-card.b h3 { color: #EA580C; }
+.cat-card.c h3 { color: #CA8A04; }
+.cat-card .cat-name {
+  font-size: 15px; font-weight: 600; margin-bottom: 8px; color: var(--text);
+}
+.cat-card p { font-size: 13px; color: var(--text-2); margin-bottom: 10px; }
+.cat-tags {
+  display: flex; flex-wrap: wrap; gap: 4px;
+}
+.cat-tag {
+  font-size: 11px; font-weight: 500;
+  padding: 2px 8px; border-radius: 4px;
+}
+.cat-card.a .cat-tag { background: #FEE2E2; color: #DC2626; }
+.cat-card.b .cat-tag { background: #FFEDD5; color: #EA580C; }
+.cat-card.c .cat-tag { background: #FEF3C7; color: #CA8A04; }
+
+/* CLUSTER */
+.cluster-box {
+  background: linear-gradient(135deg, #EEF0FF 0%, #F0F2FF 100%);
+  border: 1px solid var(--acc-mid);
+  border-radius: 12px; padding: 20px 24px;
+  margin-bottom: 40px;
+  display: flex; align-items: flex-start; gap: 16px;
+}
+.cluster-icon {
+  width: 40px; height: 40px; background: var(--accent);
+  border-radius: 10px; display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; font-size: 18px;
+}
+.cluster-box h3 { font-size: 15px; font-weight: 700; margin-bottom: 4px; }
+.cluster-box p { font-size: 13px; color: var(--text-2); }
+.cluster-box .cluster-tags { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 10px; }
+.cluster-tags .tag {
+  font-size: 11px; font-weight: 600; padding: 2px 8px;
+  background: var(--acc-bg); color: var(--accent);
+  border-radius: 4px;
+}
+
+/* CONTROLS */
+.controls {
+  display: flex; gap: 12px; align-items: center;
+  margin-bottom: 28px; flex-wrap: wrap;
+}
+.search-box {
+  flex: 1; min-width: 200px;
+  display: flex; align-items: center; gap: 8px;
+  background: var(--bg-sub); border: 1px solid var(--border);
+  border-radius: 8px; padding: 8px 14px;
+}
+.search-box input {
+  border: none; background: transparent; outline: none;
+  font-family: inherit; font-size: 14px; color: var(--text);
+  flex: 1;
+}
+.search-box input::placeholder { color: var(--text-3); }
+.filter-tabs { display: flex; gap: 4px; }
+.filter-tab {
+  font-size: 13px; font-weight: 500;
+  padding: 6px 14px; border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--bg); color: var(--text-2);
+  cursor: pointer; transition: all 0.15s;
+}
+.filter-tab:hover { background: var(--bg-sub); }
+.filter-tab.active {
+  background: var(--accent); color: #fff; border-color: var(--accent);
+}
+.sort-select {
+  font-family: inherit; font-size: 13px; font-weight: 500;
+  padding: 6px 12px; border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--bg); color: var(--text-2);
+  cursor: pointer; outline: none;
+}
+
+/* SCORES TABLE */
+.scores-section { margin-bottom: 40px; }
+.scores-section h2 { font-size: 20px; font-weight: 700; margin-bottom: 16px; }
+.score-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 10px;
+  margin-bottom: 12px;
+}
+.score-card {
+  background: var(--bg-sub); border: 1px solid var(--border);
+  border-radius: 10px; padding: 14px 16px;
+  cursor: pointer; transition: all 0.15s;
+  position: relative;
+}
+.score-card:hover { border-color: var(--accent); background: var(--acc-bg); transform: translateY(-1px); }
+.score-card.hidden { display: none; }
+.score-card-header {
+  display: flex; align-items: flex-start; justify-content: space-between;
+  margin-bottom: 8px;
+}
+.product-name { font-size: 14px; font-weight: 600; }
+.ars-badge {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px; font-weight: 700;
+  padding: 2px 8px; border-radius: 6px;
+  white-space: nowrap;
+}
+.tier-1 { background: #FEE2E2; color: #DC2626; }
+.tier-2 { background: #FEF3C7; color: #D97706; }
+.tier-3 { background: #DCFCE7; color: #16A34A; }
+.ars-bar-bg {
+  height: 4px; background: var(--border); border-radius: 2px; overflow: hidden;
+}
+.ars-bar { height: 100%; border-radius: 2px; transition: width 0.3s; }
+.cat-pill {
+  display: inline-block; margin-top: 6px;
+  font-size: 11px; font-weight: 500; padding: 1px 6px;
+  border-radius: 4px;
+}
+.cat-pill-crm { background: #EFF6FF; color: #3B82F6; }
+.cat-pill-leadgen { background: #F5F3FF; color: #8B5CF6; }
+.cat-pill-outreach { background: #FFF7ED; color: #EA580C; }
+.cat-pill-pm { background: #ECFDF5; color: #059669; }
+.cat-arch-a { background: #FEE2E2; color: #DC2626; }
+.cat-arch-b { background: #FFEDD5; color: #EA580C; }
+.cat-arch-c { background: #FFFBEB; color: #CA8A04; }
+.score-card-meta {
+  display: flex; gap: 4px; flex-wrap: wrap; margin-top: 6px;
+}
+
+/* PRODUCTS SECTION */
+.products-section h2 { font-size: 20px; font-weight: 700; margin-bottom: 20px; }
+.category-group { margin-bottom: 48px; }
+.category-group h3 {
+  font-size: 16px; font-weight: 700;
+  padding-bottom: 10px; border-bottom: 1px solid var(--border);
+  margin-bottom: 16px;
+  display: flex; align-items: center; gap: 10px;
+}
+.cat-count {
+  font-size: 12px; font-weight: 500; color: var(--text-3);
+  background: var(--bg-sub); padding: 2px 8px;
+  border-radius: 10px; border: 1px solid var(--border);
+}
+
+/* PRODUCT CARD */
+.product-card {
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  margin-bottom: 12px;
+  overflow: hidden;
+  transition: box-shadow 0.15s;
+}
+.product-card:hover { box-shadow: 0 2px 12px rgba(80, 70, 228, 0.08); }
+.product-card.hidden { display: none; }
+.product-header {
+  padding: 18px 22px;
+  cursor: pointer;
+  display: flex; align-items: center; gap: 16px;
+  background: var(--bg);
+  user-select: none;
+}
+.product-header:hover { background: var(--bg-sub); }
+.product-ars-big {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 22px; font-weight: 700;
+  width: 56px; text-align: center; flex-shrink: 0;
+}
+.product-info { flex: 1; }
+.product-info h4 { font-size: 16px; font-weight: 700; margin-bottom: 4px; }
+.product-summary { font-size: 13px; color: var(--text-2); }
+.product-pills { display: flex; gap: 4px; flex-wrap: wrap; margin-top: 6px; }
+.product-pill {
+  font-size: 11px; font-weight: 500; padding: 2px 7px; border-radius: 4px;
+}
+.expand-icon {
+  width: 28px; height: 28px; display: flex; align-items: center;
+  justify-content: center; border-radius: 6px;
+  background: var(--bg-sub); color: var(--text-2);
+  font-size: 14px; flex-shrink: 0;
+  transition: transform 0.2s, background 0.15s;
+}
+.product-card.open .expand-icon { transform: rotate(180deg); background: var(--acc-bg); color: var(--accent); }
+
+/* PRODUCT BODY */
+.product-body {
+  display: none; padding: 0;
+  border-top: 1px solid var(--border);
+  background: var(--bg-sub);
+}
+.product-card.open .product-body { display: block; }
+
+/* MINI STATS */
+.product-meta-bar {
+  display: flex; gap: 0; border-bottom: 1px solid var(--border);
+  overflow-x: auto;
+}
+.meta-item {
+  flex: 1; min-width: 100px;
+  padding: 12px 16px;
+  border-right: 1px solid var(--border);
+  background: var(--bg);
+}
+.meta-item:last-child { border-right: none; }
+.meta-key { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-3); margin-bottom: 2px; }
+.meta-val { font-size: 13px; font-weight: 600; color: var(--text); }
+
+/* USE CASES */
+.use-cases-container { padding: 20px 22px; }
+.use-cases-container h5 {
+  font-size: 13px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.06em; color: var(--text-3); margin-bottom: 14px;
+}
+.use-case-item {
+  background: var(--bg); border: 1px solid var(--border);
+  border-radius: 10px; margin-bottom: 10px; overflow: hidden;
+}
+.use-case-header {
+  padding: 12px 16px; cursor: pointer;
+  display: flex; align-items: center; gap: 12px;
+  user-select: none;
+}
+.use-case-header:hover { background: var(--bg-sub); }
+.uc-num {
+  width: 22px; height: 22px;
+  background: var(--acc-bg); color: var(--accent);
+  border-radius: 50%; font-size: 11px; font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.uc-title { font-size: 14px; font-weight: 600; flex: 1; }
+.uc-intent { font-size: 12px; color: var(--text-3); margin-top: 1px; }
+.uc-toggle {
+  font-size: 12px; color: var(--text-3); flex-shrink: 0;
+  width: 20px; text-align: center;
+  transition: transform 0.2s;
+}
+.use-case-item.open .uc-toggle { transform: rotate(180deg); color: var(--accent); }
+.use-case-body {
+  display: none; padding: 0 16px 16px;
+  border-top: 1px solid var(--border);
+}
+.use-case-item.open .use-case-body { display: block; }
+.uc-field {
+  margin-top: 12px;
+}
+.uc-field-label {
+  font-size: 11px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.06em; color: var(--text-3);
+  margin-bottom: 6px;
+}
+.uc-intent-text {
+  font-size: 13px; color: var(--text-2);
+  background: var(--bg-sub); border-radius: 6px;
+  padding: 8px 12px; border: 1px solid var(--border);
+  font-style: italic;
+}
+.uc-steps ol {
+  list-style: none; counter-reset: step-counter;
+}
+.uc-steps ol li {
+  counter-increment: step-counter;
+  display: flex; gap: 10px;
+  margin-bottom: 8px;
+  font-size: 13px; color: var(--text);
+  line-height: 1.55;
+}
+.uc-steps ol li::before {
+  content: counter(step-counter);
+  width: 20px; height: 20px; min-width: 20px;
+  background: var(--bg-deep); color: var(--accent);
+  border-radius: 50%; font-size: 11px; font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+  margin-top: 2px;
+}
+code {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px; background: var(--bg-deep);
+  padding: 1px 5px; border-radius: 4px; color: var(--accent);
+}
+.uc-source a {
+  font-size: 12px; color: var(--accent); text-decoration: none;
+  word-break: break-all;
+}
+.uc-source a:hover { text-decoration: underline; }
+.uc-failure {
+  font-size: 13px; color: var(--text);
+  background: #FFF7ED; border: 1px solid #FED7AA;
+  border-radius: 6px; padding: 10px 12px;
+  line-height: 1.55;
+}
+.uc-failure::before {
+  content: "⚠ ";
+}
+
+/* TIER LEGEND */
+.tier-legend {
+  display: flex; gap: 16px; align-items: center;
+  margin-bottom: 16px; flex-wrap: wrap;
+}
+.legend-item {
+  display: flex; align-items: center; gap: 6px;
+  font-size: 12px; color: var(--text-2);
+}
+.legend-dot {
+  width: 10px; height: 10px; border-radius: 50%;
+}
+.dot-t1 { background: var(--red); }
+.dot-t2 { background: var(--orange); }
+.dot-t3 { background: var(--green); }
+
+/* FOOTER */
+footer {
+  border-top: 1px solid var(--border);
+  padding: 32px 24px;
+  margin-top: 40px;
+  text-align: center;
+  color: var(--text-3); font-size: 13px;
+}
+footer a { color: var(--accent); text-decoration: none; }
+footer a:hover { text-decoration: underline; }
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .dims { grid-template-columns: 1fr; }
+  .cats-grid { grid-template-columns: 1fr; }
+  .hero h1 { font-size: 28px; }
+  .product-header { flex-wrap: wrap; gap: 10px; }
+  .product-meta-bar { flex-wrap: wrap; }
+  .meta-item { min-width: 50%; border-right: none; border-bottom: 1px solid var(--border); }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">Docka<span>.</span></a>
+  <a href="index.html" class="nav-back">← Landing</a>
+  <div class="nav-spacer"></div>
+  <span class="nav-label">Agent-Readiness Research</span>
+</nav>
+
+<div class="page">
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-tag">Research Report · June 2026</div>
+    <h1>25 Products.<br>How Agent-Ready Are They?</h1>
+    <p>We ran AI agents against the real APIs of 25 sales & productivity tools and measured how many tokens, how many human interruptions, and how many silent failures they encountered. Here's what we found.</p>
+    <div class="stats-row">
+      <div class="stat"><span class="stat-num">25</span><span class="stat-label">Products analyzed</span></div>
+      <div class="stat"><span class="stat-num">139</span><span class="stat-label">Use cases documented</span></div>
+      <div class="stat"><span class="stat-num">3</span><span class="stat-label">Failure archetypes</span></div>
+      <div class="stat"><span class="stat-num">91</span><span class="stat-label">Worst ARS score (Canva)</span></div>
+      <div class="stat"><span class="stat-num">39</span><span class="stat-label">Best ARS score (Hunter.io)</span></div>
+    </div>
+  </div>
+
+  <!-- ARS FRAMEWORK -->
+  <div class="framework-section">
+    <h2>ARS Framework — Agent Readiness Score</h2>
+    <p>Score = (DQ × 0.30) + (ADE × 0.45) + (HIR × 0.25). Higher score = harder for agents to complete tasks autonomously.</p>
+    <div class="dims">
+      <div class="dim">
+        <div class="dim-header">
+          <span class="dim-badge">DQ</span>
+          <span class="dim-title">Docs Quality</span>
+          <span class="dim-weight">30%</span>
+        </div>
+        <p>Accuracy, deprecated calls, example correctness, schema consistency. Does the docs match what the API actually does?</p>
+      </div>
+      <div class="dim">
+        <div class="dim-header">
+          <span class="dim-badge">ADE</span>
+          <span class="dim-title">API Design Efficiency</span>
+          <span class="dim-weight">45%</span>
+        </div>
+        <p>Tokens-to-task, mandatory discovery calls, batch support, error quality. How many calls to complete a task?</p>
+      </div>
+      <div class="dim">
+        <div class="dim-header">
+          <span class="dim-badge">HIR</span>
+          <span class="dim-title">Human Interruption Rate</span>
+          <span class="dim-weight">25%</span>
+        </div>
+        <p>Setup friction, auth discoverability, flow blockers, self-recovery. How many times must a human intervene?</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- CATEGORIES -->
+  <div class="categories-section">
+    <h2>Three Failure Archetypes</h2>
+    <div class="cats-grid">
+      <div class="cat-card a">
+        <h3>Category A</h3>
+        <div class="cat-name">Architecturally Incompatible</div>
+        <p>No headless path exists. The product's core value is locked behind a UI — agents can only trigger webhooks or call enterprise-gated APIs.</p>
+        <div class="cat-tags">
+          <span class="cat-tag">Canva (91)</span>
+          <span class="cat-tag">Clay (89)</span>
+          <span class="cat-tag">ZoomInfo (88)</span>
+        </div>
+      </div>
+      <div class="cat-card b">
+        <h3>Category B</h3>
+        <div class="cat-name">Token Amplifiers</div>
+        <p>3–5× token waste from mandatory discovery calls before useful work. APIs are functional but require many prerequisite lookups.</p>
+        <div class="cat-tags">
+          <span class="cat-tag">Attio (65)</span>
+          <span class="cat-tag">Lusha (60)</span>
+          <span class="cat-tag">Snov.io (68)</span>
+          <span class="cat-tag">Outreach.io (80)</span>
+        </div>
+      </div>
+      <div class="cat-card c">
+        <h3>Category C</h3>
+        <div class="cat-name">Silent Success / Wrong Data</div>
+        <p>HTTP 200 returned with empty or incorrect data. The agent thinks it succeeded. The user sees nothing. The worst failure mode.</p>
+        <div class="cat-tags">
+          <span class="cat-tag">Apollo (55)</span>
+          <span class="cat-tag">Amplitude (70)</span>
+          <span class="cat-tag">Jira (77)</span>
+          <span class="cat-tag">Linear (46)</span>
+          <span class="cat-tag">Smartlead (63)</span>
+          <span class="cat-tag">Lusha (60)</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CLUSTER -->
+  <div class="cluster-box">
+    <div class="cluster-icon">🎯</div>
+    <div>
+      <h3>Homogeneous Cluster: Cold Email Tools</h3>
+      <p>Instantly + Lemlist + Snov.io + Smartlead + Reply.io share the same failure patterns, the same buyer (RevOps/Sales Ops), and the same fix pattern. This is Docka's first vertical — 5 products with identical problems create a repeatable playbook.</p>
+      <div class="cluster-tags">
+        <span class="tag">Instantly.ai 49</span>
+        <span class="tag">Lemlist 59</span>
+        <span class="tag">Smartlead 63</span>
+        <span class="tag">Reply.io 73</span>
+        <span class="tag">Snov.io 68</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCORES OVERVIEW -->
+  <div class="scores-section">
+    <h2>All 25 Products at a Glance</h2>
+    <div class="tier-legend">
+      <div class="legend-item"><span class="legend-dot dot-t1"></span>Tier 1 Critical (70+)</div>
+      <div class="legend-item"><span class="legend-dot dot-t2"></span>Tier 2 Significant (50–69)</div>
+      <div class="legend-item"><span class="legend-dot dot-t3"></span>Tier 3 Manageable (&lt;50)</div>
+    </div>
+    <div class="score-grid" id="scoreGrid">
+      <!-- Generated by JS -->
+    </div>
+  </div>
+
+  <!-- PRODUCTS -->
+  <div class="products-section">
+    <h2>Products & Step-by-Step Use Cases</h2>
+
+    <!-- CONTROLS -->
+    <div class="controls">
+      <div class="search-box">
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="color:var(--text-3)"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+        <input type="text" id="productSearch" placeholder="Search product..." oninput="filterProducts()">
+      </div>
+      <div class="filter-tabs">
+        <button class="filter-tab active" onclick="filterCat('all', this)">All</button>
+        <button class="filter-tab" onclick="filterCat('crm', this)">CRM</button>
+        <button class="filter-tab" onclick="filterCat('leadgen', this)">Lead Gen</button>
+        <button class="filter-tab" onclick="filterCat('outreach', this)">Outreach</button>
+        <button class="filter-tab" onclick="filterCat('pm', this)">Analytics / PM</button>
+      </div>
+    </div>
+
+    <div id="productsContainer">
+      <!-- Filled by JS -->
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <p>Docka Agent-Readiness Research · June 2026 · <a href="index.html">Back to Docka</a></p>
+</footer>
+
+<script>
+const PRODUCTS = [
+  // CRM
+  {
+    id: "salesforce", name: "Salesforce", ars: 83, cat: "crm", catLabel: "CRM",
+    tier: 1, arch: null,
+    auth: "OAuth 2.0 (Connected App)", baseUrl: "https://{instance}.salesforce.com/services/data/v67.0/",
+    summary: "4 human interventions before first API call. SOQL/SOSL query language. Upsert by external ID requires schema pre-configuration.",
+    useCases: [
+      { title: "Create a Contact", intent: "Add a new contact named Jane Smith at Acme Corp.", steps: ["Obtain OAuth 2.0 access token via Connected App (client credentials or auth-code flow).", "POST /services/data/v67.0/sobjects/Contact — Body: {\"LastName\":\"Smith\",\"FirstName\":\"Jane\",\"Email\":\"jane@acme.com\",\"AccountId\":\"<id>\"}", "Parse response {\"id\":\"<new_contact_id>\",\"success\":true} and store the ID."], source: "https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/dome_sobject_create.htm", failure: "AccountId must be an existing Account record ID — agents commonly pass a company name string instead of a valid 18-char Salesforce ID, causing a 400 INVALID_FIELD error." },
+      { title: "Update a Contact (PATCH)", intent: "Update Jane Smith's phone number and job title.", steps: ["Resolve contact record ID via SOQL query if not cached.", "PATCH /services/data/v67.0/sobjects/Contact/{contactId} — Body: {\"Phone\":\"+491701234567\",\"Title\":\"Head of Sales\"}", "HTTP 204 No Content = success. No response body returned."], source: "https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/resources_sobject_retrieve_patch.htm", failure: "PATCH returns 204 (empty body) — agents expecting a JSON response body loop or error. Field API names are case-sensitive (Phone not phone)." },
+      { title: "Upsert by External ID", intent: "Sync contact from our system — create if new, update if already exists.", steps: ["Define an external ID field on Contact (e.g. External_ID__c) in Salesforce setup.", "PATCH /services/data/v67.0/sobjects/Contact/External_ID__c/{value} — Body: {\"LastName\":\"Smith\",\"Email\":\"jane@acme.com\"}", "Returns 201 (created) or 200 (updated) with {\"id\":\"...\",\"success\":true}."], source: "https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/dome_upsert.htm", failure: "External ID field must exist and be marked as 'External ID' in the org — if not, endpoint returns 404. Agents must check org configuration before relying on this endpoint." },
+      { title: "Query via SOQL", intent: "Find all open opportunities owned by rep Alice with close date this quarter.", steps: ["Construct SOQL: SELECT Id,Name,StageName,CloseDate,Amount FROM Opportunity WHERE OwnerId='<id>' AND IsClosed=false AND CloseDate=THIS_QUARTER", "GET /services/data/v67.0/query?q={url_encoded_soql}", "If done:false, paginate via GET /services/data/v67.0{nextRecordsUrl} until done:true."], source: "https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/resources_query.htm", failure: "Agents stop at first page (max 2,000 records). Must follow nextRecordsUrl in a loop. SOQL syntax errors return 400 with MALFORMED_QUERY." },
+      { title: "Create a Task", intent: "Log a follow-up call task for contact Jane Smith, due tomorrow.", steps: ["POST /services/data/v67.0/sobjects/Task — Body: {\"Subject\":\"Follow-up call\",\"Status\":\"Not Started\",\"WhoId\":\"<contactId>\",\"ActivityDate\":\"2026-06-05\"}", "Response: {\"id\":\"<task_id>\",\"success\":true}"], source: "https://developer.salesforce.com/docs/atlas.en-us.object_reference.meta/object_reference/sforce_api_objects_task.htm", failure: "WhoId and WhatId have object-type restrictions. ActivityDate must be YYYY-MM-DD. Status picklist value must exist in the org." },
+      { title: "Get Pipeline Data (Aggregated)", intent: "Show current pipeline — all open deals by stage with total value.", steps: ["Construct aggregate SOQL: SELECT StageName,COUNT(Id),SUM(Amount) FROM Opportunity WHERE IsClosed=false GROUP BY StageName", "GET /services/data/v67.0/query?q={url_encoded_soql}"], source: "https://developer.salesforce.com/docs/atlas.en-us.api.meta/api/sforce_api_objects_opportunity.htm", failure: "Aggregate SOQL cannot use nextRecordsUrl pagination the same way. Amount is NULL if not set, causing SUM errors." },
+      { title: "Full-Text Search (SOSL)", intent: "Search 'Acme' across contacts, accounts, and opportunities.", steps: ["Construct SOSL: FIND {Acme} IN ALL FIELDS RETURNING Contact(Id,Name,Email),Account(Id,Name),Opportunity(Id,Name,StageName)", "GET /services/data/v67.0/search?q={url_encoded_sosl}"], source: "https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/resources_search.htm", failure: "SOSL has 2,000 char limit, returns max 200 records per object type. Curly braces around search term must be URL-encoded ({Acme} → %7BAcme%7D)." }
+    ]
+  },
+  {
+    id: "hubspot", name: "HubSpot", ars: 60, cat: "crm", catLabel: "CRM",
+    tier: 2, arch: null,
+    auth: "Private App Bearer token", baseUrl: "https://api.hubapi.com",
+    summary: "Clean REST API. Stage IDs are internal numbers — must map via pipeline endpoint. Batch upsert limited to 100 records.",
+    useCases: [
+      { title: "Create a Contact", intent: "Add a new contact for a webinar lead.", steps: ["POST /crm/v3/objects/contacts — Body: {\"properties\":{\"email\":\"jane@acme.com\",\"firstname\":\"Jane\",\"lastname\":\"Smith\"}}", "Response: {\"id\":\"<contactId>\",\"properties\":{...}}"], source: "https://developers.hubspot.com/docs/api-reference/crm-contacts-v3/guide", failure: "HubSpot deduplicates on email — creating a duplicate returns 409 Conflict. Must call PATCH instead. Property names are lowercase snake_case." },
+      { title: "Search/Filter Contacts", intent: "Find all contacts at Acme Corp in the 'lead' lifecycle stage.", steps: ["POST /crm/v3/objects/contacts/search — Body: {\"filterGroups\":[{\"filters\":[{\"propertyName\":\"company\",\"operator\":\"EQ\",\"value\":\"Acme\"}]}],\"limit\":100,\"after\":0}", "Paginate using after cursor until no paging.next."], source: "https://developers.hubspot.com/docs/guides/api/crm/objects/contacts", failure: "Search API returns max 100 per page. Archived contacts excluded — requires archived=true param on list endpoint." },
+      { title: "Get Pipeline Data", intent: "Show all deals in the pipeline and their current stages.", steps: ["GET /crm/v3/pipelines/deals — Get pipeline and stage IDs (stages have internal IDs, not labels).", "POST /crm/v3/objects/deals/search with filterGroups on pipeline and dealstage."], source: "https://developers.hubspot.com/docs/api-reference/crm-pipelines-v3/guide", failure: "dealstage values are internal IDs (e.g. 701459927). Must call pipelines endpoint first to build stage-ID-to-label map." },
+      { title: "Create Task + Associate", intent: "Create a follow-up task for contact 12345, due in 3 days.", steps: ["POST /crm/v3/objects/tasks — Body: {\"properties\":{\"hs_task_subject\":\"Follow-up call\",\"hs_timestamp\":\"2026-06-07T09:00:00Z\",\"hs_task_status\":\"NOT_STARTED\"},\"associations\":[{\"to\":{\"id\":\"12345\"},\"types\":[{\"associationCategory\":\"HUBSPOT_DEFINED\",\"associationTypeId\":204}]}]}", "Response: 201 with new task object."], source: "https://developers.hubspot.com/docs/api-reference/crm-tasks-v3/guide", failure: "hs_timestamp must be milliseconds or ISO 8601 — agents pass seconds (wrong). Association type IDs (204 = task-to-contact) must be hardcoded or looked up." },
+      { title: "Batch Upsert Contacts", intent: "Import 500 contacts from CSV, skip duplicates.", steps: ["POST /crm/v3/objects/contacts/batch/upsert — Body: {\"inputs\":[{\"idProperty\":\"email\",\"properties\":{\"email\":\"a@b.com\",...}}]}", "Chunk into batches of 100. Response includes status per item: CREATED or UPDATED."], source: "https://developers.hubspot.com/docs/api-reference/crm-contacts-v3/guide", failure: "Batch limited to 100 records per request. Partial failures return mixed results array — must check each item's status individually." }
+    ]
+  },
+  {
+    id: "pipedrive", name: "Pipedrive", ars: 55, cat: "crm", catLabel: "CRM",
+    tier: 2, arch: null,
+    auth: "API token as ?api_token= query param", baseUrl: "https://api.pipedrive.com",
+    summary: "PATCH on emails/phones replaces the entire array. V2 pipelines + V1 stages — mixed API versions required.",
+    useCases: [
+      { title: "Create a Person", intent: "Add a new contact Sarah Lee from TechCorp.", steps: ["POST /api/v2/persons — Body: {\"name\":\"Sarah Lee\",\"emails\":[{\"value\":\"sarah@techcorp.com\",\"label\":\"work\",\"primary\":true}],\"org_id\":42}", "Response: {\"success\":true,\"data\":{\"id\":456,...}}"], source: "https://developers.pipedrive.com/docs/api/v1/Persons", failure: "org_id must reference an existing Organization record. Email is an array of objects, not a plain string." },
+      { title: "Update a Person", intent: "Update Sarah's job title and add a second email address.", steps: ["PATCH /api/v2/persons/{id} — Body: {\"emails\":[{\"value\":\"sarah@techcorp.com\",\"label\":\"work\",\"primary\":true},{\"value\":\"s@personal.com\",\"label\":\"personal\"}]}"], source: "https://developers.pipedrive.com/docs/api/v1/Persons", failure: "PATCH on emails/phones REPLACES the entire array. Must fetch current values and merge before PATCHing or existing data is deleted." },
+      { title: "Search Across CRM", intent: "Find all people and deals matching 'Acme'.", steps: ["GET /api/v2/itemSearch?term=Acme&item_types=person,deal&fields=name,email,title&limit=50", "Paginate using next_cursor if present."], source: "https://developers.pipedrive.com/docs/api/v1/ItemSearch", failure: "term must be ≥2 chars. V2 uses cursor-based pagination, V1 used offset — mixing them breaks pagination." },
+      { title: "Get Pipeline + Stage Data", intent: "List active pipelines with their stages and deal counts.", steps: ["GET /api/v2/pipelines — Get pipeline IDs.", "GET /api/v1/stages?pipeline_id={id} — Stages are still V1!", "GET /api/v2/deals?pipeline_id={id}&stage_id={id}&status=open&limit=500"], source: "https://developers.pipedrive.com/docs/api/v1/Pipelines", failure: "Pipelines endpoint (v2) does not return stages — must use v1 stages endpoint separately. Stage IDs must match pipeline." },
+      { title: "Create a Deal", intent: "Create a $50k deal for Sarah Lee in the New Business pipeline.", steps: ["POST /api/v2/deals — Body: {\"title\":\"TechCorp Enterprise License\",\"value\":50000,\"currency\":\"USD\",\"person_id\":456,\"pipeline_id\":1,\"stage_id\":3}"], source: "https://developers.pipedrive.com/docs/api/v1/Deals", failure: "pipeline_id and stage_id must be consistent — stage must belong to the pipeline. Mismatch silently places deal in first stage." }
+    ]
+  },
+  {
+    id: "attio", name: "Attio", ars: 65, cat: "crm", catLabel: "CRM",
+    tier: 2, arch: "b",
+    auth: "OAuth 2.0 Bearer + explicit scopes", baseUrl: "https://api.attio.com",
+    summary: "All values wrapped in arrays. Filter syntax uses nested operator keys. Mandatory scope pre-declaration.",
+    useCases: [
+      { title: "Create a Person Record", intent: "Add a new contact: Alex Johnson, CTO at Stripe.", steps: ["POST /v2/objects/people/records — Body: {\"data\":{\"values\":{\"name\":[{\"first_name\":\"Alex\",\"last_name\":\"Johnson\"}],\"email_addresses\":[{\"email_address\":\"alex@stripe.com\"}]}}}", "Response: {\"data\":{\"id\":{\"record_id\":\"...\"},...}}"], source: "https://docs.attio.com/rest-api/endpoint-reference/people/create-a-person-record", failure: "All values wrapped in arrays even for single values. Agents from Salesforce/HubSpot pass flat key-value pairs and get 400." },
+      { title: "Filter Person Records", intent: "List all people whose job title contains 'VP' with an email.", steps: ["POST /v2/objects/people/records/query — Body: {\"filter\":{\"$and\":[{\"job_title\":{\"value\":{\"$contains\":\"VP\"}}},{\"email_addresses\":{\"email_address\":{\"$not_empty\":true}}}]},\"limit\":100,\"offset\":0}", "Paginate by incrementing offset."], source: "https://docs.attio.com/rest-api/endpoint-reference/people/list-person-records", failure: "Filter uses nested operator keys ($contains, $not_empty). Agents try flat {\"equals\":\"VP\"} style and get 400." },
+      { title: "Create Task Linked to Record", intent: "Create a task: 'Send proposal to Alex Johnson' due June 10.", steps: ["POST /v2/tasks — Body: {\"data\":{\"content\":\"Send proposal\",\"format\":\"plaintext\",\"deadline_at\":\"2026-06-10T09:00:00.000000000Z\",\"linked_records\":[{\"target_object\":\"people\",\"target_record_id\":\"<id>\"}]}}"], source: "https://docs.attio.com/rest-api/endpoint-reference/tasks/create-a-task", failure: "format field required as 'plaintext'. deadline_at must have nanosecond precision (000000000Z). Assignee by workspace-member UUID." },
+      { title: "Query Pipeline List Entries", intent: "Get all entries in the 'Sales Pipeline' list in Proposal stage.", steps: ["GET /v2/lists — Find target list slug.", "POST /v2/lists/{slug}/entries/query — Body: {\"filter\":{\"stage\":{\"$eq\":\"proposal\"}},\"limit\":100}"], source: "https://docs.attio.com/rest-api/endpoint-reference/entries/list-entries", failure: "List attribute slugs are workspace-specific. Must inspect list's attribute config via GET /v2/lists/{list}/attributes first. Display label ≠ slug." }
+    ]
+  },
+
+  // LEAD GEN
+  {
+    id: "clay", name: "Clay", ars: 89, cat: "leadgen", catLabel: "Lead Gen",
+    tier: 1, arch: "a",
+    auth: "Enterprise API key (Enterprise plan only)", baseUrl: "https://api.clay.com / https://hooks.clay.com",
+    summary: "Category A: No REST API for enrichment. Webhook-in, webhook-out only. Deep enrichment is UI-only. Async with no SLA.",
+    useCases: [
+      { title: "Push leads via inbound webhook", intent: "Push a CSV of leads into a Clay table and trigger enrichment automatically.", steps: ["In Clay UI, create a table and copy its inbound webhook URL (Settings > Integrations > Webhook).", "POST https://hooks.clay.com/tables/{table_id} — JSON payload: {\"first_name\":\"...\",\"company_domain\":\"...\"}", "Clay queues the row and runs configured enrichment columns asynchronously.", "Retrieve results via an outbound 'Send to Webhook' action column."], source: "https://university.clay.com/docs/http-api-integration-overview", failure: "No synchronous response — async only, no SLA. Agents expecting immediate enriched reply will hang. Must implement callback/webhook receiver." },
+      { title: "Enterprise person lookup", intent: "Given an email or LinkedIn URL, retrieve basic contact data without UI.", steps: ["Obtain Enterprise API credentials from Clay account manager (Enterprise plan required).", "GET https://api.clay.com/v1/people?email={email} — or ?linkedin_url={url}", "Parse name, title, company_name from response."], source: "https://university.clay.com/docs/using-clay-as-an-api", failure: "Enterprise plan gate — not discoverable via trial/self-serve. Deep data (verified email, phone, revenue) not available through this endpoint." },
+      { title: "Find decision-makers at a company", intent: "Given a company domain, build a list of VP/C-level contacts.", steps: ["Create a Clay table with Company Domain seed column.", "Add 'Find Contacts at Company' enrichment column with seniority filter.", "Configure waterfall email enrichment (Apollo → Hunter → Dropcontact cascade).", "Export via 'Export to CSV' button or outbound HTTP action column."], source: "https://www.clay.com/integrations/action/find-contacts-at-company-companies-people-and-jobs", failure: "No API equivalent for this workflow. Entirely UI-bound. Cannot be triggered programmatically." }
+    ]
+  },
+  {
+    id: "apollo", name: "Apollo.io", ars: 55, cat: "leadgen", catLabel: "Lead Gen",
+    tier: 2, arch: "c",
+    auth: "X-Api-Key header (master key required)", baseUrl: "https://api.apollo.io",
+    summary: "Category C: Search returns stubs only — enrichment call mandatory for emails/phones. Master key vs standard key distinction causes common 401s.",
+    useCases: [
+      { title: "Search people by criteria", intent: "Find all VP of Sales at SaaS companies with 100–500 employees in Germany.", steps: ["POST https://api.apollo.io/api/v1/mixed_people/api_search — Body: {\"person_titles\":[\"VP of Sales\"],\"person_seniorities\":[\"vp\"],\"organization_num_employees_ranges\":[\"100,500\"],\"person_locations\":[\"Germany\"],\"per_page\":100}", "Parse people[] array — each record has id, name, title, has_email, has_direct_phone.", "Paginate by incrementing page until empty (max 500 pages)."], source: "https://docs.apollo.io/reference/people-api-search", failure: "Standard API key returns 401 — master key required. Search returns stubs, not emails — separate enrichment call needed." },
+      { title: "Enrich a single lead", intent: "Given a name and company domain, retrieve verified email and direct phone.", steps: ["POST https://api.apollo.io/api/v1/people/match — Body: {\"first_name\":\"Jane\",\"last_name\":\"Smith\",\"domain\":\"acme.com\",\"reveal_personal_emails\":true,\"reveal_phone_number\":true,\"webhook_url\":\"https://callback.com/\"}", "Email is synchronous. Phone delivery is async via webhook_url."], source: "https://docs.apollo.io/reference/people-enrichment", failure: "Phone requires a webhook — agents without a reachable callback URL cannot receive phone data. Credit depletion is silent until 422." },
+      { title: "Bulk enrich up to 10 leads", intent: "Enrich a batch of leads from a CRM export.", steps: ["POST https://api.apollo.io/api/v1/people/bulk_match — Body: {\"details\":[{\"email\":\"a@co.com\"},{\"linkedin_url\":\"...\"}],\"reveal_personal_emails\":true}", "Hard cap of 10 records per request — must batch."], source: "https://docs.apollo.io/reference/bulk-people-enrichment", failure: "Hard cap at 10. Waterfall enrichment is async — without webhook the agent never receives waterfall results." }
+    ]
+  },
+  {
+    id: "hunter", name: "Hunter.io", ars: 39, cat: "leadgen", catLabel: "Lead Gen",
+    tier: 3, arch: null,
+    auth: "api_key query parameter", baseUrl: "https://api.hunter.io/v2",
+    summary: "Best agent-ready tool in this group. Clean synchronous GET endpoints, minimal setup. Main trap: accept-all domains return non-invalid status but are unreliable.",
+    useCases: [
+      { title: "Find all emails at a domain", intent: "Given stripe.com, retrieve all known professional email addresses.", steps: ["GET https://api.hunter.io/v2/domain-search?domain=stripe.com&limit=100&offset=0&api_key={key}", "Parse data.emails[] — each item has value, confidence, position.", "Paginate using offset until offset >= meta.results."], source: "https://hunter.io/api-documentation/v2", failure: "Free plan returns max 10 results regardless of limit. accept-all domains return non-invalid status but addresses are unreliable." },
+      { title: "Find a specific person's email", intent: "Given 'Mark Zuckerberg' at meta.com, find the most likely email.", steps: ["GET https://api.hunter.io/v2/email-finder?domain=meta.com&first_name=Mark&last_name=Zuckerberg&api_key={key}", "Parse data.email and data.score (confidence 0–100).", "Pair with /v2/email-verifier to confirm deliverability."], source: "https://hunter.io/api-documentation/v2", failure: "Returns a pattern-based guess even when confidence is low. Non-null response ≠ verified. Must chain with verifier." },
+      { title: "Verify a single email", intent: "Before outreach, confirm contact@company.com is deliverable.", steps: ["GET https://api.hunter.io/v2/email-verifier?email=contact@company.com&api_key={key}", "If HTTP 202, check timed out — poll same URL again.", "Only proceed if status=valid AND smtp_check=true."], source: "https://hunter.io/api-documentation/v2", failure: "accept-all domains return non-invalid status but are unreliable. Agent must treat accept-all as uncertain." }
+    ]
+  },
+  {
+    id: "zerobounce", name: "ZeroBounce", ars: 65, cat: "leadgen", catLabel: "Lead Gen",
+    tier: 2, arch: null,
+    auth: "api_key query parameter", baseUrl: "https://api.zerobounce.net/v2",
+    summary: "Separate credit pools for validation and AI scoring. 200-email limit for sync batch — file upload required above that. 70s timeout on batch.",
+    useCases: [
+      { title: "Validate a single email", intent: "Before adding an address to a sequence, confirm deliverability.", steps: ["GET https://api.zerobounce.net/v2/validate?api_key={key}&email={email}&ip_address=", "Parse status: valid | invalid | catch-all | unknown | spamtrap | abuse | do_not_mail", "Also check sub_status for granularity (mailbox_not_found, disposable, role_based)."], source: "https://www.zerobounce.net/docs/email-validation-api-quickstart/v2-validate-emails/", failure: "Async calls can take up to 30 seconds. Agents without timeout handling will drop connections." },
+      { title: "Batch validate up to 200 emails", intent: "Validate entire lead list before uploading to a sequence tool.", steps: ["POST https://api.zerobounce.net/v2/validatebatch — Body: {\"api_key\":\"{key}\",\"email_batch\":[{\"email_address\":\"a@co.com\",\"ip_address\":\"\"}]}", "Wait up to 70 seconds. Parse email_batch[] array."], source: "https://www.zerobounce.net/docs/email-validation-api-quickstart/v2-batch-validate-emails/", failure: "70-second synchronous timeout. For lists >200, use file upload — POST >200 to this endpoint returns 400." },
+      { title: "Bulk validate via file upload", intent: "Validate a 10,000-email export from a CRM.", steps: ["POST https://bulkapi.zerobounce.net/v2/sendfile — multipart: api_key, file (CSV), email_address_column=1", "Parse file_id from response.", "Poll GET /v2/filestatus?api_key={key}&file_id={id} every 30–60s until complete:true.", "GET /v2/getfile to download results."], source: "https://www.zerobounce.net/docs/email-validation-api-quickstart/", failure: "Polling loop is the standard failure point. Large files (100k+) take 20–40 minutes. Missing email_address_column param causes 400 with misleading error." }
+    ]
+  },
+  {
+    id: "lusha", name: "Lusha", ars: 60, cat: "leadgen", catLabel: "Lead Gen",
+    tier: 2, arch: "b",
+    auth: "api_key header", baseUrl: "https://api.lusha.com/v3",
+    summary: "Category B: Every call charges api_search credits even without reveal field. No bulk endpoint — 500 contacts = 500 API calls.",
+    useCases: [
+      { title: "Prospect by ICP criteria", intent: "Find 50 Director+ Marketing contacts at fintech companies with 200–1000 employees.", steps: ["GET https://api.lusha.com/v3/contacts/prospecting/filters — Discover valid filter values first.", "POST https://api.lusha.com/v3/contacts/prospecting — Body: {\"filters\":{\"seniority\":[\"director\"],\"departments\":[\"marketing\"],\"company\":{\"size\":[\"201-500\"]}},\"size\":50}", "Parse contacts[] array — each item is a contact stub with id."], source: "https://docs.lusha.com/apis/openapi/prospecting-search-and-enrich/searchprospectingcontacts", failure: "Filter values must be fetched first — hardcoded strings like 'Director' fail with 400. Must pre-flight discovery endpoints." },
+      { title: "Enrich contact from LinkedIn URL", intent: "Given a LinkedIn profile URL, retrieve email, phone, and full profile.", steps: ["POST https://api.lusha.com/v3/contacts/search-and-enrich — Body: {\"linkedinUrl\":\"https://linkedin.com/in/target\",\"reveal\":[\"emails\",\"phones\"]}", "Parse contact.emails[] and contact.phones[] from response."], source: "https://docs.lusha.com/apis/openapi/contact-search-and-enrich", failure: "Omitting 'reveal' field returns stub and still charges api_search credit. Must always include reveal or lose credits silently." },
+      { title: "Bulk enrich a CRM contact list", intent: "Enrich 500 contacts from a HubSpot export.", steps: ["No bulk endpoint — iterate per contact.", "POST /v3/contacts/search-and-enrich per contact with email or linkedinUrl.", "Rate limit: 25 req/s — throttle to max 25 parallel requests."], source: "https://docs.lusha.com/apis/openapi/contact-search-and-enrich", failure: "No bulk endpoint. 500 contacts = 500 API calls. At 25 req/s, expect 20+ seconds minimum." }
+    ]
+  },
+  {
+    id: "zoominfo", name: "ZoomInfo", ars: 88, cat: "leadgen", catLabel: "Lead Gen",
+    tier: 1, arch: "a",
+    auth: "JWT (expires every 60 min, no refresh token)", baseUrl: "https://api.zoominfo.com/gtm/data/v1",
+    summary: "Category A: Enterprise contract required, no self-serve API. JWT expires every 60 min with no refresh token. Filter values are internal numeric IDs.",
+    useCases: [
+      { title: "Authenticate (JWT)", intent: "Obtain JWT before any API call — must refresh every 60 minutes.", steps: ["POST https://api.zoominfo.com/authenticate — Body: {\"username\":\"...\",\"password\":\"...\"}", "Parse JWT from response (valid 60 min). Store expiry timestamp.", "Re-auth when current_time > expiry - 5min."], source: "https://docs.zoominfo.com/docs/general-overview", failure: "JWT expires every 60 min with no refresh token. Long-running batches must implement proactive re-auth logic." },
+      { title: "Search contacts by criteria", intent: "Find all CMOs at healthcare companies with 1000+ employees in the US.", steps: ["POST https://api.zoominfo.com/gtm/data/v1/contacts/search — Body: {\"data\":{\"managementLevel\":[\"C-Level\"],\"companyIndustry\":[\"Healthcare\"],\"employeeCount\":{\"min\":1000}},\"page[number]\":1,\"page[size]\":100}", "Parse data.contacts[] — stubs only, no PII here.", "Pass IDs to Enrich endpoint for actual contact data."], source: "https://docs.zoominfo.com/reference/enrichinterface_enrichcontact", failure: "Search returns no PII — stubs only. Mandatory two-step pattern (search → enrich) doubles API calls. Filter values are numeric internal IDs — must use Lookup endpoint first." },
+      { title: "Lookup valid filter values", intent: "Discover valid industry codes and management levels before building a search.", steps: ["GET https://api.zoominfo.com/gtm/data/v1/lookup?filter[entity]=contact&filter[fieldType]=input", "Cache results — static, refresh daily."], source: "https://docs.zoominfo.com/docs/general-overview", failure: "ZoomInfo uses internal codenames (industry codes are numeric IDs, not 'Healthcare'). Skipping this step is the most common agent setup failure." }
+    ]
+  },
+
+  // OUTREACH
+  {
+    id: "instantly", name: "Instantly.ai", ars: 49, cat: "outreach", catLabel: "Outreach",
+    tier: 3, arch: null,
+    auth: "Bearer API key (V1 and V2 keys incompatible)", baseUrl: "https://api.instantly.ai/api/v2",
+    summary: "Homogeneous cluster. Pause=PATCH /pause, Resume=PATCH /activate — asymmetric naming is the #1 agent trap. Unique_replies vs replies field ambiguity.",
+    useCases: [
+      { title: "Create Campaign", intent: "Create a new cold email campaign with schedule and sequence.", steps: ["POST /api/v2/campaigns — Body: {\"name\":\"Q3 Outbound\",\"campaign_schedule\":{...},\"sequences\":[{...}]}", "Response: {\"id\":\"...\",\"status\":\"draft\",...} — capture id."], source: "https://developer.instantly.ai/api/v2/campaign/createcampaign", failure: "sequences is array but only index 0 is processed. V1 key returns 401 with no explanation — V2 key required." },
+      { title: "Bulk Add Leads", intent: "Upload a list of prospects to an existing campaign.", steps: ["POST /api/v2/leads/bulk — Body: {\"campaign_id\":\"...\",\"leads\":[{\"email\":\"...\",\"first_name\":\"...\"}]}", "Max 1000 leads per request. Response: {total:N,created:N,skipped:N}", "If total >1000: split into chunks of 1000."], source: "https://developer.instantly.ai/api-reference/lead/add-leads-in-bulk-to-a-campaign-or-list", failure: "Exceeding 1000-lead cap causes 400. Must infer pagination from total/created/skipped pattern." },
+      { title: "Pause / Resume Campaign", intent: "Stop sending temporarily and later resume.", steps: ["Pause: PATCH /api/v2/campaigns/{id}/pause — no body required.", "Resume: PATCH /api/v2/campaigns/{id}/activate — no body required.", "Verify: GET /api/v2/campaigns/{id}/sending-status."], source: "https://developer.instantly.ai/llms.txt", failure: "Method is PATCH not POST. Pause=…/pause, Resume=…/activate — agents guess …/resume and get 404." },
+      { title: "Get Campaign Analytics", intent: "See open rates, reply rates, bounce counts for a campaign.", steps: ["GET /api/v2/campaigns/{id}/analytics — returns sent, opened, unique_opened, replies, unique_replies, bounced.", "For daily breakdown: GET /api/v2/campaigns/{id}/analytics/daily"], source: "https://developer.instantly.ai/api/v2/analytics/getcampaignanalytics", failure: "unique_replies excludes automatic replies; replies includes them — agents report inflated counts. No date-range filter on base endpoint." }
+    ]
+  },
+  {
+    id: "lemlist", name: "Lemlist", ars: 59, cat: "outreach", catLabel: "Outreach",
+    tier: 2, arch: null,
+    auth: "HTTP Basic auth (empty username, API key as password)", baseUrl: "https://api.lemlist.com/api",
+    summary: "Homogeneous cluster. No bulk add endpoint — single-lead loop only. verifyEmail=true triggers async enrichment causing stale reads.",
+    useCases: [
+      { title: "Add Lead to Campaign", intent: "Add a single contact to an active campaign.", steps: ["POST /api/campaigns/{campaignId}/leads/{email} — Body: {\"firstName\":\"Jane\",\"lastName\":\"Doe\"}", "Query params: deduplicate=true, verifyEmail=true, findEmail=true"], source: "https://developer.lemlist.com/api-reference/endpoints/leads/create-lead-in-campaign", failure: "No bulk endpoint — must loop for scale and hits rate limits. verifyEmail=true triggers async enrichment — immediately checking lead status returns stale data." },
+      { title: "Start/Pause Campaign", intent: "Resume a paused campaign.", steps: ["Pause: POST /api/campaigns/{campaignId}/pause — Response: {state:'paused'}", "Start: POST /api/campaigns/{campaignId}/start — Response: {state:'running'}"], source: "https://developer.lemlist.com/api-reference/endpoints/campaigns/start-campaign", failure: "If campaign has no verified leads, start returns 200 but no emails are sent — agent reports success while campaign silently idles. Check GET /statutes for blocking validation errors." },
+      { title: "Get Campaign Stats", intent: "Get open rates, reply rates, and lead funnel metrics.", steps: ["GET /api/v2/campaigns/{campaignId}/stats?startDate={ISO8601}&endDate={ISO8601}", "Response: nbLeads, messagesSent, opened, clicked, replied, messagesBounced."], source: "https://developer.lemlist.com/api-reference/endpoints/campaigns/get-campaign-stats", failure: "startDate/endDate required — omitting causes generic 400. channels param must be JSON-encoded array string, not repeated query param." }
+    ]
+  },
+  {
+    id: "smartlead", name: "Smartlead", ars: 63, cat: "outreach", catLabel: "Outreach",
+    tier: 2, arch: "c",
+    auth: "api_key as query parameter on every request", baseUrl: "https://server.smartlead.ai/api/v1",
+    summary: "Category C: skipped_leads populated silently without 4xx. Analytics returns {ok:true, data:[]} for unlaunched campaigns. POST despite 'patch' in URL slug.",
+    useCases: [
+      { title: "Create Campaign", intent: "Create a campaign shell before adding sequences and leads.", steps: ["POST /campaigns/create?api_key=... — Body: {\"name\":\"Q3 Outbound\"}", "Capture id from response.", "Add sequence: POST /campaigns/{id}/sequences?api_key=...", "Add sending accounts: POST /campaigns/{id}/email-accounts?api_key=..."], source: "https://api.smartlead.ai/reference/create-campaign", failure: "Campaign creation and sequence setup are separate calls. Skip sequence step = campaign stays in draft with no validation error." },
+      { title: "Add Leads to Campaign", intent: "Upload up to 400 contacts to a campaign.", steps: ["POST /campaigns/{id}/leads?api_key=... — Body: {\"lead_list\":[{\"email\":\"...\"}],\"settings\":{\"ignore_block_list\":false}}", "Response: {success:true,added_count:N,skipped_count:N,skipped_leads:[...]}"], source: "https://api.smartlead.ai/api-reference/leads/add-to-campaign", failure: "Category C: skipped_leads populated silently — agents report added_count as success without checking skipped_count. Leads can be skipped without any 4xx error." },
+      { title: "Pause / Resume Campaign", intent: "Pause a campaign and later restart it.", steps: ["Pause: POST /campaigns/{id}/status?api_key=... — Body: {\"status\":\"PAUSED\"}", "Resume: POST /campaigns/{id}/status?api_key=... — Body: {\"status\":\"START\"}", "Stop: {\"status\":\"STOPPED\"} — WARNING: irreversible."], source: "https://api.smartlead.ai/reference/patch-campaign-status", failure: "Method is POST despite 'patch' in URL slug. Resume value is START not ACTIVE — using ACTIVE returns 422." },
+      { title: "Get Campaign Analytics", intent: "Get reply stats, open rates, and bounce counts.", steps: ["GET /campaigns/{id}/analytics?api_key=... — returns sent/open/click/reply totals.", "GET /campaigns/{id}/analytics-by-date?api_key=...&start_date=YYYY-MM-DD&end_date=YYYY-MM-DD — max 30-day span."], source: "https://api.smartlead.ai/reference/fetch-campaign-top-level-analytics", failure: "Category C: analytics returns {ok:true,data:[]} for unlaunched campaigns — indistinguishable from zero sends." }
+    ]
+  },
+  {
+    id: "replyio", name: "Reply.io", ars: 73, cat: "outreach", catLabel: "Outreach",
+    tier: 1, arch: null,
+    auth: "Bearer API key (100 req/min, 3000 req/hour)", baseUrl: "https://api.reply.io/v3",
+    summary: "Homogeneous cluster. Stats endpoint uses POST not GET. Contacts must pre-exist before bulk sequence enrollment. dateRangePreset defaults silently to lastWeek.",
+    useCases: [
+      { title: "Create Sequence", intent: "Create a new multichannel outreach sequence.", steps: ["POST /v3/sequences — Body: {\"name\":\"Q3 SaaS Outbound\",\"scheduleId\":1,\"emailAccounts\":[101]}", "Response 201: {\"id\":...,\"status\":\"new\",...} — Note: beta endpoint."], source: "https://docs.reply.io/api-reference/sequences", failure: "Beta endpoint — may change. status defaults to 'new' not 'active'. Not ready to send until email accounts assigned and at least one step added." },
+      { title: "Bulk Add Contacts to Sequence", intent: "Enroll multiple contacts into an existing sequence.", steps: ["Ensure contacts exist: POST /v3/contacts first.", "POST /v3/sequence-contacts/bulk-add — Body: {\"sequenceId\":42,\"contacts\":[{\"email\":\"jane@example.com\"}]}"], source: "https://docs.reply.io/llms.txt", failure: "Contacts must exist in Reply's database before adding to sequence. Bulk-adding raw emails returns silent skip or 422." },
+      { title: "Get Sequence Stats", intent: "Get open, reply, bounce, and meeting-booked metrics.", steps: ["POST /v3/sequences/{id}/stats — Body: {\"dateRangePreset\":\"lastMonth\"}", "Response: contacted, delivered, opened, replied, interested, bounced, meetingsBooked."], source: "https://docs.reply.io/api-reference/sequences", failure: "Stats endpoint uses POST not GET — agents default to GET and get 405. dateRangePreset defaults to lastWeek silently — new campaigns appear to have no data." }
+    ]
+  },
+  {
+    id: "outreach", name: "Outreach.io", ars: 80, cat: "outreach", catLabel: "Outreach",
+    tier: 1, arch: "b",
+    auth: "OAuth 2.0 only (no API key shortcut)", baseUrl: "https://api.outreach.io/api/v2",
+    summary: "Category B: Full OAuth required, no API key shortcut. JSON API 1.0 envelope mandatory. 3 separate calls to enroll one prospect (create → get mailbox → create sequenceState).",
+    useCases: [
+      { title: "OAuth Token Acquisition", intent: "Agent needs a valid access token before any API call.", steps: ["Redirect user to OAuth authorize URL with scopes.", "Receive code at redirect URI.", "POST https://api.outreach.io/oauth/token — form-encoded: grant_type=authorization_code, code.", "Response: {access_token, refresh_token, expires_in:7200}.", "Refresh before expiry: POST /oauth/token with grant_type=refresh_token."], source: "https://developers.outreach.io/api/oauth", failure: "Category B: Full OAuth required — no API key shortcut. Headless scripts without browser redirect get stuck at step 1. Scope selection locked at app registration — 403 with no remediation if wrong scope." },
+      { title: "Add Prospect to Sequence", intent: "Enroll a prospect into an active sequence.", steps: ["Ensure prospect exists: POST /api/v2/prospects or GET /api/v2/prospects?filter[emails]=jane@acme.com", "GET /api/v2/mailboxes — capture mailbox id.", "POST /api/v2/sequenceStates — JSON API body with prospect, sequence, and mailbox relationships."], source: "https://developers.outreach.io/api/common-patterns", failure: "Three separate API calls before enrollment. mailbox relationship mandatory — omitting gives 422 'relationships missing'. No automatic deduplication — must check existence first." },
+      { title: "Get Sequence Stats", intent: "Get aggregate metrics (opens, clicks, replies) for a sequence.", steps: ["GET /api/v2/sequences?filter[id]=456&fields[sequence]=name,clickCount,openCount,replyCount", "Use sparse fieldsets to retrieve only needed metrics."], source: "https://developers.outreach.io/api/common-patterns", failure: "Sparse fieldsets syntax required to get metrics — plain GET returns attributes without stats. Agents unfamiliar with JSON API sparse fieldsets return empty metrics." }
+    ]
+  },
+  {
+    id: "phantombuster", name: "PhantomBuster", ars: 67, cat: "outreach", catLabel: "Outreach",
+    tier: 2, arch: null,
+    auth: "X-Phantombuster-Key header", baseUrl: "https://api.phantombuster.com/api/v2",
+    summary: "Argument schema is Phantom-specific (not in API docs). No explicit status field — must parse console text. S3 download URL construction is 2-step.",
+    useCases: [
+      { title: "Launch a Phantom", intent: "Run a specific Phantom automation (e.g. LinkedIn Profile Scraper).", steps: ["Find agent ID from Phantom's console URL in dashboard.", "POST /api/v2/agents/launch — Body: {\"id\":\"1234567890\",\"argument\":{\"sessionCookie\":\"AQE...\",\"spreadsheetUrl\":\"https://docs.google.com/...\"}}", "Response 200: agent queued. No run ID — must poll status."], source: "https://hub.phantombuster.com/reference/post_agents-launch", failure: "Argument schema is Phantom-specific and not in API reference — defined per-Phantom in the UI. Guessing field names gets 'Phantom argument isn't valid'. Missing sessionCookie is the most common LinkedIn failure." },
+      { title: "Retrieve Phantom Results", intent: "Download the scraped data from a completed Phantom run.", steps: ["GET /api/v2/agents/fetch?id={agent_id} — get s3Folder and orgS3Folder fields.", "Build URL: https://phantombuster.s3.amazonaws.com/{orgS3Folder}/{s3Folder}/result.csv", "GET {download_url} — no auth needed."], source: "https://hub.phantombuster.com/reference/get_agents-fetch", failure: "API response does not contain results — returns metadata to construct download URL. Agents treating API response as data output get empty results." },
+      { title: "Chain Phantoms (workflow)", intent: "Run Phantom A (Search Export) then feed output to Phantom B (Profile Scraper).", steps: ["Launch Phantom A: POST /api/v2/agents/launch", "Poll until complete: loop GET /api/v2/agents/fetch-output?id=PhantomA_ID", "Build S3 URL from fetch response.", "Launch Phantom B with argument: {spreadsheetUrl: \"{S3_URL_from_step_3}\"}"], source: "https://hub.phantombuster.com/docs/api", failure: "UI Workflows cannot be API-triggered. Must chain individual Phantom calls manually. S3 URL as spreadsheetUrl input is undocumented behavior." }
+    ]
+  },
+  {
+    id: "snovio", name: "Snov.io", ars: 68, cat: "outreach", catLabel: "Outreach",
+    tier: 2, arch: "b",
+    auth: "OAuth 2.0 client credentials (1h TTL, no refresh token)", baseUrl: "https://api.snov.io",
+    summary: "Category B: 1-hour token TTL, no refresh token — full re-auth every session. Campaign enrollment is list-driven, not API-driven. No campaign-level pause.",
+    useCases: [
+      { title: "Authenticate", intent: "Get access token before any API call.", steps: ["POST /v1/oauth/access_token — Body: grant_type=client_credentials&client_id={id}&client_secret={secret}", "Response: {access_token, token_type:Bearer, expires_in:3600}", "Re-auth each session — no refresh token."], source: "https://snov.io/api", failure: "Category B: No refresh token. Every session requires full re-auth. Most agent SDKs don't handle this automatically." },
+      { title: "Find email for a prospect", intent: "Given name and domain, find verified email address.", steps: ["POST /v2/emails-by-domain-by-name/start — Body: {\"rows\":[{\"first_name\":\"Jane\",\"last_name\":\"Doe\",\"domain\":\"acme.com\"}]}", "Response: {task_hash:\"abc123\"}", "GET /v2/emails-by-domain-by-name/result?task_hash=abc123 — poll until result populated."], source: "https://snov.io/api", failure: "Async two-step pattern mandatory — no webhook available. Agents that only call start and never poll get task hashes but no data." },
+      { title: "Pause individual contact", intent: "Stop the sequence for a specific contact in a campaign.", steps: ["POST /v1/change-recipient-status — Body: {\"access_token\":\"...\",\"email\":\"jane@acme.com\",\"campaign_id\":123,\"status\":\"Paused\"}", "Supported statuses: Active, Paused, Finished, Unsubscribed."], source: "https://snov.io/api", failure: "No campaign-level pause — only per-recipient status changes. Pausing 100-contact campaign = 100 separate API calls, hitting 60 req/min rate limit." }
+    ]
+  },
+
+  // ANALYTICS / DESIGN / PM
+  {
+    id: "mixpanel", name: "Mixpanel", ars: 65, cat: "pm", catLabel: "Analytics",
+    tier: 2, arch: null,
+    auth: "HTTP Basic Auth (service_account:secret)", baseUrl: "https://mixpanel.com/api/2.0",
+    summary: "event param must be JSON array, not string. Cohort pagination uses session_id from first response. NDJSON raw export breaks naive JSON parsers.",
+    useCases: [
+      { title: "Query event counts", intent: "Show how many times the Purchase event fired last month, grouped by day.", steps: ["GET https://mixpanel.com/api/2.0/events/aggregate?event=[\"Purchase\"]&unit=day&from_date=YYYY-MM-01&to_date=YYYY-MM-31&project_id={id}", "Parse data.values for per-day counts."], source: "https://developer.mixpanel.com/reference/events-aggregate", failure: "event param must be a JSON array ([\"Purchase\"]), not an unquoted string. Wrong from_date format returns 400." },
+      { title: "Query a saved funnel", intent: "Get conversion rates for our signup funnel.", steps: ["GET /api/2.0/funnels/list?project_id={id} — Get funnel IDs by name.", "GET /api/2.0/funnels?funnel_id={id}&from_date=...&to_date=..."], source: "https://developer.mixpanel.com/reference/funnels", failure: "GET /funnels/list returns IDs not names — must map name→ID. Ad-hoc funnels have no ID." },
+      { title: "Export cohort user IDs", intent: "Export the user IDs in the 'Power Users' cohort.", steps: ["GET /api/2.0/cohorts/list?project_id={id} — Match cohort by name.", "GET /api/2.0/engage?where=properties[\"$cohort_id\"]=={cohort_id}&project_id={id}", "Paginate using session_id + page params until results empty."], source: "https://developer.mixpanel.com/reference/engage-query", failure: "GET /engage paginates via session_id (from first response) + page increment. Ignoring session_id loses pagination state." }
+    ]
+  },
+  {
+    id: "amplitude", name: "Amplitude", ars: 70, cat: "pm", catLabel: "Analytics",
+    tier: 1, arch: "c",
+    auth: "HTTP Basic Auth (api_key:secret_key)", baseUrl: "https://amplitude.com/api/2",
+    summary: "Category C: Misspelled event name returns 200 OK with series:[[]] — indistinguishable from zero data. Multiple e= params must be repeated (not array). 3-step async cohort export.",
+    useCases: [
+      { title: "Query event segmentation", intent: "Show daily song_play event counts for the last 30 days.", steps: ["GET https://amplitude.com/api/2/events/segmentation?e={\"event_type\":\"song_play\"}&start=YYYYMMDD&end=YYYYMMDD&m=totals", "Parse data.series[0] — empty array means event name didn't match."], source: "https://amplitude.com/docs/apis/analytics/dashboard-rest", failure: "Category C: Misspelled event name returns 200 OK with series:[[]] — identical to valid-but-zero response. Cannot distinguish wrong event name from no data." },
+      { title: "Funnel analysis", intent: "Get conversion rates for: Sign Up → Add to Cart → Purchase.", steps: ["GET https://amplitude.com/api/2/funnels?e={\"event_type\":\"Sign Up\"}&e={\"event_type\":\"Add to Cart\"}&e={\"event_type\":\"Purchase\"}&start=YYYYMMDD&end=YYYYMMDD&mode=ordered&cs=2592000"], source: "https://amplitude.com/docs/apis/analytics/dashboard-rest", failure: "Multiple e params must be repeated (not array) — HTTP clients that serialize as e[]=... are rejected. cs defaults to 2592000 (30 days) if omitted — implicit default affects results." },
+      { title: "Export cohort user IDs (async)", intent: "Export all user IDs in cohort ID abc123.", steps: ["GET https://amplitude.com/api/5/cohorts/request/abc123 — Returns 202 with request_id.", "Poll GET /api/5/cohorts/request-status/{request_id} until async_status==\"JOB_COMPLETED\".", "GET /api/5/cohorts/request/{request_id}/file — follows 302 to S3."], source: "https://amplitude.com/docs/apis/analytics/behavioral-cohorts", failure: "Three-step async — agents that don't poll get stuck at 202. S3 redirect URL expires in ~1 minute; must follow immediately." }
+    ]
+  },
+  {
+    id: "metabase", name: "Metabase", ars: 74, cat: "pm", catLabel: "Analytics",
+    tier: 1, arch: null,
+    auth: "X-Api-Key header (or session token for older instances)", baseUrl: "https://{your-instance}",
+    summary: "MBQL requires numeric field IDs, not names — must discover via metadata API. Dashboard filter params shape silently ignored = wrong data.",
+    useCases: [
+      { title: "Run ad-hoc SQL query", intent: "Execute SELECT COUNT(*) FROM orders WHERE status='complete'.", steps: ["POST /api/dataset — Body: {\"database\":1,\"type\":\"native\",\"native\":{\"query\":\"SELECT COUNT(*) FROM orders WHERE status='complete'\"}}", "Response: {\"data\":{\"rows\":[[1234]],\"cols\":[{\"name\":\"count\"}]}}"], source: "https://www.metabase.com/learn/metabase-basics/administration/administration-and-operation/metabase-api", failure: "database is a numeric ID, not name. Must resolve database name → ID first. Native SQL requires SELECT privileges — errors propagate as 400 with cryptic MBQL wrappers." },
+      { title: "Get results of a saved card", intent: "Pull the latest results from the 'Weekly Revenue' saved question.", steps: ["GET /api/card — List all cards; match by name to get card_id.", "POST /api/card/{id}/query — Body: {\"ignore_cache\":true} to force refresh.", "Response: data.rows, data.cols."], source: "https://www.metabase.com/docs/latest/api", failure: "Results may be cached. Not passing ignore_cache:true returns stale data. Large results need /api/card/{id}/query/csv for full export." },
+      { title: "Get dashboard data", intent: "Retrieve all charts from the 'Exec Dashboard' with current data.", steps: ["GET /api/dashboard — Match by name to get dashboard_id.", "GET /api/dashboard/{id} — Get dashcards array with card_id for each panel.", "For each card_id: POST /api/card/{id}/query to get results."], source: "https://www.metabase.com/docs/latest/api", failure: "Dashboards with filters need parameters in card query body — format: [{type:category,target:[dimension,[field,42,null]],value:paid}]. Ignoring filters returns unfiltered (wrong) data silently." }
+    ]
+  },
+  {
+    id: "figma", name: "Figma", ars: 72, cat: "pm", catLabel: "Design",
+    tier: 1, arch: null,
+    auth: "X-Figma-Token or OAuth 2.0 Bearer", baseUrl: "https://api.figma.com/v1",
+    summary: "GET /images returns S3 URL, not bytes. Only published components appear in component endpoints. team_id not discoverable via API.",
+    useCases: [
+      { title: "Get file structure", intent: "Get the full document tree for a Figma file.", steps: ["GET https://api.figma.com/v1/files/{file_key}?depth=3 — Limit depth to avoid 50–200MB responses.", "For specific nodes: GET /v1/files/{file_key}/nodes?ids=1:2,1:3"], source: "https://developers.figma.com/docs/rest-api/file-endpoints/", failure: "Full file JSON for complex files can be 50–200MB. Must use depth parameter. Node IDs are non-human-readable (e.g. '1:23')." },
+      { title: "Export nodes as PNG/SVG", intent: "Export the hero illustration node as a 2x PNG.", steps: ["GET https://api.figma.com/v1/images/{file_key}?ids=1:23&format=png&scale=2", "Response: {\"images\":{\"1:23\":\"https://s3.aws.../image.png\"}} — URL only, not binary.", "Download binary from returned S3 URL (no auth needed)."], source: "https://developers.figma.com/docs/rest-api/file-endpoints/", failure: "API returns URL, not image bytes. S3 URL is time-limited (a few hours) — must download immediately." },
+      { title: "List published components", intent: "List all published components in this design file.", steps: ["GET https://api.figma.com/v1/files/{file_key}/components", "Response: {meta:{components:[{key,file_key,node_id,name,thumbnail_url}]}}"], source: "https://developers.figma.com/docs/rest-api/component-endpoints/", failure: "Only returns published components. Local/unpublished components don't appear. Agents may report zero components for files with components not published as library." }
+    ]
+  },
+  {
+    id: "canva", name: "Canva", ars: 91, cat: "pm", catLabel: "Design",
+    tier: 1, arch: "a",
+    auth: "OAuth 2.0 only (user-scoped, no service account)", baseUrl: "https://api.canva.com/rest/v1",
+    summary: "Category A: No API for template content editing. POST /designs creates empty shell — all content editing is UI-only via Apps SDK. No service-account model.",
+    useCases: [
+      { title: "Create a blank design", intent: "Create a new presentation design for the user.", steps: ["POST https://api.canva.com/rest/v1/designs — Body: {\"design_type\":{\"type\":\"presentation\"}}", "Response: {\"design\":{\"id\":\"...\",\"edit_url\":\"...\"}}", "Return edit_url — user must open in browser to add content."], source: "https://www.canva.dev/docs/connect/api-reference/designs/create-design/", failure: "API creates an EMPTY design. Adding content (text, images, brand elements) requires browser UI. There is no API call to fill in design content." },
+      { title: "Export design as PNG (async)", intent: "Export the finished proposal design as PNG.", steps: ["POST https://api.canva.com/rest/v1/exports — Body: {\"design_id\":\"{id}\",\"format\":{\"type\":\"png\",\"export_quality\":\"regular\"}}", "Response: {\"job\":{\"id\":\"{job_id}\",\"status\":\"in_progress\"}}", "Poll GET /rest/v1/exports/{job_id} until status=='success'.", "Download from job.urls[0] (valid 24 hours)."], source: "https://www.canva.dev/docs/connect/api-reference/exports/create-design-export-job/", failure: "Export is async — agents that don't poll get stuck. Multi-page designs export each page as separate URL in urls array." },
+      { title: "List user's designs", intent: "Find all designs the user has created in Canva.", steps: ["GET https://api.canva.com/rest/v1/designs?type=presentation&ownership=owned", "Response: {items:[{id,title,thumbnail,urls,created_at}],continuation:\"...\"}", "Paginate using continuation token."], source: "https://www.canva.dev/docs/connect/", failure: "Only returns designs of the authenticated user's token. Cannot list designs of other team members — no service-account model." }
+    ]
+  },
+  {
+    id: "notion", name: "Notion", ars: 63, cat: "pm", catLabel: "PM",
+    tier: 2, arch: null,
+    auth: "Bearer token + Notion-Version: 2026-03-11 header", baseUrl: "https://api.notion.com/v1",
+    summary: "Integration must be shared in UI before API access. Property types have wildly different JSON shapes. Search scoped to shared pages only.",
+    useCases: [
+      { title: "Create a page in a database", intent: "Add a new row to the 'CRM Contacts' database with name and email.", steps: ["GET database_id from Notion database URL.", "POST https://api.notion.com/v1/pages — Body: {\"parent\":{\"database_id\":\"{id}\"},\"properties\":{\"Name\":{\"title\":[{\"text\":{\"content\":\"Acme\"}}]},\"Email\":{\"email\":\"contact@acme.com\"}}}"], source: "https://developers.notion.com/reference/post-page", failure: "Property names case-sensitive and must exactly match DB column names. Property value format varies wildly by type. Must retrieve DB schema first via GET /v1/databases/{id}." },
+      { title: "Query database with filters", intent: "Get all 'Active' deals from the Deals database owned by John.", steps: ["POST https://api.notion.com/v1/databases/{id}/query — Body: {\"filter\":{\"and\":[{\"property\":\"Status\",\"select\":{\"equals\":\"Active\"}}]},\"page_size\":100}", "Paginate: re-post with start_cursor:{next_cursor} until has_more==false."], source: "https://developers.notion.com/reference/post-database-query", failure: "Filtering by people property requires Notion user ID (UUID), not email. Must resolve email → user ID via GET /v1/users first." },
+      { title: "Append blocks to a page", intent: "Add a table and paragraph to the 'Meeting Notes' page.", steps: ["PATCH https://api.notion.com/v1/blocks/{page_id}/children — Body: {\"children\":[{\"object\":\"block\",\"type\":\"paragraph\",\"paragraph\":{\"rich_text\":[{\"type\":\"text\",\"text\":{\"content\":\"Summary:\"}}]}}]}", "Max 100 blocks per request."], source: "https://developers.notion.com/reference/patch-block-children", failure: "Block type schemas differ significantly — applying paragraph schema to other types gives 400. Tables require table block with separate table_row children in nested structure." }
+    ]
+  },
+  {
+    id: "linear", name: "Linear", ars: 46, cat: "pm", catLabel: "PM",
+    tier: 3, arch: "c",
+    auth: "OAuth 2.0 Bearer or personal API key (no 'Bearer' prefix for API key)", baseUrl: "https://api.linear.app/graphql",
+    summary: "Low ARS = agents mostly succeed. GraphQL schema is introspectable. State names are custom (no standard 'Done') — must resolve dynamically.",
+    useCases: [
+      { title: "Create an issue", intent: "Create a bug report titled 'Login page crashes on Safari' in the Frontend team.", steps: ["Query team ID: {teams{nodes{id name}}}", "Optionally query workflow states for stateId.", "issueCreate mutation: {issueCreate(input:{title:\"...\",teamId:\"{id}\",priority:1}){success issue{id identifier url}}}"], source: "https://linear.app/developers/graphql", failure: "Without stateId, issue goes in first Backlog state — may not be intended. teamId must be fetched dynamically (UUID)." },
+      { title: "Update issue status", intent: "Move issue BLA-42 from 'In Progress' to 'Done'.", steps: ["Query available states: {workflowStates(filter:{team:{id:{eq:\"{id}\"}}}){{nodes{id name}}}}", "issueUpdate mutation: {issueUpdate(id:\"{id}\",input:{stateId:\"{doneStateId}\"}){success issue{id state{name}}}}"], source: "https://linear.app/developers/graphql", failure: "State names like 'Done' vary between teams. Agent must query states dynamically — never hardcode." },
+      { title: "Get all issues for a project", intent: "List all open issues in the 'Q3 Launch' project.", steps: ["Query project ID: {projects{nodes{id name}}}", "Query issues: {issues(filter:{project:{id:{eq:\"{id}\"}},state:{type:{neq:\"completed\"}}},first:50){nodes{id identifier title state{name}} pageInfo{hasNextPage endCursor}}}", "Paginate with after:\"{endCursor}\" while hasNextPage==true."], source: "https://linear.app/developers/filtering", failure: "Relay-style cursor pagination — must check pageInfo.hasNextPage and pass endCursor. Default 50 per page." }
+    ]
+  },
+  {
+    id: "jira", name: "Jira", ars: 77, cat: "pm", catLabel: "PM",
+    tier: 1, arch: "c",
+    auth: "Basic Auth (email:api_token base64)", baseUrl: "https://{domain}.atlassian.net",
+    summary: "Category C: JQL returns 200 with issues:[] for incorrect queries. ADF required for description (not plain text). Custom field IDs are instance-specific.",
+    useCases: [
+      { title: "Create an issue", intent: "Create a bug report in project KEY with summary 'Null pointer on checkout'.", steps: ["POST /rest/api/3/issue — Body: {\"fields\":{\"project\":{\"key\":\"PROJ\"},\"summary\":\"Null pointer\",\"issuetype\":{\"name\":\"Bug\"},\"description\":{\"type\":\"doc\",\"version\":1,\"content\":[{\"type\":\"paragraph\",\"content\":[{\"type\":\"text\",\"text\":\"Steps...\"}]}]}}}", "Response: {\"id\":\"10001\",\"key\":\"PROJ-42\"}"], source: "https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/", failure: "description uses Atlassian Document Format (ADF), NOT plain text. Agent sending plain string gets 400. Required fields vary per project — discover via GET /rest/api/3/issue/createmeta." },
+      { title: "Search issues with JQL", intent: "Find all open bugs in PROJ assigned to me, updated last 7 days.", steps: ["GET /rest/api/3/search/jql?jql=project=PROJ AND issuetype=Bug AND status!=Done AND assignee=currentUser() AND updated>=-7d&maxResults=50&startAt=0", "Paginate: increment startAt by maxResults while startAt+maxResults < total."], source: "https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-search/", failure: "Category C: JQL returns 200 with issues:[] for incorrect queries — indistinguishable from valid-but-empty results. Old GET /search deprecated after 2025-08-01." },
+      { title: "Transition issue to new status", intent: "Move issue PROJ-42 to 'In Review'.", steps: ["GET /rest/api/3/issue/{key}/transitions — Get available transitions with id and name.", "Match by name to get transition.id.", "POST /rest/api/3/issue/{key}/transitions — Body: {\"transition\":{\"id\":\"31\"}} — Returns 204."], source: "https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-transitions/", failure: "Transition IDs are workflow-specific — never hardcode. Must GET transitions first for each issue. Transitions with required fields need fields or update in body." },
+      { title: "Get sprint issues (Agile)", intent: "List all issues in the current active sprint for board 42.", steps: ["GET /rest/agile/1.0/board/{boardId}/sprint?state=active — Get active sprint id.", "GET /rest/agile/1.0/sprint/{sprintId}/issue?maxResults=50&startAt=0", "Paginate with startAt."], source: "https://developer.atlassian.com/cloud/jira/software/rest/api-group-sprint/", failure: "Requires Jira Software (not just Jira Cloud). Agile API is separate from platform API. Board ID is not the project ID." }
+    ]
+  }
+];
+
+// Build score grid
+function getBarColor(ars) {
+  if (ars >= 70) return '#EF4444';
+  if (ars >= 50) return '#F97316';
+  return '#22C55E';
+}
+
+function getTierClass(ars) {
+  if (ars >= 70) return 'tier-1';
+  if (ars >= 50) return 'tier-2';
+  return 'tier-3';
+}
+
+function getCatPillClass(cat) {
+  const map = { crm: 'cat-pill-crm', leadgen: 'cat-pill-leadgen', outreach: 'cat-pill-outreach', pm: 'cat-pill-pm' };
+  return map[cat] || '';
+}
+
+function getArchClass(arch) {
+  if (!arch) return '';
+  return `cat-arch-${arch}`;
+}
+function getArchLabel(arch) {
+  if (!arch) return '';
+  const m = { a: 'Cat A', b: 'Cat B', c: 'Cat C' };
+  return m[arch];
+}
+
+const grid = document.getElementById('scoreGrid');
+[...PRODUCTS].sort((a, b) => b.ars - a.ars).forEach(p => {
+  const card = document.createElement('div');
+  card.className = `score-card`;
+  card.dataset.cat = p.cat;
+  card.dataset.name = p.name.toLowerCase();
+  card.onclick = () => {
+    const el = document.getElementById('card-' + p.id);
+    if (el) { el.scrollIntoView({ behavior: 'smooth', block: 'start' }); if (!el.classList.contains('open')) toggleProduct(el); }
+  };
+  card.innerHTML = `
+    <div class="score-card-header">
+      <span class="product-name">${p.name}</span>
+      <span class="ars-badge ${getTierClass(p.ars)}">${p.ars}</span>
+    </div>
+    <div class="ars-bar-bg"><div class="ars-bar" style="width:${p.ars}%;background:${getBarColor(p.ars)}"></div></div>
+    <div class="score-card-meta">
+      <span class="cat-pill ${getCatPillClass(p.cat)}">${p.catLabel}</span>
+      ${p.arch ? `<span class="cat-pill ${getArchClass(p.arch)}">${getArchLabel(p.arch)}</span>` : ''}
+    </div>`;
+  grid.appendChild(card);
+});
+
+// Build product cards
+const container = document.getElementById('productsContainer');
+const catGroups = [
+  { key: 'crm', label: 'CRM Tools' },
+  { key: 'leadgen', label: 'Lead Gen / Data Enrichment' },
+  { key: 'outreach', label: 'Cold Email & Outreach' },
+  { key: 'pm', label: 'Analytics, Design & PM' }
+];
+
+catGroups.forEach(group => {
+  const products = PRODUCTS.filter(p => p.cat === group.key);
+  const groupEl = document.createElement('div');
+  groupEl.className = 'category-group';
+  groupEl.dataset.cat = group.key;
+  groupEl.innerHTML = `<h3>${group.label} <span class="cat-count">${products.length} products</span></h3>`;
+
+  products.forEach(p => {
+    const card = document.createElement('div');
+    card.className = 'product-card';
+    card.id = 'card-' + p.id;
+    card.dataset.cat = p.cat;
+    card.dataset.name = p.name.toLowerCase();
+
+    const archPill = p.arch ? `<span class="product-pill ${getArchClass(p.arch)}" style="font-size:11px;padding:2px 7px;border-radius:4px;">${getArchLabel(p.arch)}: ${p.arch === 'a' ? 'No headless path' : p.arch === 'b' ? 'Token amplifier' : 'Silent failures'}</span>` : '';
+
+    const useCasesHtml = p.useCases.map((uc, i) => `
+      <div class="use-case-item">
+        <div class="use-case-header" onclick="toggleUC(this)">
+          <span class="uc-num">${i + 1}</span>
+          <div style="flex:1">
+            <div class="uc-title">${uc.title}</div>
+            <div class="uc-intent">${uc.intent}</div>
+          </div>
+          <span class="uc-toggle">▼</span>
+        </div>
+        <div class="use-case-body">
+          <div class="uc-field">
+            <div class="uc-field-label">User Intent</div>
+            <div class="uc-intent-text">${uc.intent}</div>
+          </div>
+          <div class="uc-field">
+            <div class="uc-field-label">Steps</div>
+            <div class="uc-steps"><ol>${uc.steps.map(s => `<li>${s.replace(/`([^`]+)`/g, '<code>$1</code>').replace(/POST |GET |PATCH |DELETE /g, m => `<code>${m.trim()}</code> `)}</li>`).join('')}</ol></div>
+          </div>
+          <div class="uc-field">
+            <div class="uc-field-label">Primary Source</div>
+            <div class="uc-source"><a href="${uc.source}" target="_blank" rel="noopener">${uc.source}</a></div>
+          </div>
+          <div class="uc-field">
+            <div class="uc-field-label">Agent Failure Point</div>
+            <div class="uc-failure">${uc.failure}</div>
+          </div>
+        </div>
+      </div>`).join('');
+
+    card.innerHTML = `
+      <div class="product-header" onclick="toggleProduct(this.parentElement)">
+        <div class="product-ars-big ${getTierClass(p.ars)}" style="color:${getBarColor(p.ars)}">${p.ars}</div>
+        <div class="product-info">
+          <h4>${p.name}</h4>
+          <div class="product-summary">${p.summary}</div>
+          <div class="product-pills">
+            <span class="product-pill ${getCatPillClass(p.cat)}">${p.catLabel}</span>
+            ${archPill}
+          </div>
+        </div>
+        <div class="expand-icon">▼</div>
+      </div>
+      <div class="product-body">
+        <div class="product-meta-bar">
+          <div class="meta-item"><div class="meta-key">Auth</div><div class="meta-val">${p.auth}</div></div>
+          <div class="meta-item"><div class="meta-key">Base URL</div><div class="meta-val" style="font-family:monospace;font-size:11px">${p.baseUrl}</div></div>
+          <div class="meta-item"><div class="meta-key">Use Cases</div><div class="meta-val">${p.useCases.length} documented</div></div>
+          <div class="meta-item"><div class="meta-key">ARS Score</div><div class="meta-val" style="color:${getBarColor(p.ars)}">${p.ars} / 100</div></div>
+        </div>
+        <div class="use-cases-container">
+          <h5>Step-by-Step Use Cases</h5>
+          ${useCasesHtml}
+        </div>
+      </div>`;
+
+    groupEl.appendChild(card);
+  });
+
+  container.appendChild(groupEl);
+});
+
+// Toggle functions
+function toggleProduct(card) {
+  card.classList.toggle('open');
+}
+function toggleUC(header) {
+  const item = header.parentElement;
+  item.classList.toggle('open');
+}
+
+// Filter functions
+let currentCat = 'all';
+function filterCat(cat, btn) {
+  currentCat = cat;
+  document.querySelectorAll('.filter-tab').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  applyFilters();
+}
+function filterProducts() {
+  applyFilters();
+}
+function applyFilters() {
+  const query = document.getElementById('productSearch').value.toLowerCase();
+  document.querySelectorAll('.product-card').forEach(card => {
+    const matchCat = currentCat === 'all' || card.dataset.cat === currentCat;
+    const matchQuery = !query || card.dataset.name.includes(query);
+    card.classList.toggle('hidden', !(matchCat && matchQuery));
+  });
+  document.querySelectorAll('.score-card').forEach(card => {
+    const matchCat = currentCat === 'all' || card.dataset.cat === currentCat;
+    const matchQuery = !query || card.dataset.name.includes(query);
+    card.classList.toggle('hidden', !(matchCat && matchQuery));
+  });
+  document.querySelectorAll('.category-group').forEach(group => {
+    const visible = [...group.querySelectorAll('.product-card')].some(c => !c.classList.contains('hidden'));
+    group.style.display = visible ? '' : 'none';
+  });
+}
+</script>
+</body>
+</html>
