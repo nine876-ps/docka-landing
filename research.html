@@ -478,6 +478,52 @@ footer {
 footer a { color: var(--accent); text-decoration: none; }
 footer a:hover { text-decoration: underline; }
 
+/* ICP */
+.icp-section { margin-bottom: 48px; }
+.icp-section > h2 { font-size: 20px; font-weight: 700; margin-bottom: 8px; }
+.icp-intro { font-size: 14px; color: var(--text-2); max-width: 720px; margin-bottom: 28px; line-height: 1.65; }
+
+.icp-matrix { position: relative; margin-bottom: 20px; }
+.icp-matrix-label { font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-3); margin-bottom: 8px; }
+.icp-grid-2x2 { display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: auto auto; gap: 8px; max-width: 800px; }
+.icp-quad { border-radius: 10px; padding: 16px 18px; border: 1px solid var(--border); }
+.icp-quad.muted { background: var(--bg-sub); opacity: 0.6; }
+.icp-quad.target { background: var(--acc-bg); border-color: var(--accent); border-width: 2px; }
+.icp-quad-badge { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--accent); margin-bottom: 6px; }
+.icp-quad-label { font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+.icp-quad-desc { font-size: 12px; color: var(--text-2); margin-bottom: 6px; }
+.icp-quad-examples { font-size: 11px; color: var(--text-3); font-style: italic; }
+.icp-quad.target .icp-quad-examples { color: var(--accent); font-style: normal; font-weight: 500; }
+.icp-axis-x { font-size: 11px; font-weight: 600; color: var(--text-3); text-align: center; max-width: 800px; margin-top: 6px; }
+.icp-axis-y { display: none; }
+
+.icp-note { background: var(--bg-sub); border: 1px solid var(--border); border-left: 3px solid var(--accent); border-radius: 8px; padding: 14px 16px; font-size: 13px; color: var(--text-2); line-height: 1.65; margin-top: 16px; max-width: 800px; }
+.icp-note strong { color: var(--text); }
+
+.personas-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; margin-bottom: 32px; }
+.persona-card { background: var(--bg-sub); border: 1px solid var(--border); border-radius: 12px; padding: 20px; }
+.persona-header { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 14px; }
+.persona-icon { font-size: 22px; flex-shrink: 0; }
+.persona-role { font-size: 15px; font-weight: 700; color: var(--text); margin-bottom: 2px; }
+.persona-context { font-size: 12px; color: var(--text-3); line-height: 1.4; }
+.persona-pain { margin-bottom: 12px; }
+.persona-pain-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-3); margin-bottom: 6px; }
+.persona-pain ul { list-style: none; padding: 0; }
+.persona-pain ul li { font-size: 13px; color: var(--text-2); padding-left: 14px; position: relative; margin-bottom: 4px; line-height: 1.5; }
+.persona-pain ul li::before { content: "—"; position: absolute; left: 0; color: var(--text-3); }
+.persona-quote { font-size: 13px; color: var(--text); border-left: 2px solid var(--acc-mid); padding-left: 12px; margin-bottom: 12px; font-style: italic; line-height: 1.6; }
+.persona-buy { font-size: 12px; color: var(--text-2); }
+.persona-buy-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-3); margin-bottom: 4px; }
+
+.icp-segments h3 { font-size: 17px; font-weight: 700; margin-bottom: 16px; }
+.segments-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+.segment-card { background: var(--bg); border: 1px solid var(--border); border-radius: 10px; padding: 16px; }
+.segment-icon { font-size: 20px; margin-bottom: 8px; }
+.segment-title { font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 6px; }
+.segment-desc { font-size: 12px; color: var(--text-2); margin-bottom: 8px; line-height: 1.55; }
+.segment-examples { font-size: 11px; color: var(--accent); margin-bottom: 8px; font-weight: 500; }
+.segment-buyer { font-size: 11px; color: var(--text-3); font-style: italic; }
+
 /* RESPONSIVE */
 @media (max-width: 768px) {
   .dims { grid-template-columns: 1fr; }
@@ -486,6 +532,9 @@ footer a:hover { text-decoration: underline; }
   .product-header { flex-wrap: wrap; gap: 10px; }
   .product-meta-bar { flex-wrap: wrap; }
   .meta-item { min-width: 50%; border-right: none; border-bottom: 1px solid var(--border); }
+  .personas-grid { grid-template-columns: 1fr; }
+  .segments-grid { grid-template-columns: 1fr 1fr; }
+  .icp-grid-2x2 { grid-template-columns: 1fr; }
 }
 </style>
 </head>
@@ -599,6 +648,176 @@ footer a:hover { text-decoration: underline; }
         <span class="tag">Smartlead 63</span>
         <span class="tag">Reply.io 73</span>
         <span class="tag">Snov.io 68</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ICP -->
+  <div class="icp-section">
+    <h2>Who Buys Docka — ICP &amp; Buyer Perspectives</h2>
+    <p class="icp-intro">Synthesized from product research, customer conversations, and the fundamental insight that <strong>agent intent matters more than current API readiness</strong>. The best Docka customers are companies whose users <em>already want</em> to automate with AI — even if the product doesn't support it yet.</p>
+
+    <div class="icp-matrix">
+      <div class="icp-matrix-label">Where Docka lives:</div>
+      <div class="icp-grid-2x2">
+        <div class="icp-quad icp-q-tl">
+          <div class="icp-quad-label">High intent · High readiness</div>
+          <div class="icp-quad-desc">Already works. No urgency.</div>
+          <div class="icp-quad-examples">Stripe, Twilio, Linear</div>
+        </div>
+        <div class="icp-quad icp-q-tr muted">
+          <div class="icp-quad-label">Low intent · High readiness</div>
+          <div class="icp-quad-desc">Agent-ready but nobody asks for it.</div>
+          <div class="icp-quad-examples">Not our customer</div>
+        </div>
+        <div class="icp-quad icp-q-bl target">
+          <div class="icp-quad-badge">🎯 Docka's market</div>
+          <div class="icp-quad-label">High intent · Low readiness</div>
+          <div class="icp-quad-desc">Users want to automate. Product blocks them. Every week of delay = churn risk.</div>
+          <div class="icp-quad-examples">Salesforce · HubSpot · Jira · Amplitude · Notion · Canva · Clay · Outreach.io</div>
+        </div>
+        <div class="icp-quad icp-q-br muted">
+          <div class="icp-quad-label">Low intent · Low readiness</div>
+          <div class="icp-quad-desc">No automation makes sense yet.</div>
+          <div class="icp-quad-examples">Not our customer</div>
+        </div>
+      </div>
+      <div class="icp-axis-x">Agent Intent →</div>
+      <div class="icp-axis-y">↑ API Readiness</div>
+    </div>
+
+    <div class="icp-note">
+      <strong>Key insight:</strong> Absence of API is not a death sentence. Clay has no REST API — but agents can push events via webhook, Clay runs the enrichment waterfall, and outreach fires automatically. Canva's API can't edit content — but "generate 50 banner variants for each ICP segment" is a real request agents should handle. The question is never "is the API ready?" — it's "would a user ask an agent to do this?"
+    </div>
+
+    <h3 style="font-size:17px;font-weight:700;margin:32px 0 20px">Four Buyer Perspectives</h3>
+    <div class="personas-grid">
+
+      <div class="persona-card">
+        <div class="persona-header">
+          <span class="persona-icon">👤</span>
+          <div>
+            <div class="persona-role">CEO / Founder</div>
+            <div class="persona-context">Sees the agentic shift as a platform transition — like mobile in 2010</div>
+          </div>
+        </div>
+        <div class="persona-pain">
+          <div class="persona-pain-label">What keeps them up at night</div>
+          <ul>
+            <li>Competitors marketing themselves as "agent-ready" while their product breaks in Cursor</li>
+            <li>Developer community posts: "tried to use [product] with Claude — doesn't work"</li>
+            <li>Being on the wrong side of the agentic platform transition</li>
+          </ul>
+        </div>
+        <div class="persona-quote">"I don't want to be the product that breaks every AI workflow. That's a reputation we can't afford in 2026."</div>
+        <div class="persona-buy">
+          <div class="persona-buy-label">Buys for</div>
+          Competitive moat · Developer retention · Category positioning as "agent-native"
+        </div>
+      </div>
+
+      <div class="persona-card">
+        <div class="persona-header">
+          <span class="persona-icon">📦</span>
+          <div>
+            <div class="persona-role">CPO / Head of Product</div>
+            <div class="persona-context">Owns developer experience, gets DevRel escalations about agent failures</div>
+          </div>
+        </div>
+        <div class="persona-pain">
+          <div class="persona-pain-label">What keeps them up at night</div>
+          <ul>
+            <li>Support tickets: "Claude can't authenticate to your API", "error messages are unparseable"</li>
+            <li>No metric to prioritize DX improvements on the roadmap</li>
+            <li>Shipping a breaking change that silently breaks all agent workflows</li>
+          </ul>
+        </div>
+        <div class="persona-quote">"I know our docs need work but I can't prioritize it without data. Docka gives me the data — and a score I can track sprint over sprint."</div>
+        <div class="persona-buy">
+          <div class="persona-buy-label">Buys for</div>
+          ARS as a KPI · Regression detection in CI/CD · Roadmap prioritization signal
+        </div>
+      </div>
+
+      <div class="persona-card">
+        <div class="persona-header">
+          <span class="persona-icon">📈</span>
+          <div>
+            <div class="persona-role">Head of Sales / RevOps</div>
+            <div class="persona-context">Building AI-powered outreach — agents managing the full sequence lifecycle</div>
+          </div>
+        </div>
+        <div class="persona-pain">
+          <div class="persona-pain-label">What keeps them up at night</div>
+          <ul>
+            <li>20+ back-and-forths with Claude to set up one Outreach.io campaign</li>
+            <li>Agents fail silently — campaign "created" but no emails sent (Smartlead Cat C)</li>
+            <li>Stack of tools that each require human babysitting: Clay → Instantly → CRM sync</li>
+          </ul>
+        </div>
+        <div class="persona-quote">"If my agent can set up and manage campaigns without me, I can run 10× more experiments. The ROI is obvious — but right now every tool in my stack requires hand-holding."</div>
+        <div class="persona-buy">
+          <div class="persona-buy-label">Buys for</div>
+          Autonomous outreach stack · Zero-human campaign ops · Faster iteration cycles
+        </div>
+      </div>
+
+      <div class="persona-card">
+        <div class="persona-header">
+          <span class="persona-icon">⚙️</span>
+          <div>
+            <div class="persona-role">CTO / Head of Engineering</div>
+            <div class="persona-context">Technical owner of API contract, CI/CD, and agent infrastructure</div>
+          </div>
+        </div>
+        <div class="persona-pain">
+          <div class="persona-pain-label">What keeps them up at night</div>
+          <ul>
+            <li>Shipping a breaking change that silently breaks every agent using the API</li>
+            <li>No way to test "does this change break agent workflows?" before release</li>
+            <li>Auth complexity and undocumented behavior surface — agents hit 401s at 2am</li>
+          </ul>
+        </div>
+        <div class="persona-quote">"We need Docka in our CI before every release. If we break the agent interface, we'll hear about it from 1,000 customers — not from a pre-release test."</div>
+        <div class="persona-buy">
+          <div class="persona-buy-label">Buys for</div>
+          CI/CD integration · Pre-release agent contract testing · Schema change alerting
+        </div>
+      </div>
+
+    </div>
+
+    <div class="icp-segments">
+      <h3 style="font-size:17px;font-weight:700;margin:0 0 16px">Target Segments by Vertical</h3>
+      <div class="segments-grid">
+        <div class="segment-card">
+          <div class="segment-icon">🛠️</div>
+          <div class="segment-title">Developer Tools</div>
+          <div class="segment-desc">Products whose users run AI coding assistants (Cursor, Claude Code, Copilot) that call their API directly. Every Cursor user is an agent calling your API.</div>
+          <div class="segment-examples">Supabase · Linear · Vercel · Auth0 · ClickHouse · Redis · Clerk</div>
+          <div class="segment-buyer">Buyer: CTO, Head of DevRel</div>
+        </div>
+        <div class="segment-card">
+          <div class="segment-icon">📊</div>
+          <div class="segment-title">Enterprise SaaS (RevOps)</div>
+          <div class="segment-desc">Sales, marketing, and ops platforms where teams build AI workflows. The product's API is the bottleneck between intent and automation.</div>
+          <div class="segment-examples">Salesforce · HubSpot · Jira · Amplitude · Notion · Outreach.io</div>
+          <div class="segment-buyer">Buyer: CPO, Head of Sales, CEO</div>
+        </div>
+        <div class="segment-card">
+          <div class="segment-icon">🕷️</div>
+          <div class="segment-title">Scraping &amp; Data Infra</div>
+          <div class="segment-desc">Proxies, headless browsers, and data APIs used by fully autonomous agents. The entire workflow is designed to be human-free — any friction is unacceptable.</div>
+          <div class="segment-examples">Bright Data · Browserbase · Steel · Apify · ScrapingBee · Firecrawl</div>
+          <div class="segment-buyer">Buyer: CTO, Head of Engineering</div>
+        </div>
+        <div class="segment-card">
+          <div class="segment-icon">🔄</div>
+          <div class="segment-title">Cold Email &amp; Outreach</div>
+          <div class="segment-desc">Homogeneous cluster — same failure patterns, same buyer (RevOps/Sales Ops), same fix. First Docka vertical: 5 products, one playbook.</div>
+          <div class="segment-examples">Instantly · Lemlist · Smartlead · Reply.io · Snov.io</div>
+          <div class="segment-buyer">Buyer: Head of Sales, RevOps</div>
+        </div>
       </div>
     </div>
   </div>
