@@ -279,6 +279,10 @@ nav {
 .cat-pill-leadgen { background: #F5F3FF; color: #8B5CF6; }
 .cat-pill-outreach { background: #FFF7ED; color: #EA580C; }
 .cat-pill-pm { background: #ECFDF5; color: #059669; }
+.cat-pill-devtools { background: #F0F9FF; color: #0284C7; }
+.cat-pill-scraping { background: #FFF1F2; color: #E11D48; }
+.cat-pill-marketing { background: #FFF0FB; color: #A21CAF; }
+.cat-pill-finance { background: #F0FDF4; color: #15803D; }
 .cat-arch-a { background: #FEE2E2; color: #DC2626; }
 .cat-arch-b { background: #FFEDD5; color: #EA580C; }
 .cat-arch-c { background: #FFFBEB; color: #CA8A04; }
@@ -555,11 +559,11 @@ footer a:hover { text-decoration: underline; }
     <h1>25 Products.<br>How Agent-Ready Are They?</h1>
     <p>We ran AI agents against the real APIs of 25 sales & productivity tools and measured how many tokens, how many human interruptions, and how many silent failures they encountered. Here's what we found.</p>
     <div class="stats-row">
-      <div class="stat"><span class="stat-num">25</span><span class="stat-label">Products analyzed</span></div>
-      <div class="stat"><span class="stat-num">139</span><span class="stat-label">Use cases documented</span></div>
+      <div class="stat"><span class="stat-num">76</span><span class="stat-label">Products analyzed</span></div>
+      <div class="stat"><span class="stat-num">267</span><span class="stat-label">Use cases documented</span></div>
       <div class="stat"><span class="stat-num">3</span><span class="stat-label">Failure archetypes</span></div>
       <div class="stat"><span class="stat-num">91</span><span class="stat-label">Worst ARS score (Canva)</span></div>
-      <div class="stat"><span class="stat-num">39</span><span class="stat-label">Best ARS score (Hunter.io)</span></div>
+      <div class="stat"><span class="stat-num">28</span><span class="stat-label">Best ARS score (OpenAI)</span></div>
     </div>
   </div>
 
@@ -851,6 +855,10 @@ footer a:hover { text-decoration: underline; }
         <button class="filter-tab" onclick="filterCat('leadgen', this)">Lead Gen</button>
         <button class="filter-tab" onclick="filterCat('outreach', this)">Outreach</button>
         <button class="filter-tab" onclick="filterCat('pm', this)">Analytics / PM</button>
+        <button class="filter-tab" onclick="filterCat('devtools', this)">Dev Tools</button>
+        <button class="filter-tab" onclick="filterCat('scraping', this)">Scraping</button>
+        <button class="filter-tab" onclick="filterCat('marketing', this)">Marketing</button>
+        <button class="filter-tab" onclick="filterCat('finance', this)">Finance</button>
       </div>
     </div>
 
@@ -1160,6 +1168,638 @@ const PRODUCTS = [
       { title: "Transition issue to new status", intent: "Move issue PROJ-42 to 'In Review'.", steps: ["GET /rest/api/3/issue/{key}/transitions — Get available transitions with id and name.", "Match by name to get transition.id.", "POST /rest/api/3/issue/{key}/transitions — Body: {\"transition\":{\"id\":\"31\"}} — Returns 204."], source: "https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-transitions/", failure: "Transition IDs are workflow-specific — never hardcode. Must GET transitions first for each issue. Transitions with required fields need fields or update in body." },
       { title: "Get sprint issues (Agile)", intent: "List all issues in the current active sprint for board 42.", steps: ["GET /rest/agile/1.0/board/{boardId}/sprint?state=active — Get active sprint id.", "GET /rest/agile/1.0/sprint/{sprintId}/issue?maxResults=50&startAt=0", "Paginate with startAt."], source: "https://developer.atlassian.com/cloud/jira/software/rest/api-group-sprint/", failure: "Requires Jira Software (not just Jira Cloud). Agile API is separate from platform API. Board ID is not the project ID." }
     ]
+  },
+
+  // DEVELOPER TOOLS — DB
+  {
+    id: 'supabase', name: 'Supabase', ars: 64, cat: 'devtools-db', catLabel: 'Dev Tools — DB',
+    tier: 1, arch: null,
+    auth: 'apikey header + optional Authorization: Bearer <JWT>',
+    baseUrl: 'https://<project_ref>.supabase.co/rest/v1/',
+    summary: 'Best-documented DB-SaaS for agents; fails on RLS policy correctness, view security semantics, and the fact that schema changes require either the Management API (gated) or raw SQL via pg — no single unified flow.',
+    useCases: [
+      { title: 'Create Table with RLS', intent: 'Create a table with Row-Level Security and grant authenticated role access via SQL migration.', steps: [], source: 'https://supabase.com/docs/guides/api', failure: 'RLS policies must be written in SQL — agents that skip RLS setup return data or silently block all reads depending on default deny policy.' },
+      { title: 'Insert and Query Rows', intent: 'Insert and query rows using the JS SDK with JWT auth and column filtering.', steps: [], source: 'https://supabase.com/docs/reference/javascript/select', failure: 'anon key vs service_role key distinction: anon key respects RLS, service_role bypasses it. Mixing them in the wrong context leaks data or blocks legitimate inserts.' },
+      { title: 'Semantic Search via pgvector', intent: 'Enable pgvector, store embeddings, and run semantic search via an RPC wrapper function.', steps: [], source: 'https://supabase.com/docs/guides/ai/vector-columns', failure: 'pgvector must be enabled as a Postgres extension first. match_documents RPC function must be created manually before calling it.' }
+    ]
+  },
+  {
+    id: 'neon', name: 'Neon', ars: 63, cat: 'devtools-db', catLabel: 'Dev Tools — DB',
+    tier: 1, arch: null,
+    auth: 'Authorization: Bearer $NEON_API_KEY',
+    baseUrl: 'https://console.neon.tech/api/v2/',
+    summary: 'Best agent ergonomics for branching workflows; serverless driver is genuinely agent-friendly. Main friction: Management API is async (operations poll needed); connection string discovery requires multiple API calls.',
+    useCases: [
+      { title: 'Create Dev Branch', intent: 'Create a dev branch from main with compute endpoint, polling until ready.', steps: [], source: 'https://api-docs.neon.tech/reference/createprojectbranch', failure: 'Branch creation is async — response is PENDING, not ready. Must poll GET /projects/{id}/operations/{op_id} until status: finished.' },
+      { title: 'Execute SQL via Serverless Driver', intent: 'Execute SQL via the serverless HTTP driver using tagged template literals for safe parameterization.', steps: [], source: 'https://neon.tech/docs/serverless/serverless-driver', failure: 'The serverless HTTP driver requires @neondatabase/serverless npm package. Tagged template literals auto-parameterize; concatenated strings bypass protection.' },
+      { title: 'Discover Connection String', intent: 'Discover connection string for a named branch by resolving endpoint host from the branches API.', steps: [], source: 'https://api-docs.neon.tech/reference/listprojectbranchendpoints', failure: 'Connection strings are not returned directly by branch creation — must GET /projects/{id}/branches/{branch_id}/endpoints and construct the URL from host + project_id.' }
+    ]
+  },
+  {
+    id: 'planetscale', name: 'PlanetScale', ars: 61, cat: 'devtools-db', catLabel: 'Dev Tools — DB',
+    tier: 1, arch: null,
+    auth: 'Authorization: Bearer <SERVICE_TOKEN>',
+    baseUrl: 'https://api.planetscale.com/v1/',
+    summary: 'The branching + deploy request workflow is powerful but requires 3–5 sequential API calls to move a schema change from dev to prod. The one-time password revelation model is a significant human-in-the-loop blocker.',
+    useCases: [
+      { title: 'Create Development Branch', intent: 'Create a development branch from main and verify it reaches ready state.', steps: [], source: 'https://api-docs.planetscale.com/reference/create-a-branch', failure: 'Branch state must be polled — state transitions from initializing → ready. Branches created from a non-production parent do not have deploy request capability.' },
+      { title: 'Deploy Schema Change', intent: 'Apply a schema change via deploy request with auto_cutover and monitor until complete.', steps: [], source: 'https://api-docs.planetscale.com/reference/create-a-deploy-request', failure: '3–5 sequential calls: create branch, push schema via CLI, create deploy request, approve, deploy. Each step blocks the next. auto_cutover skips the manual approval gate.' },
+      { title: 'Revert Deployment', intent: 'Revert a deployment within the 30-minute rollback window using the deploy request ID.', steps: [], source: 'https://api-docs.planetscale.com/reference/revert-a-queued-deploy-request', failure: 'Revert window is 30 minutes from cutover. After that, reverts are manual migrations. Revert state must be polled same as deploy.' }
+    ]
+  },
+  {
+    id: 'mongodb-atlas', name: 'MongoDB Atlas', ars: 61, cat: 'devtools-db', catLabel: 'Dev Tools — DB',
+    tier: 1, arch: null,
+    auth: 'Digest auth with public/private API keys',
+    baseUrl: 'https://cloud.mongodb.com/api/atlas/v2/',
+    summary: 'Highest HIR of the group — IP whitelist, user creation, and cluster provisioning must all precede first query. Atlas Data API is deprecated. Vector search index creation is separate from collection creation. Digest auth is uncommon and agents often misconfigure it.',
+    useCases: [
+      { title: 'Create Cluster', intent: 'Create a free-tier cluster, poll until IDLE, and extract the connection string from the response.', steps: [], source: 'https://www.mongodb.com/docs/atlas/reference/api-resources-spec/v2/#tag/Clusters/operation/createCluster', failure: 'Cluster creation takes 3–7 minutes. stateName must reach IDLE before any operations. Free-tier (M0) has limitations not reflected in provisioning response.' },
+      { title: 'Configure Network + User Access', intent: 'Add IP to the access list and create a database user with readWrite role before connecting.', steps: [], source: 'https://www.mongodb.com/docs/atlas/reference/api-resources-spec/v2/', failure: 'Both IP whitelist AND database user must be created before any connection succeeds. Missing either returns a connection refused error with no hint which is missing.' },
+      { title: 'Vector Search Index', intent: 'Create a vector search index and run semantic search using the $vectorSearch aggregation stage.', steps: [], source: 'https://www.mongodb.com/docs/atlas/atlas-vector-search/create-index/', failure: 'Vector search indexes are separate from regular Atlas Search indexes — different API endpoint and different status polling. $vectorSearch aggregation requires Atlas Search tier (not free M0).' }
+    ]
+  },
+  {
+    id: 'cockroachdb', name: 'CockroachDB', ars: 63, cat: 'devtools-db', catLabel: 'Dev Tools — DB',
+    tier: 1, arch: null,
+    auth: 'Authorization: Bearer <SECRET_KEY> + Cc-Version header',
+    baseUrl: 'https://cockroachlabs.cloud/api/v1',
+    summary: 'PostgreSQL-compatible SQL layer is agent-friendly; the Cloud API is limited to cluster lifecycle only (no SQL execution endpoint). Connection string retrieval requires human interaction with the Cloud Console; strong consistency and distributed transactions are well-documented.',
+    useCases: [
+      { title: 'Create Serverless Cluster', intent: 'Create a serverless cluster, poll until CREATED, create a SQL user via the Cloud API.', steps: [], source: 'https://www.cockroachlabs.com/docs/api/cloud/v1', failure: 'Cluster creation is async; state transitions to CREATED when ready. SQL users must be created via /clusters/{id}/sql-users before first connection.' },
+      { title: 'Execute PostgreSQL Queries', intent: 'Create tables and run queries using PostgreSQL-compatible drivers with sslmode=verify-full.', steps: [], source: 'https://www.cockroachlabs.com/docs/stable/connect-to-the-database.html', failure: 'CockroachDB requires sslmode=verify-full with a CA cert — standard sslmode=require fails. Connection strings from the Cloud API omit the sslrootcert parameter.' },
+      { title: 'Distributed Transactions', intent: 'Implement distributed transactions with SQLSTATE 40001 retry logic for serialization failures.', steps: [], source: 'https://www.cockroachlabs.com/docs/stable/transaction-retry-error-reference.html', failure: 'CockroachDB uses serializable isolation by default — agents must handle TransactionRetryWithProtoRefreshError (SQLSTATE 40001) or all concurrent writes will fail under load.' }
+    ]
+  },
+
+  // DEVELOPER TOOLS — AI APIs
+  {
+    id: 'openai', name: 'OpenAI', ars: 28, cat: 'devtools-ai', catLabel: 'Dev Tools — AI',
+    tier: 3, arch: null,
+    auth: 'Authorization: Bearer $OPENAI_API_KEY',
+    baseUrl: 'https://api.openai.com/v1',
+    summary: 'Best-documented AI API; dual endpoint families (Responses vs Chat Completions) add friction. Rapid model deprecations require version tracking. Fine-tuning platform requires dataset upload before job creation.',
+    useCases: [
+      { title: 'Chat Completion with Tool Use', intent: 'Call a function tool, detect the tool_calls finish reason, execute the tool, and re-submit results.', steps: ['POST /v1/chat/completions with tools array and tool_choice: auto', 'Check finish_reason === "tool_calls" in response', 'Append tool result as role:tool message, re-POST for final answer'], source: 'https://platform.openai.com/docs/guides/function-calling', failure: 'finish_reason must be checked — agents that treat every 200 as a final answer miss tool call requests. Role must be "tool", not "assistant" or "user", for tool results.' },
+      { title: 'Streaming Response', intent: 'Stream tokens via SSE, accumulating delta.content chunks and handling mid-stream errors.', steps: ['POST /v1/chat/completions with stream: true', 'Parse SSE events: data: {...}, skip data: [DONE]', 'Concatenate delta.content from each chunk; check finish_reason in final chunk'], source: 'https://platform.openai.com/docs/api-reference/streaming', failure: 'Mid-stream errors arrive as data: {"error":{...}} inside the 200 SSE stream — agents checking only HTTP status miss them. delta.content is null on the last event.' },
+      { title: 'Generate Embeddings', intent: 'Generate text embeddings with text-embedding-3 models using the dimensions parameter for storage optimization.', steps: ['POST /v1/embeddings with model: text-embedding-3-small and optional dimensions param', 'Parse data[0].embedding (float array)', 'Store vector with associated text for retrieval'], source: 'https://platform.openai.com/docs/api-reference/embeddings', failure: 'dimensions parameter only supported on text-embedding-3 models. text-embedding-ada-002 ignores dimensions and returns fixed 1536-dimension vectors.' }
+    ]
+  },
+  {
+    id: 'anthropic', name: 'Anthropic', ars: 32, cat: 'devtools-ai', catLabel: 'Dev Tools — AI',
+    tier: 3, arch: null,
+    auth: 'X-Api-Key: $ANTHROPIC_API_KEY + anthropic-version: 2023-06-01',
+    baseUrl: 'https://api.anthropic.com/v1',
+    summary: 'Clean docs; non-standard auth (two required headers) and unique tool-use loop (tool_result as user content block). No native embeddings or image generation — agents expecting OpenAI parity hit gaps.',
+    useCases: [
+      { title: 'Messages API Call', intent: 'Send messages with required max_tokens and top-level system param; detect stop_reason for tool_use vs end_turn.', steps: ['POST /v1/messages with both X-Api-Key and anthropic-version headers', 'Include max_tokens (required — no default); system as top-level string, not in messages array', 'Check stop_reason: "end_turn" for text, "tool_use" for function calls'], source: 'https://docs.anthropic.com/en/api/messages', failure: 'max_tokens is required with no default — omitting it returns a 400. system must be a top-level param, not a role:system message in the array.' },
+      { title: 'Tool Use Loop', intent: 'Submit tool_result as a content block inside a user message, not as a role:tool message.', steps: ['POST /v1/messages with tools array; receive stop_reason: "tool_use"', 'Append assistant response to messages array', 'Append user message with content: [{type: "tool_result", tool_use_id, content}]', 'Re-POST; repeat until stop_reason: "end_turn"'], source: 'https://docs.anthropic.com/en/docs/build-with-claude/tool-use', failure: 'Tool results are user-role content blocks, not a separate role. Agents sending role: "tool" get a 400. tool_use_id from the assistant response must match exactly.' },
+      { title: 'Extended Thinking', intent: 'Enable extended thinking with budget_tokens; handle thinking + text content blocks in the response.', steps: ['POST /v1/messages with thinking: {type: "enabled", budget_tokens: 10000}', 'Response content array contains type: "thinking" block(s) before type: "text" block', 'Parse both types; thinking content is the model\'s chain-of-thought'], source: 'https://docs.anthropic.com/en/docs/build-with-claude/extended-thinking', failure: 'budget_tokens must be ≥1024 and ≤max_tokens. Extended thinking disables streaming with tool_use in some model versions.' }
+    ]
+  },
+  {
+    id: 'cohere', name: 'Cohere', ars: 52, cat: 'devtools-ai', catLabel: 'Dev Tools — AI',
+    tier: 2, arch: null,
+    auth: 'Authorization: Bearer $CO_API_KEY',
+    baseUrl: 'https://api.cohere.com/v2',
+    summary: 'Unique enterprise-focused API with native RAG and reranking. Disruptive v1→v2 migration: retired fine-tuning endpoint, non-standard parameter naming, and required input_type on embeddings create friction for agents from v1.',
+    useCases: [
+      { title: 'Chat Completion (v2)', intent: 'Chat completion via v2 endpoint with messages array; avoid v1 single-string message param.', steps: [], source: 'https://docs.cohere.com/reference/chat', failure: 'v1 used a message string param; v2 requires messages array. Mixing param styles returns 422. Model names changed between v1 and v2.' },
+      { title: 'Generate Embeddings', intent: 'Generate embeddings with required input_type distinguishing search_document from search_query.', steps: [], source: 'https://docs.cohere.com/reference/embed', failure: 'input_type is required — omitting it returns 400. Values search_query and search_document produce different vector spaces; mixing them degrades retrieval quality.' },
+      { title: 'RAG Pipeline with Reranking', intent: 'RAG pipeline: embed query, retrieve chunks, rerank with /v2/rerank, pass documents to /v2/chat for grounded generation.', steps: [], source: 'https://docs.cohere.com/reference/rerank', failure: 'Rerank requires top_n ≤ number of documents submitted or returns 400. Citations in chat response reference document index positions, not original text.' }
+    ]
+  },
+  {
+    id: 'replicate', name: 'Replicate', ars: 71, cat: 'devtools-ai', catLabel: 'Dev Tools — AI',
+    tier: 1, arch: null,
+    auth: 'Authorization: Bearer $REPLICATE_API_TOKEN',
+    baseUrl: 'https://api.replicate.com/v1',
+    summary: 'Vast model marketplace but async prediction loop, version-based addressing, cold boot latency, and no unified model catalog API make autonomous agent use high-friction.',
+    useCases: [
+      { title: 'Run a Prediction', intent: 'Discover model version, POST to /predictions, poll until succeeded, concatenate string array output.', steps: ['GET /models/{owner}/{name}/versions to find latest version_id', 'POST /predictions with version: "<id>" and input: {...}', 'Poll GET /predictions/{id} every 2s until status: "succeeded"; parse output array'], source: 'https://replicate.com/docs/reference/http', failure: 'output is typically an array of strings — agents expecting a single string fail. status "canceled" or "failed" returns error field, not HTTP 4xx.' },
+      { title: 'Inspect Model Input Schema', intent: 'Inspect openapi_schema.components.schemas.Input.properties before calling to avoid 422 unknown field errors.', steps: [], source: 'https://replicate.com/docs/reference/http#models.versions.get', failure: 'Every model has unique input parameters. Sending unknown or mistyped fields returns 422 with no field-level hint. Schema varies by model version.' },
+      { title: 'Avoid Cold Boot Latency', intent: 'Deploy a model with min_instances > 0 to avoid cold boot; send predictions to the deployment endpoint.', steps: [], source: 'https://replicate.com/docs/deployments', failure: 'Community models have no persistent compute — cold boots add 30–120s to TTFT. Deployments have consistent latency but require separate endpoint URL different from /predictions.' }
+    ]
+  },
+  {
+    id: 'together-ai', name: 'Together.ai', ars: 41, cat: 'devtools-ai', catLabel: 'Dev Tools — AI',
+    tier: 3, arch: null,
+    auth: 'Authorization: Bearer $TOGETHER_API_KEY',
+    baseUrl: 'https://api.together.ai/v1',
+    summary: 'OpenAI-compatible API surface with a strong open-model catalog. Model ID discovery, fine-tuning deployment gaps, and inconsistent image parameter schemas are the main agent stumbling blocks.',
+    useCases: [
+      { title: 'Chat Completion', intent: 'Chat completion with OpenAI-compatible SDK; model IDs use Owner/ModelName casing exactly.', steps: [], source: 'https://docs.together.ai/reference/chat-completions', failure: 'Model IDs are case-sensitive (meta-llama/Llama-3.3-70B-Instruct-Turbo). Typos return 404, not a helpful model-not-found message.' },
+      { title: 'Image Generation', intent: 'Image generation with FLUX models; width/height vs aspect_ratio parameters differ between model variants.', steps: [], source: 'https://docs.together.ai/reference/images', failure: 'FLUX.1-schnell uses width/height; FLUX.1-dev uses aspect_ratio — different params for same model family. Sending wrong params is silently ignored in some variants.' },
+      { title: 'Fine-tune Open Models', intent: 'Fine-tune open models with JSONL; deploy to a dedicated endpoint separate from /v1/chat/completions.', steps: [], source: 'https://docs.together.ai/reference/finetune', failure: 'Fine-tuned model IDs are in the form ft:owner/model:suffix and must be used with /v1/completions not /v1/chat/completions for older base models.' }
+    ]
+  },
+
+  // DEVELOPER TOOLS — AUTH & INFRA
+  {
+    id: 'clerk', name: 'Clerk', ars: 52, cat: 'devtools-auth', catLabel: 'Dev Tools — Auth',
+    tier: 2, arch: null,
+    auth: 'Authorization: Bearer <secret_key>',
+    baseUrl: 'https://api.clerk.com/v1',
+    summary: 'Backend API is well-documented with clean REST endpoints. Most user/org operations are fully programmable. Webhook endpoints and social OAuth configuration require Dashboard UI with no API equivalent.',
+    useCases: [
+      { title: 'Create User with Metadata', intent: 'Create a user and attach custom metadata; bulk invitations are rate-limited at 25/hr.', steps: [], source: 'https://clerk.com/docs/reference/backend-api/tag/Users', failure: 'email_address and phone_number are arrays (multiple allowed). Setting skip_password_checks: true bypasses strength validation for admin-created accounts.' },
+      { title: 'Assign Organization Role', intent: 'Assign a role to an organization member; roles must be pre-created in the Dashboard — no API to create them.', steps: [], source: 'https://clerk.com/docs/reference/backend-api/tag/Organization-Memberships', failure: 'Roles are dashboard-only. Passing a role key that does not exist in the dashboard returns 422. Role names are slugified (admin → org:admin).' },
+      { title: 'Generate Session Token', intent: 'Generate a session token for an existing active session for impersonation or testing.', steps: [], source: 'https://clerk.com/docs/reference/backend-api/tag/Sessions', failure: 'Token validity is fixed (60s for short-lived). Session must be active status; pending or expired sessions return 422.' }
+    ]
+  },
+  {
+    id: 'auth0', name: 'Auth0', ars: 68, cat: 'devtools-auth', catLabel: 'Dev Tools — Auth',
+    tier: 1, arch: null,
+    auth: 'OAuth 2.0 Client Credentials → Authorization: Bearer <mgmt_token>',
+    baseUrl: 'https://{tenant}.auth0.com/api/v2',
+    summary: 'Comprehensive Management API coverage — virtually everything is programmable. Double-step auth flow (get a management token first), social connection setup requires correct strategy + options JSON.',
+    useCases: [
+      { title: 'Get Management Token + Create User', intent: 'Get management token via client_credentials grant, then POST /users with exact connection name.', steps: ['POST /oauth/token with grant_type: client_credentials, audience: https://{tenant}.auth0.com/api/v2/', 'Store token (valid 24h); include Authorization: Bearer in all subsequent calls', 'GET /connections → find target connection name; POST /users with { connection, email, password }'], source: 'https://auth0.com/docs/api/management/v2', failure: 'connection field must exactly match an existing Auth0 connection name (e.g. "Username-Password-Authentication"). Wrong or missing connection returns 400.' },
+      { title: 'Configure Social OAuth Connection', intent: 'Configure Google OAuth2 connection with strategy + options JSON, then separately enable it for the target application.', steps: [], source: 'https://auth0.com/docs/api/management/v2#!/Connections/post_connections', failure: 'Two-step: create/update connection AND enable it for each application separately via PATCH /clients/{id}. Creating a connection does not auto-enable it.' },
+      { title: 'Create Log Stream Webhook', intent: 'Create a log-streams webhook for HTTP event forwarding with type-dependent sink schema.', steps: [], source: 'https://auth0.com/docs/api/management/v2#!/Log_Streams/post_log_streams', failure: 'sink JSON schema differs by type (http vs datadog vs splunk). Wrong sink schema returns 400. Log streams have a disabled state by default — must explicitly set status: active.' }
+    ]
+  },
+  {
+    id: 'workos', name: 'WorkOS', ars: 57, cat: 'devtools-auth', catLabel: 'Dev Tools — Auth',
+    tier: 2, arch: null,
+    auth: 'Authorization: Bearer <api_key>',
+    baseUrl: 'https://api.workos.com',
+    summary: 'Clean REST docs with curl examples on every page. Webhook registration is fully programmable. Token generation follows a magic auth OTP pattern. Roles must be pre-configured in the dashboard.',
+    useCases: [
+      { title: 'Create User', intent: 'Create a user with email_verified:true to skip verification in admin contexts.', steps: [], source: 'https://workos.com/docs/reference/user-management/user/create', failure: 'email_verified defaults to false, triggering a verification email. Must explicitly set email_verified: true for programmatic user creation.' },
+      { title: 'Magic Auth Token Exchange', intent: 'Generate a magic auth OTP code and exchange it for access_token + refresh_token using the custom grant type.', steps: [], source: 'https://workos.com/docs/reference/user-management/authentication/magic-auth', failure: 'The token exchange uses a non-standard grant_type: "urn:workos:oauth:grant-type:magic-auth:code". Agents expecting OAuth 2.0 standard grants will not find this in OAuth docs.' },
+      { title: 'Register Webhook Endpoint', intent: 'Register a webhook endpoint programmatically and receive the signing secret (returned once only at creation).', steps: [], source: 'https://workos.com/docs/reference/webhooks', failure: 'Signing secret is only returned in the create response — never again via GET. If not stored immediately, must delete and recreate the webhook.' }
+    ]
+  },
+  {
+    id: 'supabase-auth', name: 'Supabase Auth', ars: 44, cat: 'devtools-auth', catLabel: 'Dev Tools — Auth',
+    tier: 3, arch: null,
+    auth: 'service_role key in Authorization: Bearer header',
+    baseUrl: 'https://{project-ref}.supabase.co',
+    summary: 'Admin operations exposed via clean JS SDK (supabase.auth.admin.*) and REST API. Social OAuth provider config requires the Supabase dashboard for client credentials. Auth hooks require SQL functions and config redeploy.',
+    useCases: [
+      { title: 'Create User (Skip Email Verification)', intent: 'Create a user with email_confirm:true to skip verification; service_role key must never be used client-side.', steps: [], source: 'https://supabase.com/docs/reference/javascript/auth-admin-createuser', failure: 'Using the anon key for admin operations returns 403. service_role key must be kept server-side only — leaking it grants full database bypass.' },
+      { title: 'Generate Magic Link', intent: 'Generate magic links with admin.generateLink(); links are single-use and expire within 1 hour.', steps: [], source: 'https://supabase.com/docs/reference/javascript/auth-admin-generatelink', failure: 'Magic links expire in 1 hour and are single-use. Generating a new link for a user invalidates all previous unexpired links for that user.' },
+      { title: 'Custom Access Token Hook', intent: 'Set up a custom access token hook via Postgres function + config.toml change + supabase db push.', steps: [], source: 'https://supabase.com/docs/guides/auth/auth-hooks', failure: 'Auth hooks require a SQL function + supabase/config.toml entry + supabase db push. All three steps must succeed; partial configuration results in silent hook bypass.' }
+    ]
+  },
+  {
+    id: 'vercel', name: 'Vercel', ars: 45, cat: 'devtools-auth', catLabel: 'Dev Tools — Auth',
+    tier: 3, arch: null,
+    auth: 'Authorization: Bearer <token>',
+    baseUrl: 'https://api.vercel.com',
+    summary: 'Most complete and agent-friendly REST API of the infra tools. Every dashboard action has an API equivalent. Domain verification is a 2-step DNS propagation flow; rollback is implemented by redeploying a previous deployment ID.',
+    useCases: [
+      { title: 'Deploy and Wait for Ready', intent: 'Deploy from git source and poll /v13/deployments/{id} until state=READY and aliasAssigned=true.', steps: [], source: 'https://vercel.com/docs/rest-api/endpoints#deployments', failure: 'Deployment is async; must poll for state: READY. aliasAssigned:true separately confirms domain is live. Checking only state misses DNS propagation delays.' },
+      { title: 'Set Environment Variables', intent: 'Set environment variables with target array and type=encrypted; adding vars does not auto-redeploy.', steps: [], source: 'https://vercel.com/docs/rest-api/endpoints#projects', failure: 'Adding environment variables does not trigger a redeploy. A new deployment must be manually triggered to pick up the new values.' },
+      { title: 'Roll Back Deployment', intent: 'Roll back by redeploying a previous deployment ID; there is no dedicated rollback endpoint.', steps: [], source: 'https://vercel.com/docs/rest-api/endpoints#deployments', failure: 'No dedicated rollback endpoint — must find the previous deployment ID from GET /v6/deployments and create a new deployment pointing to it.' }
+    ]
+  },
+  {
+    id: 'railway', name: 'Railway', ars: 61, cat: 'devtools-auth', catLabel: 'Dev Tools — Auth',
+    tier: 1, arch: null,
+    auth: 'Authorization: Bearer <api_token>',
+    baseUrl: 'https://backboard.railway.com/graphql/v2',
+    summary: 'GraphQL-only API. Every operation requires building a query/mutation, and resource IDs (projectId, environmentId, serviceId) must all be fetched in a preliminary discovery step.',
+    useCases: [
+      { title: 'Trigger Deployment', intent: 'Trigger deployment via environmentTriggersDeploy mutation, then query for the new deployment ID to poll status.', steps: [], source: 'https://docs.railway.com/reference/public-api', failure: 'environmentTriggersDeploy does not return a deployment ID directly — must query deployments for the service after triggering to get the new deployment.' },
+      { title: 'Upsert Environment Variables', intent: 'Upsert environment variables with variableCollectionUpsert; replace:true destructively removes unlisted keys.', steps: [], source: 'https://docs.railway.com/reference/public-api', failure: 'replace:true replaces the entire variable set — omitting a key that should stay destroys it. Must fetch existing vars and merge before upserting.' },
+      { title: 'Roll Back Service', intent: 'Roll back by finding a deployment where canRollback:true and calling the deploymentRollback mutation.', steps: [], source: 'https://docs.railway.com/reference/public-api', failure: 'Not all deployments are rollback-eligible; must query deployments list and filter by canRollback:true before attempting rollback mutation.' }
+    ]
+  },
+  {
+    id: 'flyio', name: 'Fly.io', ars: 58, cat: 'devtools-auth', catLabel: 'Dev Tools — Auth',
+    tier: 2, arch: null,
+    auth: 'Authorization: Bearer <fly_token> or flyctl CLI',
+    baseUrl: 'https://api.fly.io/v1',
+    summary: 'Primarily a CLI-driven platform — flyctl covers all deployment operations. Agents comfortable with shell execution can automate effectively. Custom domain setup has DNS verification dependency.',
+    useCases: [
+      { title: 'Deploy with Secret Batching', intent: 'Deploy with fly deploy using rolling strategy; use --stage flag to batch multiple secret changes into one redeploy.', steps: [], source: 'https://fly.io/docs/flyctl/', failure: 'Setting secrets one-by-one via fly secrets set triggers a redeploy per secret. Use --stage flag for all but the last secret to batch them.' },
+      { title: 'Add Custom Domain', intent: 'Add custom domain: allocate dedicated IPv4, set DNS A record, run fly certs add, poll until DNS Validation: OK.', steps: [], source: 'https://fly.io/docs/networking/custom-domain/', failure: 'DNS propagation can take hours. fly certs add returns pending immediately; must poll fly certs check until DNS Validation: OK.' },
+      { title: 'Roll Back by Image', intent: 'Roll back by identifying the previous image from fly releases --image and re-running fly deploy --image.', steps: [], source: 'https://fly.io/docs/flyctl/', failure: 'No fly rollback command exists. Must manually find the previous image digest from fly releases and re-deploy it.' }
+    ]
+  },
+  {
+    id: 'cloudflare-workers', name: 'Cloudflare Workers', ars: 49, cat: 'devtools-auth', catLabel: 'Dev Tools — Auth',
+    tier: 3, arch: null,
+    auth: 'CLOUDFLARE_API_TOKEN env var (wrangler) or Authorization: Bearer <token> (REST)',
+    baseUrl: 'https://api.cloudflare.com/client/v4',
+    summary: 'Well-suited for agents — Wrangler CLI has clean, well-documented commands. Secrets, deployments, and rollbacks all have dedicated commands. Custom domain requires an active Cloudflare zone; wrangler secret put is interactive by default.',
+    useCases: [
+      { title: 'Deploy Worker with Secrets', intent: 'Deploy Worker with wrangler deploy; pipe secrets via stdin or --secrets-file to avoid interactive prompts.', steps: [], source: 'https://developers.cloudflare.com/workers/wrangler/commands/', failure: 'wrangler secret put is interactive (reads from stdin). In CI, pipe via echo "$SECRET" | wrangler secret put KEY or use --secrets-file flag.' },
+      { title: 'Roll Back Worker Version', intent: 'Roll back with wrangler rollback <VERSION_ID>; without ID always reverts to immediately preceding version.', steps: [], source: 'https://developers.cloudflare.com/workers/wrangler/commands/#rollback', failure: 'Rollback without a VERSION_ID always targets the immediately preceding deployment, not a specific known-good version. List versions first with wrangler versions list.' },
+      { title: 'Add Custom Domain Route', intent: 'Add custom domain via wrangler.toml routes with custom_domain:true; domain must already be on Cloudflare zone.', steps: [], source: 'https://developers.cloudflare.com/workers/configuration/routing/custom-domains/', failure: 'Domain must exist as an active zone in the same Cloudflare account. Cross-account or external DNS domains return an error during wrangler deploy.' }
+    ]
+  },
+
+  // DEVELOPER TOOLS — OSS INFRA
+  {
+    id: 'clickhouse', name: 'ClickHouse', ars: 48, cat: 'devtools-oss', catLabel: 'Dev Tools — OSS',
+    tier: 3, arch: null,
+    auth: 'HTTP Basic with Key ID + Key Secret (Cloud API); X-ClickHouse-User / X-ClickHouse-Key (query interface)',
+    baseUrl: 'https://api.clickhouse.cloud/v1',
+    summary: 'Clean HTTP interface where SQL is sent as a POST body. Split between Cloud Management API (provisioning) and query HTTP interface (data ops) is the main cognitive hurdle — different base URLs, different credentials.',
+    useCases: [
+      { title: 'Provision Cloud Service', intent: 'Provision a new Cloud service via POST /organizations/{orgId}/services and poll until state:running.', steps: [], source: 'https://clickhouse.com/docs/en/cloud/manage/openapi', failure: 'Service provisioning is async. Must poll GET /organizations/{orgId}/services/{serviceId} until state: running. Provisioning typically takes 2–5 minutes.' },
+      { title: 'Bulk Insert JSONL Data', intent: 'Bulk insert JSONL data via HTTP POST with FORMAT JSONEachRow; check response body not just HTTP status for errors.', steps: [], source: 'https://clickhouse.com/docs/en/interfaces/http', failure: 'ClickHouse returns HTTP 200 even for partial insert failures in some error modes. Must check response body for exception messages.' },
+      { title: 'Run Aggregation Query', intent: 'Run aggregation queries with FORMAT JSON appended inside the SQL; default format is TabSeparated which breaks JSON parsing.', steps: [], source: 'https://clickhouse.com/docs/en/interfaces/formats', failure: 'Default response format is TabSeparated — agents expecting JSON must append FORMAT JSON inside the SQL string, not as a query param.' }
+    ]
+  },
+  {
+    id: 'elasticsearch', name: 'Elasticsearch', ars: 62, cat: 'devtools-oss', catLabel: 'Dev Tools — OSS',
+    tier: 1, arch: null,
+    auth: 'Authorization: ApiKey {base64(id:key)}',
+    baseUrl: 'https://{deployment-id}.{region}.{provider}.elastic-cloud.com:443',
+    summary: 'Exceptionally well-documented REST API with predictable URL patterns. Main challenges: Query DSL verbosity, the 10,000-hit pagination cliff requiring search_after, and bulk responses returning HTTP 200 even when individual operations fail.',
+    useCases: [
+      { title: 'Create Index with Mappings', intent: 'Create index with mappings and wait for shards_acknowledged:true; poll cluster health for green status.', steps: [], source: 'https://www.elastic.co/docs/api/doc/elasticsearch/operation/operation-indices-create', failure: 'Index creation returns acknowledged:true before shards are assigned. For write operations to succeed, must wait for cluster health yellow or green.' },
+      { title: 'Bulk Index Documents', intent: 'Bulk index NDJSON documents; always check errors:true in the body since HTTP status is always 200.', steps: [], source: 'https://www.elastic.co/docs/api/doc/elasticsearch/operation/operation-bulk', failure: 'Bulk endpoint always returns HTTP 200. Must inspect errors: true in the response body and iterate items[] to find individual failures.' },
+      { title: 'Terms Aggregation', intent: 'Run terms aggregation on keyword fields (not text); set aggs size to expand beyond the default 10-bucket limit.', steps: [], source: 'https://www.elastic.co/docs/api/doc/elasticsearch/operation/operation-search', failure: 'Aggregations on text fields require a .keyword sub-field. Default aggs size is 10 — agents expect all buckets and get truncated results silently.' }
+    ]
+  },
+  {
+    id: 'redis-cloud', name: 'Redis Cloud', ars: 71, cat: 'devtools-oss', catLabel: 'Dev Tools — OSS',
+    tier: 1, arch: null,
+    auth: 'x-api-key + x-api-secret-key headers (both required)',
+    baseUrl: 'https://api.rediscloud.com/v1',
+    summary: 'REST API covers full lifecycle of subscription and database management. Two-key auth pattern is unfamiliar. All create/update operations are asynchronous via a task queue. Practical data operations go through Redis protocol, not this REST API.',
+    useCases: [
+      { title: 'Create Pro Subscription', intent: 'Create a Pro subscription with embedded database; API must be manually enabled in console first or all calls return 401.', steps: [], source: 'https://api.rediscloud.com/docs/#tag/Subscriptions', failure: 'API access requires manual activation in Redis Cloud console — it is not enabled by default. All calls return 401 until activated.' },
+      { title: 'Create Database and Poll', intent: 'Create a database in an existing subscription; poll the taskId to get the databaseId and publicEndpoint after provisioning.', steps: [], source: 'https://api.rediscloud.com/docs/#tag/Databases/operation/createDatabase', failure: 'Database creation returns a taskId, not a database. Must GET /tasks/{id} until status: completed and extract resourceId from the response.' },
+      { title: 'Trigger Manual Backup', intent: 'Trigger a manual backup; periodicBackupPath must be pre-configured on the database or the async task fails silently.', steps: [], source: 'https://api.rediscloud.com/docs/#tag/Databases', failure: 'periodicBackupPath (S3/GCS bucket) must already be configured on the database. Task is async; failure surfaces only when polling the task status, not at trigger time.' }
+    ]
+  },
+  {
+    id: 'percona-pmm', name: 'Percona PMM', ars: 79, cat: 'devtools-oss', catLabel: 'Dev Tools — OSS',
+    tier: 1, arch: null,
+    auth: 'Authorization: Bearer glsa_xxxxx (service account token from UI)',
+    baseUrl: 'https://{pmm-server-host}/v1',
+    summary: 'Self-hosted only, no shared base URL. PMM does not install databases — it only registers already-running ones. Authentication requires a UI-generated token with no programmatic provisioning path.',
+    useCases: [
+      { title: 'Register MySQL Service', intent: 'Register a MySQL service for monitoring: first register the node, then POST to /v1/management/services with nodeId.', steps: [], source: 'https://percona.github.io/pmm-doc/api/', failure: 'Must register the node first, then add the service referencing the nodeId. Skipping node registration returns 404. PMM agent must already be running on the target host.' },
+      { title: 'Query Slow Query Report', intent: 'Query top slow queries via /v1/qan:getReport with period, group_by queryid, and service_name filter.', steps: [], source: 'https://percona.github.io/pmm-doc/api/', failure: 'period_start_from / period_start_to must be RFC3339 UTC timestamps. group_by: queryid is required to get per-query breakdowns; omitting returns aggregated totals only.' },
+      { title: 'Create Alert Rule', intent: 'Create an alert rule from a template; GET /alerting/templates first to discover template names and param schemas dynamically.', steps: [], source: 'https://percona.github.io/pmm-doc/api/', failure: 'Template names and required param schemas are not documented — must be fetched from GET /alerting/templates at runtime. Hardcoding template params breaks on PMM version upgrades.' }
+    ]
+  },
+
+  // SCRAPING — HEADLESS BROWSERS
+  {
+    id: 'browserless', name: 'Browserless', ars: 38, cat: 'scraping-browser', catLabel: 'Scraping — Browsers',
+    tier: 3, arch: null,
+    auth: 'token query parameter on every request',
+    baseUrl: 'https://production-sfo.browserless.io',
+    summary: 'Three-mode API (REST / WebSocket BaaS / BrowserQL GraphQL). REST endpoints are stateless — multi-step agents must use BaaS. BrowserQL is uniquely powerful for stealth but requires GraphQL literacy.',
+    useCases: [
+      { title: 'Screenshot via REST', intent: 'Take a full-page screenshot via REST POST with options wrapper; response is raw binary not JSON.', steps: [], source: 'https://docs.browserless.io/docs/screenshot', failure: 'Response is raw binary image data, not JSON. Agents expecting JSON and calling .json() will fail. fullPage must be nested inside options object.' },
+      { title: 'Multi-step Login via BaaS', intent: 'Run multi-step login automation via BaaS WebSocket with Puppeteer; set ?timeout=60000 for slow pages.', steps: [], source: 'https://docs.browserless.io/docs/docker', failure: 'Default timeout is 30s — complex SPAs with multiple redirects time out. Must increase ?timeout= on the WebSocket URL.' },
+      { title: 'Stealth Scrape via BrowserQL', intent: 'Scrape bot-protected sites via BrowserQL mutation at /stealth/bql with GraphQL query key in JSON body.', steps: [], source: 'https://docs.browserless.io/browserql/overview', failure: 'BrowserQL requires { query: "mutation {...}" } JSON body format. Sending plain GraphQL string without the query wrapper returns 400.' }
+    ]
+  },
+  {
+    id: 'browserbase', name: 'Browserbase', ars: 44, cat: 'scraping-browser', catLabel: 'Scraping — Browsers',
+    tier: 3, arch: null,
+    auth: 'X-BB-API-Key header + projectId required in every session creation',
+    baseUrl: 'https://api.browserbase.com/v1',
+    summary: 'Most AI-agent-native platform with Stagehand SDK. Two-credential requirement (API key + project ID) is persistent friction. Stagehand natural language primitives significantly reduce friction for agent-first workflows.',
+    useCases: [
+      { title: 'Create Session and Connect', intent: 'Create a session with POST /v1/sessions including projectId, then connectOverCDP to the returned WebSocket URL.', steps: [], source: 'https://docs.browserbase.com/reference/api/sessions', failure: 'projectId is required in every session creation request — not a default. Omitting it returns 400. WebSocket URL from response expires if not connected within 60s.' },
+      { title: 'Natural Language Automation with Stagehand', intent: 'Use Stagehand act() and extract() for natural language browser control; observe() before act() to disambiguate targets.', steps: [], source: 'https://docs.browserbase.com/sdks/stagehand', failure: 'act() can target the wrong element if multiple similar elements exist. Call observe() first to inspect available actions before using act().' },
+      { title: 'Stealth Session with Proxy + CAPTCHA', intent: 'Create session with proxies:true and solveCaptchas:true in browserSettings for stealth automation.', steps: [], source: 'https://docs.browserbase.com/features/stealth-mode', failure: 'proxies and solveCaptchas are in a browserSettings nested object — not top-level params. Sending them at the top level is silently ignored.' }
+    ]
+  },
+  {
+    id: 'steel', name: 'Steel', ars: 36, cat: 'scraping-browser', catLabel: 'Scraping — Browsers',
+    tier: 3, arch: null,
+    auth: 'steel-api-key header or STEEL_API_KEY env var',
+    baseUrl: 'https://api.steel.dev/v1',
+    summary: 'Open-source, batteries-included (proxy, CAPTCHA, profiles built-in); cleanest session lifecycle API. WebSocket URL needs API key appended manually — a frequent agent error.',
+    useCases: [
+      { title: 'Create Session and Connect', intent: 'Create session via SDK, then append &apiKey=... manually to session.websocket_url before connectOverCDP.', steps: [], source: 'https://docs.steel.dev/api-reference/sessions', failure: 'session.websocket_url does not include the API key — must manually append ?apiKey=YOUR_KEY. Connecting without the key returns a 401 WebSocket error.' },
+      { title: 'Inject Auth Cookies', intent: 'Inject auth cookies into browser context via context.add_cookies(); release session after use to avoid billing.', steps: [], source: 'https://docs.steel.dev/guides/sessions', failure: 'Sessions persist until released or TTL expires — forgetting to call release() causes runaway billing. TTL max is 3600s.' },
+      { title: 'Quick Static Scrape', intent: 'Quick REST scrape to markdown via POST /v1/scrape for static pages; use session-based approach for SPAs.', steps: [], source: 'https://docs.steel.dev/api-reference/scrape', failure: '/v1/scrape is stateless (new browser per request). JavaScript-heavy SPAs with loading delays return empty or partial content — use a session instead.' }
+    ]
+  },
+  {
+    id: 'apify', name: 'Apify', ars: 62, cat: 'scraping-browser', catLabel: 'Scraping — Browsers',
+    tier: 1, arch: null,
+    auth: 'Authorization: Bearer TOKEN',
+    baseUrl: 'https://api.apify.com/v2',
+    summary: 'Highest friction for agents — no direct browser control; actor-based model requires knowing actor IDs, polling for completion, fetching from separate dataset endpoint. Excellent for batch scraping but poor for interactive/stateful agent workflows.',
+    useCases: [
+      { title: 'Run Actor and Fetch Results', intent: 'Run actor async via POST /actors/{id}/runs, extract defaultDatasetId, poll status, then fetch dataset items.', steps: ['POST /v2/actors/{actorId}/runs with { input: {...} }', 'Poll GET /v2/actor-runs/{runId} until status: SUCCEEDED; extract defaultDatasetId', 'GET /v2/datasets/{datasetId}/items?format=json&clean=true'], source: 'https://docs.apify.com/api/v2', failure: 'Results are not in the run response — must fetch from the separate dataset endpoint. status: SUCCEEDED does not mean dataset is fully flushed; add a 5s delay before fetching.' },
+      { title: 'Synchronous Run for Short Tasks', intent: 'Use run-sync-get-dataset-items for scrapes under 5 minutes; switch to async polling for longer jobs.', steps: [], source: 'https://docs.apify.com/api/v2', failure: 'Sync endpoint times out after 300s. Tasks exceeding this return timeout error with no partial results. Must switch to async + polling for anything longer.' },
+      { title: 'Build Custom Playwright Actor', intent: 'Build custom Playwright actor with Actor.init() lifecycle calls and Actor.push_data() to store results.', steps: [], source: 'https://docs.apify.com/sdk/python', failure: 'Actor.init() and Actor.exit() must wrap all async code. Missing Actor.exit() causes zombie actors that consume resources until timeout.' }
+    ]
+  },
+  {
+    id: 'playwright-cloud', name: 'Playwright (cloud)', ars: 29, cat: 'scraping-browser', catLabel: 'Scraping — Browsers',
+    tier: 3, arch: null,
+    auth: 'Delegated to cloud provider (Browserless token, Steel API key, etc.)',
+    baseUrl: 'wss://production-sfo.browserless.io/chromium',
+    summary: 'Lowest ARS — the Playwright SDK is extremely well-documented with comprehensive error messages. All friction lives in the cloud connection setup, not the automation itself.',
+    useCases: [
+      { title: 'Connect to Cloud Browser', intent: 'Connect via chromium.connectOverCDP() to a cloud browser; use newContext() instead of reusing default context.', steps: [], source: 'https://playwright.dev/docs/api/class-browsertype', failure: 'Default context may carry state from previous connections on the same browser instance. Always create a new context per session with newContext().' },
+      { title: 'Persist Auth State', intent: 'Save auth state with context.storageState() after login; restore on next run with storageState option.', steps: [], source: 'https://playwright.dev/docs/auth', failure: 'storageState includes cookies and localStorage. Saved state expires when the site rotates session tokens — must handle 401/redirect by re-authenticating.' },
+      { title: 'Intercept Network Requests', intent: 'Intercept network requests with page.route() before page.goto(); routes registered after navigation miss early-load requests.', steps: [], source: 'https://playwright.dev/docs/network', failure: 'page.route() must be called before page.goto() to intercept all requests including initial page load. Registering routes after navigation misses already-completed requests.' }
+    ]
+  },
+
+  // SCRAPING — PROXIES
+  {
+    id: 'bright-data', name: 'Bright Data', ars: 62, cat: 'scraping-proxy', catLabel: 'Scraping — Proxies',
+    tier: 1, arch: null,
+    auth: 'brd-customer-{ID}-zone-{NAME}:{PASSWORD}@brd.superproxy.io:{PORT}',
+    baseUrl: 'https://api.brightdata.com',
+    summary: 'Most feature-rich provider with granular targeting (ASN, OS, ZIP, city). Zone-based architecture adds configuration overhead — agents must create zones in the control panel before any proxy use.',
+    useCases: [
+      { title: 'Country + City Targeting', intent: 'Configure residential proxy with country+city targeting by appending -country-de-city-berlin to the zone username.', steps: [], source: 'https://docs.brightdata.com/api-reference/proxy-manager', failure: 'Zone must be created in the Bright Data control panel before use. Using a non-existent zone name returns proxy auth failure (407).' },
+      { title: 'Sticky Session', intent: 'Maintain sticky session by appending -session-{UUID} to username; peer may go offline silently breaking stickiness.', steps: [], source: 'https://docs.brightdata.com/api-reference/proxy-manager', failure: 'Sticky sessions depend on a single exit node — if the peer goes offline, subsequent requests silently use a different IP without notification.' },
+      { title: 'Check Bandwidth Usage', intent: 'Check bandwidth usage via GET /zone/bw with Bearer API key; zone names are case-sensitive.', steps: [], source: 'https://docs.brightdata.com/api-reference/zone', failure: 'Zone names in the API are case-sensitive and must match exactly the name configured in the control panel.' }
+    ]
+  },
+  {
+    id: 'oxylabs', name: 'Oxylabs', ars: 58, cat: 'scraping-proxy', catLabel: 'Scraping — Proxies',
+    tier: 2, arch: null,
+    auth: 'customer-{USERNAME}:{PASSWORD}@pr.oxylabs.io:7777',
+    baseUrl: 'https://residential-api.oxylabs.io/v2',
+    summary: 'Clean username-parameter design with consistent patterns. Country targeting syntax differs between residential (-cc-) and datacenter (-country-) — a common agent error. JWT-based management API adds a login step.',
+    useCases: [
+      { title: 'Country Targeting (Residential vs Datacenter)', intent: 'Configure residential proxy with -cc-US; use -country- prefix for datacenter — different syntax for same goal.', steps: [], source: 'https://developers.oxylabs.io/proxies', failure: 'Residential uses -cc-US; Datacenter uses -country-US. Mixing them returns proxy connection errors with no useful message.' },
+      { title: 'Sticky Datacenter Sessions', intent: 'Sticky datacenter sessions use port offsets (8001, 8002) not -sessid- username params; -sessid- is residential only.', steps: [], source: 'https://developers.oxylabs.io/proxies/datacenter-proxies', failure: '-sessid- username param is residential only — applying it to datacenter proxies is silently ignored and a new IP is used each request.' },
+      { title: 'Get Stats via JWT', intent: 'Obtain JWT via POST /login with Basic auth before calling stats endpoints; JWT expires after 1 hour.', steps: [], source: 'https://developers.oxylabs.io/management-api', failure: 'JWT expires in 1 hour with no refresh token — must re-authenticate. Expired JWT returns 401 with no expiry info in the error message.' }
+    ]
+  },
+  {
+    id: 'decodo', name: 'Smartproxy / Decodo', ars: 55, cat: 'scraping-proxy', catLabel: 'Scraping — Proxies',
+    tier: 2, arch: null,
+    auth: 'user-{USERNAME}-country-{CC}:{PASSWORD}@gate.decodo.com:7000',
+    baseUrl: 'https://api.decodo.com/api/v2',
+    summary: 'Clean single-endpoint architecture with targeting via username parameters. Consistent -country-, -city-, -state- syntax. Rebrand from Smartproxy creates cached-doc confusion. Stats endpoint requires POST with JSON body.',
+    useCases: [
+      { title: 'Sticky Session with Duration', intent: 'Sticky session by appending -session-{ID}-sessionduration-30 to username; SOCKS5 ignores sessionduration.', steps: [], source: 'https://smartproxy.com/docs', failure: 'sessionduration parameter is only honored by HTTP/HTTPS protocol — SOCKS5 ignores it and rotates normally. Mismatched protocol selection breaks sticky session.' },
+      { title: 'Check Traffic Stats', intent: 'Check traffic stats via POST /statistics/traffic with JSON body; Authorization header uses raw key without Bearer prefix.', steps: [], source: 'https://smartproxy.com/docs', failure: 'Authorization header format is the raw API key without Bearer or Token prefix — non-standard and differs from most other APIs in this space.' },
+      { title: 'IP Whitelist Auth', intent: 'IP whitelist auth for datacenter proxies; incompatible with ephemeral cloud compute due to dynamic egress IPs.', steps: [], source: 'https://smartproxy.com/docs', failure: 'IP whitelist auth requires a static IP. Cloud compute (Lambda, GCP Run) have ephemeral IPs that change between invocations, breaking whitelist auth.' }
+    ]
+  },
+  {
+    id: 'webshare', name: 'Webshare', ars: 42, cat: 'scraping-proxy', catLabel: 'Scraping — Proxies',
+    tier: 3, arch: null,
+    auth: 'Authorization: Token {API_KEY}',
+    baseUrl: 'https://proxy.webshare.io/api/v2',
+    summary: 'Most developer-friendly — dedicated REST API for full proxy lifecycle management, clean token auth with no username prefix syntax, comprehensive OpenAPI docs. Lowest ARS because agents can handle the full workflow via API without dashboard interaction.',
+    useCases: [
+      { title: 'Fetch Proxy List', intent: 'Fetch proxy list via GET /proxy/list/ with required mode=direct param; pick random proxy from results array.', steps: [], source: 'https://proxy.webshare.io/docs', failure: 'mode=direct is required — omitting it returns a 400. Proxy list endpoint returns paginated results; agents may miss proxies on subsequent pages.' },
+      { title: 'Configure Auto-Replacement', intent: 'Configure auto-replacement with auto_replace_threshold as a 0.0–1.0 float; trigger on-demand refresh via dedicated endpoint.', steps: [], source: 'https://proxy.webshare.io/docs', failure: 'auto_replace_threshold must be between 0.0 and 1.0 (fraction, not percentage). Sending integer values like 70 instead of 0.7 is rejected with 400.' },
+      { title: 'Download Proxy List File', intent: 'Download full proxy list as IP:PORT:USER:PASS text file; 60 req/min rate limit shared with list API.', steps: [], source: 'https://proxy.webshare.io/docs', failure: 'Rate limit of 60 req/min is shared between /proxy/list/ and the download endpoint. High-frequency polling to detect list updates will exhaust the rate limit.' }
+    ]
+  },
+
+  // SCRAPING — APIs, Anti-bot & Account
+  {
+    id: 'scrapingbee', name: 'ScrapingBee', ars: 52, cat: 'scraping-api', catLabel: 'Scraping — APIs',
+    tier: 2, arch: null,
+    auth: 'api_key query parameter',
+    baseUrl: 'https://app.scrapingbee.com/api/v1',
+    summary: 'Single GET endpoint for all scraping. Parameters are GET query strings, requiring URL-encoding of the target URL and any JSON options. AI extraction adds 1 credit per call. No native async or batch endpoint.',
+    useCases: [
+      { title: 'Scrape Static HTML', intent: 'Scrape static HTML with render_js=false; double-encoding of inner URL query params causes 422 errors.', steps: [], source: 'https://www.scrapingbee.com/documentation/', failure: 'The target URL is passed as a query param and must be URL-encoded. Any query params in the target URL must be double-encoded, or ScrapingBee strips them.' },
+      { title: 'JS Page Interaction', intent: 'JS page interaction via js_scenario as URL-encoded stringified JSON with scroll and wait instructions.', steps: [], source: 'https://www.scrapingbee.com/documentation/', failure: 'js_scenario must be a URL-encoded stringified JSON array. Agents passing a plain JS string or non-encoded JSON get 400.' },
+      { title: 'AI Data Extraction', intent: 'AI-powered extraction with ai_extract_rules + json_response=true for reliable structured output.', steps: [], source: 'https://www.scrapingbee.com/documentation/', failure: 'ai_extract_rules costs 1 extra credit per request. Structured extraction requires json_response=true or the AI output is wrapped in HTML.' }
+    ]
+  },
+  {
+    id: 'scraperapi', name: 'ScraperAPI', ars: 48, cat: 'scraping-api', catLabel: 'Scraping — APIs',
+    tier: 3, arch: null,
+    auth: 'api_key query parameter',
+    baseUrl: 'https://api.scraperapi.com',
+    summary: 'Mirrors ScrapingBee GET-only pattern for sync API. Adds a structured data layer (Google SERP, Amazon) and a DataPipeline product for scheduled/batch jobs. Async API uses a different base host.',
+    useCases: [
+      { title: 'Google SERP Extraction', intent: 'Structured Google SERP extraction via /structured/google/search endpoint returning clean JSON with organic_results.', steps: [], source: 'https://docs.scraperapi.com/making-requests/google', failure: 'Structured endpoints require a different base path (/structured/) from the generic proxy endpoint. Mixing them returns HTML for structured queries.' },
+      { title: 'Async Batch Scraping', intent: 'Async batch scraping via POST to async.scraperapi.com with JSON body and optional webhookUrl callback.', steps: [], source: 'https://docs.scraperapi.com/making-requests/asynchronous', failure: 'Async endpoint is a different host (async.scraperapi.com). Without webhookUrl, must poll the status URL from the response.' },
+      { title: 'Scheduled Scraping via DataPipeline', intent: 'Scheduled recurring scrapes via DataPipeline at datapipeline.scraperapi.com with project lifecycle management.', steps: [], source: 'https://docs.scraperapi.com/data-pipeline', failure: 'DataPipeline is a separate product with distinct billing and auth — not included in base ScraperAPI credits. Project IDs are separate from scrape job IDs.' }
+    ]
+  },
+  {
+    id: 'firecrawl', name: 'Firecrawl', ars: 38, cat: 'scraping-api', catLabel: 'Scraping — APIs',
+    tier: 3, arch: null,
+    auth: 'Authorization: Bearer fc-YOUR_API_KEY',
+    baseUrl: 'https://api.firecrawl.dev/v2',
+    summary: 'Most agent-native scraping API: POST + JSON body throughout, multiple output formats in one request, async-first crawl design, and a dedicated /extract endpoint for LLM schema extraction.',
+    useCases: [
+      { title: 'Scrape Page to Markdown', intent: 'Scrape to markdown with onlyMainContent:true; combine formats array for markdown+json+screenshot in one call.', steps: [], source: 'https://docs.firecrawl.dev/api-reference/endpoint/scrape', failure: 'onlyMainContent:true significantly reduces token consumption but may strip relevant sidebars or navigation links depending on page structure.' },
+      { title: 'LLM Structured Extraction', intent: 'Extract structured JSON with jsonOptions.schema; missing required fields return null silently.', steps: [], source: 'https://docs.firecrawl.dev/api-reference/endpoint/scrape', failure: 'LLM extraction costs 4 credits vs 1 for markdown. If the page does not contain a required schema field, it returns null without an error — agents must validate required fields.' },
+      { title: 'Crawl Entire Site', intent: 'Crawl entire site async with /v2/crawl; results expire 24h after completion so fetch promptly after polling.', steps: [], source: 'https://docs.firecrawl.dev/api-reference/endpoint/crawl', failure: 'Crawl results expire 24 hours after job completion. Large sites may take hours to crawl — results may expire before the agent fetches them if timing is not accounted for.' }
+    ]
+  },
+  {
+    id: 'jina-ai', name: 'Jina AI Reader', ars: 30, cat: 'scraping-api', catLabel: 'Scraping — APIs',
+    tier: 3, arch: null,
+    auth: 'Authorization: Bearer YOUR_JINA_API_KEY (optional)',
+    baseUrl: 'https://r.jina.ai',
+    summary: 'Most minimal agent interface: just prepend r.jina.ai/ to a URL. Purpose-built for LLM pipelines — output is clean markdown. Search (s.jina.ai) returns top-5 results with full page content in one call.',
+    useCases: [
+      { title: 'Convert URL to Markdown', intent: 'Convert any URL to clean markdown via GET r.jina.ai/{url}; add API key header for higher rate limit.', steps: [], source: 'https://jina.ai/reader/', failure: 'Without API key: 20 RPM rate limit. With key: 200 RPM. Blocked pages return a jina error page as markdown — must check for error indicators in the response.' },
+      { title: 'Target Specific DOM Section', intent: 'Target specific DOM section with X-Target-Selector header; silent fallback to full page if selector matches nothing.', steps: [], source: 'https://jina.ai/reader/', failure: 'If X-Target-Selector matches no elements, Jina silently returns the full page content instead of an error — agents may process irrelevant content without realizing it.' },
+      { title: 'Web Search with Content', intent: 'Web search returning full content of top 5 results via s.jina.ai/?q=query; no pagination available.', steps: [], source: 'https://jina.ai/reader/', failure: 'Search returns exactly 5 results with no pagination. Results include full page content which can be very large — agents must implement token budgeting.' }
+    ]
+  },
+  {
+    id: '2captcha', name: '2captcha', ars: 68, cat: 'scraping-api', catLabel: 'Scraping — APIs',
+    tier: 1, arch: null,
+    auth: 'clientKey field in every JSON request body',
+    baseUrl: 'https://api.2captcha.com',
+    summary: 'Two-step poll API: POST /createTask returns a task ID, then /getTaskResult must be polled until the human solver finishes (15–45s). Token injection is entirely out-of-band — agent must inject the returned token into the target page.',
+    useCases: [
+      { title: 'Solve reCAPTCHA v2', intent: 'Solve reCAPTCHA v2 with RecaptchaV2TaskProxyless; inject solution.gRecaptchaResponse into textarea before form submission.', steps: ['POST /createTask with { clientKey, task: { type: RecaptchaV2TaskProxyless, websiteURL, websiteKey } }', 'Poll POST /getTaskResult every 5s until status: ready; extract solution.gRecaptchaResponse', 'Set textarea[name=g-recaptcha-response].value = token before form submit'], source: 'https://2captcha.com/api-docs/recaptcha-v2', failure: 'Token must be injected into the page before form submission — the 2captcha API only returns a string token. Agents that submit the form without token injection fail CAPTCHA validation.' },
+      { title: 'Solve reCAPTCHA v3', intent: 'Solve reCAPTCHA v3 with pageAction matching the exact grecaptcha.execute action string; token valid ~2 minutes.', steps: [], source: 'https://2captcha.com/api-docs/recaptcha-v3', failure: 'pageAction must exactly match the action parameter used in grecaptcha.execute() call on the page. Wrong action produces a valid token with a low score that fails server-side validation.' },
+      { title: 'Report Incorrect Solution', intent: 'Report incorrect solution via /reportIncorrect within the short window after task completion to get credit refunded.', steps: [], source: 'https://2captcha.com/api-docs/report-incorrect', failure: 'Reporting window is short (5–15 minutes after solve). After that, the report is rejected and no credit refund is issued.' }
+    ]
+  },
+  {
+    id: 'capsolver', name: 'CapSolver', ars: 62, cat: 'scraping-api', catLabel: 'Scraping — APIs',
+    tier: 1, arch: null,
+    auth: 'clientKey field in every JSON request body',
+    baseUrl: 'https://api.capsolver.com',
+    summary: 'Structurally identical to 2captcha (createTask / getTaskResult poll) but uses AI-based solving for 1–10 second solve times. Adds Cloudflare Turnstile and AWS WAF support. Returns browser fingerprint artifacts alongside the token.',
+    useCases: [
+      { title: 'Solve Cloudflare Turnstile', intent: 'Solve Cloudflare Turnstile via AntiTurnstileTaskProxyLess; tokens are single-use and cannot be cached or replayed.', steps: [], source: 'https://docs.capsolver.com/guide/antibots/cloudflare_turnstile.html', failure: 'Turnstile tokens are single-use with short expiry (~5s). Caching a solved token for reuse across multiple requests causes all but the first to fail.' },
+      { title: 'reCAPTCHA v3 with UserAgent Matching', intent: 'Solve reCAPTCHA v3 and use solution.userAgent in downstream request headers; mismatched UA invalidates token.', steps: [], source: 'https://docs.capsolver.com/guide/antibots/recaptcha_v3.html', failure: 'CapSolver returns a userAgent alongside the token. The downstream HTTP request must use this exact UA — a different UA causes the token to fail server-side validation.' },
+      { title: 'Check Balance Before Batch', intent: 'Check balance before batch runs; pricing varies by CAPTCHA type but getBalance returns only total credits.', steps: [], source: 'https://docs.capsolver.com/guide/api-server.html', failure: 'getBalance returns total credits only — no per-type breakdown. Turnstile costs more than reCAPTCHA v2. Agents estimating batch cost from a single price assume wrong.' }
+    ]
+  },
+  {
+    id: 'multilogin', name: 'Multilogin', ars: 78, cat: 'scraping-api', catLabel: 'Scraping — APIs',
+    tier: 1, arch: null,
+    auth: 'POST /user/signin with MD5-hashed password → Bearer token (30-min expiry)',
+    baseUrl: 'https://api.multilogin.com',
+    summary: 'Two-host architecture: profile management via api.multilogin.com; starting browser sessions via local launcher (launcher.mlx.yt:45001) requiring Multilogin desktop app running locally. Token expires every 30 minutes.',
+    useCases: [
+      { title: 'Authenticate with MD5 Password', intent: 'Authenticate with MD5-hashed password (not plaintext); token expires in 30 minutes requiring re-auth mid-session.', steps: [], source: 'https://multilogin.com/docs/api', failure: 'Password must be MD5-hashed before sending — sending plaintext always fails. Token expiry at 30 minutes means long-running batch jobs must implement re-auth logic.' },
+      { title: 'Start Browser Session via Local Launcher', intent: 'Start browser session via launcher.mlx.yt:45001 (local service only); unreachable from CI/CD containers or remote machines.', steps: [], source: 'https://multilogin.com/docs/api', failure: 'The launcher service only binds to localhost:45001. CI/CD pipelines, Docker containers, or remote servers cannot reach it — fully headless operation requires MLX browser running on the same machine.' },
+      { title: 'Create and Start Profile', intent: 'Create profile storing both folder_id and profile_id; both are required to start the profile via the launcher API.', steps: [], source: 'https://multilogin.com/docs/api', failure: 'Profile creation returns folder_id and profile_id separately. The launcher start endpoint requires both. Storing only profile_id (the more obvious field) causes 400 on start.' }
+    ]
+  },
+  {
+    id: 'gologin', name: 'GoLogin', ars: 72, cat: 'scraping-api', catLabel: 'Scraping — APIs',
+    tier: 1, arch: null,
+    auth: 'Authorization: Bearer YOUR_API_TOKEN',
+    baseUrl: 'https://api.gologin.com',
+    summary: 'Cleaner architecture than Multilogin for cloud use cases — cloud browser endpoint is a real remote service, not a local app dependency. WS connection URL doubles as the automation endpoint.',
+    useCases: [
+      { title: 'Launch Cloud Browser', intent: 'Launch cloud browser by connecting Puppeteer to wss://cloudbrowser.gologin.com/connect?token=TOKEN&profile=ID.', steps: [], source: 'https://docs.gologin.com/api', failure: 'Token and profile ID must both be in the WebSocket URL as query params. Missing either returns a WebSocket 403.' },
+      { title: 'Inject Cookies Before Launch', intent: 'Inject cookies via PATCH /browser/{profileId} before launching; cookies added to a live session only take effect on next start.', steps: [], source: 'https://docs.gologin.com/api', failure: 'Cookie injection via API only takes effect when the profile is stopped and restarted. Patching cookies on a running session has no immediate effect.' },
+      { title: 'Stop Session Correctly', intent: 'Stop session with DELETE /browser/{profileId}/web (not POST /stop); SDK GL.exit() wraps this non-obvious DELETE pattern.', steps: [], source: 'https://docs.gologin.com/api', failure: 'The stop endpoint is a DELETE request — non-obvious. Using POST /stop or GET returns 404. Unreleased sessions count against concurrent session limits.' }
+    ]
+  },
+
+  // PROSUMER — Analytics & PM additions
+  {
+    id: 'looker', name: 'Looker', ars: 72, cat: 'pm', catLabel: 'Analytics',
+    tier: 1, arch: null,
+    auth: 'POST /login with client_id + client_secret → Authorization: token <access_token>',
+    baseUrl: 'https://<instance>.looker.com:19999/api/4.0',
+    summary: 'Full REST API surface: run saved Looks, build ad-hoc Explore queries, generate embed URLs, user provisioning. Create query and run query are separate sequenced steps; user provisioning requires 3–4 serial calls.',
+    useCases: [
+      { title: 'Run a Saved Look', intent: 'Run a saved Look with GET /looks/{id}/run/csv; result_format is a path segment not a query param.', steps: [], source: 'https://developers.looker.com/api/explorer/4.0/methods/Look/run_look', failure: 'result_format (json, csv, txt) is a URL path segment: /looks/{id}/run/json — not a query param. Using ?format=json returns 404.' },
+      { title: 'Ad-hoc Explore Query', intent: 'Ad-hoc Explore query requires two steps: POST /queries to get query_id, then POST /queries/{id}/run/json.', steps: [], source: 'https://developers.looker.com/api/explorer/4.0/methods/Query', failure: 'Creating and running a query are separate API calls — no one-shot endpoint. The query body (model, view, fields, filters) must be valid Looker field references, not arbitrary SQL.' },
+      { title: 'Provision User', intent: 'Provision user in 4 steps: create record, attach email credential, look up role ID, then PUT /users/{id}/roles with array.', steps: [], source: 'https://developers.looker.com/api/explorer/4.0/methods/User', failure: 'POST /users silently discards role_ids — roles must be set via a separate PUT /users/{id}/roles call. Expecting roles to stick from the create call causes silent permission failures.' }
+    ]
+  },
+  {
+    id: 'heap', name: 'Heap', ars: 81, cat: 'pm', catLabel: 'Analytics',
+    tier: 1, arch: null,
+    auth: 'app_id field in every JSON request body (no Authorization header)',
+    baseUrl: 'https://heapanalytics.com/api',
+    summary: 'Write-only public API. Funnel analysis, session replay, and event definitions are UI-only with no programmatic creation API. No REST endpoint to query historical events or funnels — agents can write data in but cannot read analytics out.',
+    useCases: [
+      { title: 'Track Server-side Event', intent: 'Track server-side custom events with POST /track; API returns 200 for malformed payloads with no validation error.', steps: [], source: 'https://developers.heap.io/reference/track-1', failure: 'API returns HTTP 200 even for malformed payloads (missing required fields, wrong types). Agents assume success; events silently fail to record.' },
+      { title: 'Bulk Event Ingestion', intent: 'Bulk ingest up to 1000 events per batch with POST /bulk_track; set idempotency_key per event to prevent duplicates.', steps: [], source: 'https://developers.heap.io/reference/bulk-track', failure: 'Without idempotency_key, retry logic on network errors causes duplicate events that corrupt funnel and cohort analysis.' },
+      { title: 'Add User Properties', intent: 'Add user properties for segmentation with POST /add_user_properties; nested objects not supported.', steps: [], source: 'https://developers.heap.io/reference/add-user-properties-1', failure: 'Property values must be strings or numbers — nested objects are silently dropped. No validation error is returned.' }
+    ]
+  },
+  {
+    id: 'asana', name: 'Asana', ars: 58, cat: 'pm', catLabel: 'PM',
+    tier: 2, arch: null,
+    auth: 'Authorization: Bearer {personal_access_token}',
+    baseUrl: 'https://app.asana.com/api/1.0',
+    summary: 'Among most developer-friendly PM tools; workspace_gid required before every action; search has indexing lag of 10–60s; task creation without required custom fields fails silently in some project configs.',
+    useCases: [
+      { title: 'Create a Task', intent: "Create a task 'Design mockups' in the 'Sprint 12' project.", steps: ['GET /workspaces to get workspace_gid', 'GET /projects?workspace={gid} — match by name to get project_gid', 'POST /tasks with { name, projects: [project_gid], workspace, assignee }'], source: 'https://developers.asana.com/reference/createtask', failure: 'workspace is required when not using projects or parent — agents that omit it receive 400 Bad Request. Projects with required custom fields return 400 if those fields are missing.' },
+      { title: 'Search Tasks', intent: 'Find all overdue tasks in workspace assigned to Sarah.', steps: [], source: 'https://developers.asana.com/reference/searchtasksforworkspace', failure: 'Search results have eventual consistency — tasks created in last 10–60 seconds may not appear. Requires Asana Premium or higher; free users receive 402 Payment Required.' },
+      { title: "Update Project Status", intent: "Mark the 'Website Relaunch' project as on-track with a green status.", steps: [], source: 'https://developers.asana.com/reference/updateproject', failure: 'color must be one of green, yellow, red — passing on-track or a hex code returns 400. Status is an immutable append (new record), not an edit.' }
+    ]
+  },
+  {
+    id: 'monday-com', name: 'Monday.com', ars: 63, cat: 'pm', catLabel: 'PM',
+    tier: 1, arch: null,
+    auth: 'Authorization: <token> header (no Bearer prefix); API-Version: 2024-01 header required',
+    baseUrl: 'https://api.monday.com/v2',
+    summary: 'GraphQL exclusively — every operation is a POST to a single endpoint. Status column values require numeric index lookups (not label strings); column IDs are board-specific opaque strings; cursors expire after 60 minutes.',
+    useCases: [
+      { title: 'Create an Item on a Board', intent: "Create a new task 'Design mockups' in the 'Sprint 12' board.", steps: ['POST https://api.monday.com/v2 with { query: "{ boards(limit:50) { id name } }" } to find board ID', 'Mutation: create_item(board_id: ..., item_name: "Design mockups") { id name }'], source: 'https://developer.monday.com/api-reference/reference/items', failure: 'All requests use POST — agents that attempt GET or PUT for reads/updates receive 405. If the board has required columns, creating without them returns UserError in body with HTTP 200.' },
+      { title: 'Update Status Column', intent: "Mark item as 'Done' on the Sprint 12 board.", steps: [], source: 'https://developer.monday.com/api-reference/docs/change-column-values', failure: 'Status labels are board-specific and mutable. change_simple_column_value accepts a label string but silently sets incorrect status if label does not match exactly. Must look up numeric index from settings_str.' },
+      { title: 'Paginate Board Items', intent: 'Get all items from a board including their status and owner columns.', steps: [], source: 'https://developer.monday.com/api-reference/docs/querying-board-items', failure: 'Cursors expire after 60 minutes — long-running pagination on large boards must restart. Complexity-based rate limiting depletes budget on heavy field selections.' }
+    ]
+  },
+
+  // MARKETING AUTOMATION
+  {
+    id: 'klaviyo', name: 'Klaviyo', ars: 62, cat: 'marketing', catLabel: 'Marketing',
+    tier: 1, arch: null,
+    auth: 'Authorization: Klaviyo-API-Key {private_key} header; revision: 2026-04-15 header required on all requests',
+    baseUrl: 'https://a.klaviyo.com/api/',
+    summary: 'REST JSON:API style. Flow triggering is indirect (post an event → flow listens for it). Segment creation rate-limited to 1/s burst. Campaign metrics require a separate aggregates query endpoint.',
+    useCases: [
+      { title: 'Sync a Profile', intent: 'Upsert customer profile — set email, first name, and loyalty tier.', steps: ['POST https://a.klaviyo.com/api/profile-import with { data: { type: profile, attributes: { email, first_name, properties: { loyalty_tier } } } }', '201 = new profile; 200 = updated. Parse data.id for the Klaviyo profile ID.'], source: 'https://developers.klaviyo.com/en/reference/create_or_update_profile', failure: 'Setting a field to null clears it; omitting a field leaves it unchanged — agents that do not distinguish these behaviors accidentally wipe data. Rate limit: 75 req/s burst.' },
+      { title: 'Trigger Flow via Event', intent: "Fire a 'Checkout Abandoned' event to trigger the abandonment flow.", steps: ['POST /api/events with { data: { type: event, attributes: { metric: { data: { type: metric, attributes: { name: "Checkout Abandoned" } } }, profile, properties, time } } }', 'API returns HTTP 202 (accepted, not guaranteed processed)'], source: 'https://developers.klaviyo.com/en/reference/create_event', failure: 'No direct trigger flow by ID endpoint — flows are driven entirely by metric events. If the metric name does not exactly match the flow trigger condition (case-sensitive), the flow never fires with no error returned.' },
+      { title: 'Get Campaign Metrics', intent: 'What were the open rate and click rate for last week email campaign?', steps: ['GET /api/campaigns?filter=equals(messages.channel,"email") — find campaign ID', 'POST /api/metric-aggregates with { data: { type: metric-aggregate, attributes: { metric_id, measurements: [count, unique], filter, timeframe } } }'], source: 'https://developers.klaviyo.com/en/reference/query_metric_aggregates', failure: 'The aggregates endpoint requires the internal metric_id (e.g. Klaviyo assigned ID for "Opened Email") which must be fetched separately from GET /api/metrics/. Rate limit: 3 req/s burst.' }
+    ]
+  },
+  {
+    id: 'customer-io', name: 'Customer.io', ars: 55, cat: 'marketing', catLabel: 'Marketing',
+    tier: 2, arch: null,
+    auth: 'Track API: HTTP Basic (Site ID as username, secret key as password); App API: Authorization: Bearer {app_api_key}',
+    baseUrl: 'https://track.customer.io',
+    summary: 'Two separate APIs with different auth and base URLs — Track API (data in) vs App API (messages out). Broadcasts limited to existing people only by default.',
+    useCases: [
+      { title: 'Create or Update a Person', intent: 'Add user to Customer.io with plan=pro and company=Acme.', steps: ['POST https://track.customer.io/api/v2/entity with Basic auth', 'Body: { type: person, action: identify, identifiers: { id: "42" }, attributes: { email, plan, company } }', 'HTTP 200 = success. Person is created if new, updated if existing. No response body.'], source: 'https://docs.customer.io/api/track', failure: 'V1 and V2 APIs have different base paths and body schemas — agents mixing them get 404s or silent data drops. Attribute names over 150 bytes are silently truncated.' },
+      { title: 'Trigger API Broadcast', intent: 'Send the Weekly Digest broadcast to 500 users.', steps: ['GET https://api.customer.io/v1/campaigns → find campaign by name → get id', 'POST /v1/campaigns/{broadcast_id}/triggers with { data: {...}, recipients: { email: [...] } }'], source: 'https://docs.customer.io/api/app', failure: 'Broadcasts cannot add new people — if a recipient email does not exist in Customer.io, they are silently skipped unless email_ignore_missing: false is set.' },
+      { title: 'Send Transactional Email', intent: 'Send a password reset email using the password-reset template.', steps: ['POST https://api.customer.io/v1/send/email with Bearer app API key', 'Body: { transactional_message_id: "password-reset", to, identifiers: { email }, message_data: { reset_link } }'], source: 'https://docs.customer.io/api/app', failure: 'transactional_message_id must exactly match the transactional message identifier in the UI (not the name, but the separate ID field). Suppressed recipients return 200 but email is never sent.' }
+    ]
+  },
+  {
+    id: 'mailchimp', name: 'Mailchimp', ars: 58, cat: 'marketing', catLabel: 'Marketing',
+    tier: 2, arch: null,
+    auth: 'HTTP Basic Auth (any string as username, API key as password)',
+    baseUrl: 'https://{dc}.api.mailchimp.com/3.0/',
+    summary: 'Data center prefix embedded in API key (last segment after -). Subscriber hash = MD5(lowercase email). Multi-step campaign workflow: create → set content → send.',
+    useCases: [
+      { title: 'Add Subscriber to List', intent: "Subscribe alice@example.com to newsletter, tagged as 'webinar-attendee'.", steps: ['Extract data center from API key (key ending in -us6 → dc = us6)', 'POST https://us6.api.mailchimp.com/3.0/lists/{list_id}/members with { email_address, status: subscribed, tags: [...], merge_fields: {...} }'], source: 'https://mailchimp.com/developer/marketing/api/list-members/', failure: 'Sending status: subscribed for a previously unsubscribed address returns 400 — Mailchimp blocks resubscribing without explicit opt-in re-confirmation.' },
+      { title: 'Create and Send Campaign', intent: "Create and send an email campaign with subject 'June Sale' using template Y.", steps: ['POST /3.0/campaigns with { type, recipients: { list_id }, settings: { subject_line, template_id } } → capture campaign id', 'PUT /3.0/campaigns/{id}/content with { template: { id } }', 'POST /3.0/campaigns/{id}/actions/send — returns 204 on success'], source: 'https://mailchimp.com/developer/marketing/api/campaigns/', failure: 'Three separate API calls in strict sequence. If content step is skipped, the send endpoint returns 400 Campaign has no content.' },
+      { title: 'Upsert Subscriber', intent: 'Add subscriber if not exist, or update if exists.', steps: ['Compute subscriber hash: MD5(lowercase(email))', 'PUT /3.0/lists/{list_id}/members/{subscriber_hash} with { email_address, status_if_new: subscribed }'], source: 'https://mailchimp.com/developer/marketing/api/list-members/', failure: 'status_if_new controls status for new contacts only; status field overrides for existing and can accidentally resubscribe archived contacts.' }
+    ]
+  },
+  {
+    id: 'braze', name: 'Braze', ars: 72, cat: 'marketing', catLabel: 'Marketing',
+    tier: 1, arch: null,
+    auth: 'Authorization: Bearer {rest_api_key} header; API key scopes must be configured per-key',
+    baseUrl: 'https://rest.iad-01.braze.com',
+    summary: 'Enterprise-grade, instance-specific base URL is the first blocker. Separate API keys for each use case with scoped permissions. Every custom attribute costs a data point.',
+    useCases: [
+      { title: 'Track Custom Event', intent: "Log a 'video_watched' event for user u_789 with video_id and duration.", steps: ['Determine instance base URL from Braze dashboard (e.g. https://rest.iad-01.braze.com)', 'POST {base_url}/users/track with { events: [{ external_id, name, time, properties: { video_id, duration_seconds } }] }', 'Response: { message: success, events_processed: 1 }; check errors array for partial failures'], source: 'https://www.braze.com/docs/api/endpoints/user_data/post_user_track/', failure: 'The base URL is instance-specific and not discoverable via API — it must be manually found in the dashboard. Sending more than 75 combined objects per request returns 400.' },
+      { title: 'Trigger Campaign via API', intent: "Trigger the 'Welcome Series' campaign for user u_789.", steps: ['Campaign must be set to API-Triggered Delivery in dashboard — cannot be changed via API', 'POST {base_url}/campaigns/trigger/send with { campaign_id, recipients: [{ external_user_id }], trigger_properties }'], source: 'https://www.braze.com/docs/api/endpoints/messaging/send_messages/post_send_triggered_campaigns/', failure: 'Campaign must be configured as API-Triggered in the UI before this endpoint works — attempting to trigger a standard campaign returns 400.' },
+      { title: 'Send Push Notification', intent: "Send push notification 'Your order shipped!' to user u_789 on iOS.", steps: ['POST {base_url}/messages/send with Authorization: Bearer key (must have messages.send scope)', 'Body: { external_user_ids: [u_789], messages: { apple_push: { alert, badge } } }'], source: 'https://www.braze.com/docs/api/endpoints/messaging/send_messages/post_send_messages/', failure: 'API key must have messages.send permission — missing scope returns 401 with no explanation of which permission is required.' }
+    ]
+  },
+
+  // FINANCE TOOLS
+  {
+    id: 'ramp', name: 'Ramp', ars: 68, cat: 'finance', catLabel: 'Finance',
+    tier: 1, arch: null,
+    auth: 'Authorization: Bearer {token} via OAuth 2.0',
+    baseUrl: 'https://api.ramp.com/developer/v1/',
+    summary: 'Clean REST API with good OpenAPI spec. Virtual card creation is async — agents must poll a task endpoint. Amounts are in cents.',
+    useCases: [
+      { title: 'Get Transactions', intent: 'List all company card transactions from last month with merchant name and amount.', steps: ['GET https://api.ramp.com/developer/v1/transactions with from_date and to_date query params', 'Navigate pages via page.next cursor until exhausted'], source: 'https://docs.ramp.com/developer-api/v1/reference/transactions', failure: 'Pagination uses an opaque cursor in page.next — agents that construct query params manually instead of following the cursor lose data. Transactions without receipts have empty receipts[] with no way to distinguish no receipt from not-yet-uploaded.' },
+      { title: 'Create Virtual Card', intent: 'Create a $500 single-use virtual card for vendor payment.', steps: ['POST /developer/v1/cards/deferred/virtual with { user_id, idempotency_key, display_name, spending_restrictions: { limit: 50000, interval: TOTAL } }', 'Note: limit is in cents; response is { id: task_id, status: PENDING }', 'Poll GET /developer/v1/cards/deferred/{task_id} until status: SUCCESS; extract card ID'], source: 'https://docs.ramp.com/developer-api/v1/reference/cards', failure: 'Virtual card creation is async — the response is a task ID, not the card. Agents that treat the task ID as a card ID fail all downstream operations. limit is in cents — agents passing dollar amounts create cards with 100× the intended limit.' },
+      { title: 'Export Receipts', intent: 'Download all receipts for transactions this month for bookkeeping.', steps: ['GET /developer/v1/transactions to list transactions', 'For each transaction, check receipts array for receipt_url fields', 'Download each receipt image via the URL (no additional auth required)'], source: 'https://docs.ramp.com/developer-api/v1/reference/transactions', failure: 'No dedicated export-all-receipts endpoint. Receipt URLs may expire; agents must download promptly after fetching.' }
+    ]
+  },
+  {
+    id: 'xero', name: 'Xero', ars: 70, cat: 'finance', catLabel: 'Finance',
+    tier: 1, arch: null,
+    auth: 'OAuth 2.0 PKCE → Authorization: Bearer {token} (expires 30 min); Xero-Tenant-Id: {tenantId} required on every request',
+    baseUrl: 'https://api.xero.com/api.xro/2.0/',
+    summary: 'OAuth 2.0 with short-lived 30-min tokens and refresh flow. Xero-Tenant-Id must be resolved fresh after each token exchange. Two required headers make every request setup non-trivial.',
+    useCases: [
+      { title: 'Create an Invoice', intent: 'Create a $1,200 invoice for consulting services in June.', steps: ['Complete OAuth 2.0 PKCE flow → get access token', 'GET https://api.xero.com/connections → parse tenantId for the target organization', 'POST /Invoices with { Type: ACCREC, Contact: { Name }, Date, DueDate, LineItems: [...], Status: AUTHORISED }'], source: 'https://developer.xero.com/documentation/api/accounting/invoices', failure: 'Access token expires after 30 minutes — agents must implement refresh token rotation. Contact.Name must exactly match an existing contact name or a duplicate contact is auto-created.' },
+      { title: 'Get Outstanding Invoices', intent: 'List all unpaid invoices over 30 days old for follow-up.', steps: ['GET /Invoices?where=Status=="AUTHORISED"&order=DueDate', 'Filter client-side for DueDate < (today - 30 days)'], source: 'https://developer.xero.com/documentation/api/accounting/invoices', failure: 'The where filter DateTime syntax (DateTime(2026,5,5)) is Xero-proprietary and not ISO 8601 — agents using ISO dates in where clauses get 400 errors.' },
+      { title: 'Record Bank Transaction', intent: 'Record an $89 software subscription payment from the operating account.', steps: ['GET /Accounts?where=Type=="BANK" to find target bank account AccountID', 'POST /BankTransactions with { Type: SPEND, Contact, Date, LineItems, BankAccount: { AccountID } }'], source: 'https://developer.xero.com/documentation/api/accounting/banktransactions', failure: 'BankAccount.AccountID must be a bank-type account — passing a regular expense account returns 400. Bank transactions must be manually reconciled in the UI — no API endpoint for automatic reconciliation.' }
+    ]
+  },
+  {
+    id: 'quickbooks', name: 'QuickBooks', ars: 75, cat: 'finance', catLabel: 'Finance',
+    tier: 2, arch: null,
+    auth: 'OAuth 2.0 Authorization Code → Bearer token (expires 60 min); realmId required in every URL path',
+    baseUrl: 'https://quickbooks.api.intuit.com/v3/company/{realmId}/',
+    summary: 'OAuth 2.0 complexity plus realmId in every URL makes cold-start difficult. SyncToken required for all updates (optimistic concurrency). Reports are a separate resource type.',
+    useCases: [
+      { title: 'Create an Invoice', intent: 'Create a $3,500 invoice for software development services.', steps: ['Complete OAuth 2.0 flow → get access token + realmId from callback', 'GET /query?query=SELECT Id FROM Customer WHERE DisplayName="Globex Corp" to resolve customer ID', 'GET /query?query=SELECT Id FROM Item WHERE Name="Software Dev" to resolve item ID', 'POST /invoice with { CustomerRef: { value }, Line: [...] }'], source: 'https://developer.intuit.com/app/developer/qbo/docs/api/accounting/all-entities/invoice', failure: 'CustomerRef.value must be the QBO numeric customer ID, not the name — agents passing display names get ValidationFault. SyncToken returned must be stored and passed back on any subsequent update.' },
+      { title: 'Get P&L Report', intent: 'Get the Profit & Loss report for Q1 2026.', steps: ['GET /reports/ProfitAndLoss?start_date=2026-01-01&end_date=2026-03-31&accounting_method=Accrual', 'Parse nested JSON: Rows arrays with type: Section, group: GrossProfit and group: NetIncome'], source: 'https://developer.intuit.com/app/developer/qbo/docs/api/accounting/all-entities/profitandloss', failure: 'Report response is a deeply nested non-standard JSON structure — agents expecting tabular data fail on the hierarchical row/column format. accounting_method defaults to Cash if omitted.' },
+      { title: 'Record Payment on Invoice', intent: 'Mark invoice as paid — $3,500 received via bank transfer.', steps: ['Resolve invoice ID and bank account ID via query endpoints', 'POST /payment with { CustomerRef, TotalAmt: 3500.00, Line: [{ Amount, LinkedTxn: [{ TxnId, TxnType: Invoice }] }], DepositToAccountRef: { value: bank_account_id } }'], source: 'https://developer.intuit.com/app/developer/qbo/docs/api/accounting/all-entities/payment', failure: 'DepositToAccountRef must match a Bank-type account. TotalAmt must match the sum of Line[].Amount exactly — any discrepancy returns 400.' }
+    ]
+  },
+  {
+    id: 'brex', name: 'Brex', ars: 60, cat: 'finance', catLabel: 'Finance',
+    tier: 2, arch: null,
+    auth: 'Authorization: Bearer {user_token} header; tokens expire after 90 days of inactivity',
+    baseUrl: 'https://api.brex.com',
+    summary: 'Clean REST API with good OpenAPI coverage. No sandbox environment is the primary blocker — all testing hits production. Separate endpoints for card vs cash account transactions.',
+    useCases: [
+      { title: 'Get Card Transactions', intent: 'List all card transactions over $500 from this month for expense review.', steps: ['GET https://api.brex.com/v2/transactions/card/primary with expand[]=merchant', 'Iterate pages using next_cursor from response until next_cursor is null', 'Filter for amount >= 50000 (amounts in cents)'], source: 'https://developer.brex.com/openapi/transactions_api/', failure: 'Two transaction endpoints exist: /v2/transactions/card/primary and /v2/transactions/cash/primary — agents querying only one miss the other. Amounts are in cents; dollar threshold comparisons get incorrect results.' },
+      { title: 'Create ACH Payment', intent: 'Send $2,500 ACH payment to a stored vendor payment method.', steps: ['GET /v1/vendors → find vendor by name → get id and payment instrument ID', 'POST /v1/payments with { description, amount: { amount: 250000, currency: USD }, counterparty: { vendor_id, payment_instrument: { id } } }'], source: 'https://developer.brex.com/openapi/payments_api/', failure: 'No sandbox — all payment API calls hit live accounts. amount.amount is in cents — agents passing dollar amounts send 100× the intended value.' },
+      { title: 'Export Transactions for Bookkeeping', intent: 'Export transactions with category, merchant, and receipt status for bookkeeping.', steps: ['Fetch card: GET /v2/transactions/card/primary?expand[]=merchant', 'Fetch cash: GET /v2/transactions/cash/primary', 'Merge both lists; flag empty receipts[] as missing receipt'], source: 'https://developer.brex.com/openapi/transactions_api/', failure: 'Two API calls required to get full transaction picture. Receipt images require a separate GET /v1/receipts/{receipt_id} call per receipt.' }
+    ]
   }
 ];
 
@@ -1177,8 +1817,15 @@ function getTierClass(ars) {
 }
 
 function getCatPillClass(cat) {
-  const map = { crm: 'cat-pill-crm', leadgen: 'cat-pill-leadgen', outreach: 'cat-pill-outreach', pm: 'cat-pill-pm' };
-  return map[cat] || '';
+  if (cat === 'crm') return 'cat-pill-crm';
+  if (cat === 'leadgen') return 'cat-pill-leadgen';
+  if (cat === 'outreach') return 'cat-pill-outreach';
+  if (cat === 'pm') return 'cat-pill-pm';
+  if (cat.startsWith('devtools')) return 'cat-pill-devtools';
+  if (cat.startsWith('scraping')) return 'cat-pill-scraping';
+  if (cat === 'marketing') return 'cat-pill-marketing';
+  if (cat === 'finance') return 'cat-pill-finance';
+  return '';
 }
 
 function getArchClass(arch) {
@@ -1220,7 +1867,16 @@ const catGroups = [
   { key: 'crm', label: 'CRM Tools' },
   { key: 'leadgen', label: 'Lead Gen / Data Enrichment' },
   { key: 'outreach', label: 'Cold Email & Outreach' },
-  { key: 'pm', label: 'Analytics, Design & PM' }
+  { key: 'pm', label: 'Analytics, Design & PM' },
+  { key: 'devtools-db', label: 'Developer Tools — Database', supercat: 'devtools' },
+  { key: 'devtools-ai', label: 'Developer Tools — AI APIs', supercat: 'devtools' },
+  { key: 'devtools-auth', label: 'Developer Tools — Auth & Infra', supercat: 'devtools' },
+  { key: 'devtools-oss', label: 'Developer Tools — OSS Infra', supercat: 'devtools' },
+  { key: 'scraping-browser', label: 'Scraping — Headless Browsers', supercat: 'scraping' },
+  { key: 'scraping-proxy', label: 'Scraping — Proxies', supercat: 'scraping' },
+  { key: 'scraping-api', label: 'Scraping — APIs, Anti-bot & Account', supercat: 'scraping' },
+  { key: 'marketing', label: 'Marketing Automation' },
+  { key: 'finance', label: 'Finance Tools' },
 ];
 
 catGroups.forEach(group => {
@@ -1239,7 +1895,11 @@ catGroups.forEach(group => {
 
     const archPill = p.arch ? `<span class="product-pill ${getArchClass(p.arch)}" style="font-size:11px;padding:2px 7px;border-radius:4px;">${getArchLabel(p.arch)}: ${p.arch === 'a' ? 'No headless path' : p.arch === 'b' ? 'Token amplifier' : 'Silent failures'}</span>` : '';
 
-    const useCasesHtml = p.useCases.map((uc, i) => `
+    const useCasesHtml = p.useCases.map((uc, i) => {
+      const stepsHtml = uc.steps && uc.steps.length ? `<div class="uc-field"><div class="uc-field-label">Steps</div><div class="uc-steps"><ol>${uc.steps.map(s => `<li>${s.replace(/`([^`]+)`/g, '<code>$1</code>').replace(/\b(POST|GET|PATCH|DELETE|PUT)\b /g, m => `<code>${m.trim()}</code> `)}</li>`).join('')}</ol></div></div>` : '';
+      const sourceHtml = uc.source ? `<div class="uc-field"><div class="uc-field-label">Primary Source</div><div class="uc-source"><a href="${uc.source}" target="_blank" rel="noopener">${uc.source}</a></div></div>` : '';
+      const failureHtml = uc.failure ? `<div class="uc-field"><div class="uc-field-label">Agent Failure Point</div><div class="uc-failure">${uc.failure}</div></div>` : '';
+      return `
       <div class="use-case-item">
         <div class="use-case-header" onclick="toggleUC(this)">
           <span class="uc-num">${i + 1}</span>
@@ -1250,24 +1910,11 @@ catGroups.forEach(group => {
           <span class="uc-toggle">▼</span>
         </div>
         <div class="use-case-body">
-          <div class="uc-field">
-            <div class="uc-field-label">User Intent</div>
-            <div class="uc-intent-text">${uc.intent}</div>
-          </div>
-          <div class="uc-field">
-            <div class="uc-field-label">Steps</div>
-            <div class="uc-steps"><ol>${uc.steps.map(s => `<li>${s.replace(/`([^`]+)`/g, '<code>$1</code>').replace(/POST |GET |PATCH |DELETE /g, m => `<code>${m.trim()}</code> `)}</li>`).join('')}</ol></div>
-          </div>
-          <div class="uc-field">
-            <div class="uc-field-label">Primary Source</div>
-            <div class="uc-source"><a href="${uc.source}" target="_blank" rel="noopener">${uc.source}</a></div>
-          </div>
-          <div class="uc-field">
-            <div class="uc-field-label">Agent Failure Point</div>
-            <div class="uc-failure">${uc.failure}</div>
-          </div>
+          <div class="uc-field"><div class="uc-field-label">User Intent</div><div class="uc-intent-text">${uc.intent}</div></div>
+          ${stepsHtml}${sourceHtml}${failureHtml}
         </div>
-      </div>`).join('');
+      </div>`;
+    }).join('');
 
     card.innerHTML = `
       <div class="product-header" onclick="toggleProduct(this.parentElement)">
@@ -1321,15 +1968,16 @@ function filterCat(cat, btn) {
 function filterProducts() {
   applyFilters();
 }
+function catMatches(cardCat, filter) {
+  if (filter === 'all') return true;
+  if (filter === 'devtools') return cardCat.startsWith('devtools');
+  if (filter === 'scraping') return cardCat.startsWith('scraping');
+  return cardCat === filter;
+}
 function applyFilters() {
   const query = document.getElementById('productSearch').value.toLowerCase();
-  document.querySelectorAll('.product-card').forEach(card => {
-    const matchCat = currentCat === 'all' || card.dataset.cat === currentCat;
-    const matchQuery = !query || card.dataset.name.includes(query);
-    card.classList.toggle('hidden', !(matchCat && matchQuery));
-  });
-  document.querySelectorAll('.score-card').forEach(card => {
-    const matchCat = currentCat === 'all' || card.dataset.cat === currentCat;
+  document.querySelectorAll('.product-card, .score-card').forEach(card => {
+    const matchCat = catMatches(card.dataset.cat, currentCat);
     const matchQuery = !query || card.dataset.name.includes(query);
     card.classList.toggle('hidden', !(matchCat && matchQuery));
   });
