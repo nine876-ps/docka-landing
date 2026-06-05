@@ -721,6 +721,188 @@
     padding: 2px 7px;
     border-radius: 5px;
   }
+
+  /* ROLE SCENARIOS */
+  .role-tabs {
+    display: flex;
+    gap: 0;
+    margin-top: 40px;
+    border-bottom: 1.5px solid var(--border);
+  }
+  .role-tab {
+    padding: 10px 24px;
+    border: none;
+    background: none;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-3);
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1.5px;
+    transition: color 0.15s, border-color 0.15s;
+    border-radius: 0;
+  }
+  .role-tab:hover { color: var(--text-2); }
+  .role-tab.active { color: var(--blue); border-bottom-color: var(--blue); }
+  .role-scenario { display: none; }
+  .role-scenario.active { display: block; }
+  .scenario-wrap {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 24px;
+    margin-top: 32px;
+    align-items: start;
+  }
+  @media (max-width: 760px) {
+    .scenario-wrap { grid-template-columns: 1fr; }
+  }
+  .scenario-role-tag {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: var(--text-3);
+    margin-bottom: 10px;
+  }
+  .prompt-bubble {
+    background: var(--blue);
+    color: #fff;
+    border-radius: 4px 16px 16px 16px;
+    padding: 16px 18px;
+    font-size: 14px;
+    line-height: 1.6;
+    font-style: italic;
+    margin-bottom: 14px;
+  }
+  .scenario-context {
+    font-size: 13px;
+    color: var(--text-3);
+    line-height: 1.55;
+  }
+  .agent-trace {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+  .trace-header {
+    padding: 10px 18px;
+    border-bottom: 1px solid var(--border);
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: var(--text-3);
+    background: var(--bg-2);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .trace-header-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--green);
+    animation: pulse 2s infinite;
+  }
+  .trace-step {
+    display: grid;
+    grid-template-columns: 110px 1fr;
+    border-bottom: 1px solid var(--border);
+  }
+  .trace-step:last-child { border-bottom: none; }
+  .trace-type {
+    padding: 12px 12px 12px 14px;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--text-3);
+    border-right: 1px solid var(--border);
+    background: var(--bg-2);
+    display: flex;
+    align-items: flex-start;
+    padding-top: 14px;
+    line-height: 1.4;
+  }
+  .trace-rows {
+    padding: 10px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .trace-row {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    flex-wrap: wrap;
+  }
+  .ttag {
+    font-size: 12px;
+    font-weight: 700;
+    background: var(--bg-3);
+    border: 1px solid var(--border);
+    color: var(--text-2);
+    padding: 2px 9px;
+    border-radius: 5px;
+    white-space: nowrap;
+  }
+  .ttag.pick {
+    background: var(--blue-bg);
+    border-color: var(--blue-border);
+    color: var(--blue);
+  }
+  .ttag.skip {
+    text-decoration: line-through;
+    opacity: 0.55;
+  }
+  .abadge {
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 7px;
+    border-radius: 100px;
+    white-space: nowrap;
+  }
+  .abadge.hi { background: var(--green-bg); color: var(--green); }
+  .abadge.mid { background: var(--orange-bg); color: var(--orange); }
+  .abadge.lo { background: var(--red-bg); color: var(--red); }
+  .trace-status {
+    font-size: 11px;
+    font-weight: 600;
+    line-height: 1.4;
+  }
+  .trace-status.ok { color: var(--green); }
+  .trace-status.warn { color: var(--orange); }
+  .trace-status.err { color: var(--red); }
+  .scenario-outcome {
+    margin-top: 14px;
+    background: var(--bg-2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 16px 20px;
+  }
+  .outcome-pills {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 10px;
+  }
+  .opill {
+    font-size: 11px;
+    font-weight: 700;
+    padding: 4px 11px;
+    border-radius: 100px;
+  }
+  .opill.ok { background: var(--green-bg); color: var(--green); }
+  .opill.warn { background: var(--orange-bg); color: var(--orange); }
+  .opill.err { background: var(--red-bg); color: var(--red); }
+  .outcome-insight {
+    font-size: 12px;
+    color: var(--text-2);
+    line-height: 1.6;
+    margin: 0;
+  }
+  .outcome-insight strong { color: var(--text); }
   </style>
 </head>
 <body>
@@ -752,130 +934,247 @@
     <a href="mailto:hello@docka.io" class="btn-primary">Get Early Access</a>
     <a href="research.html" class="btn-secondary">See ARS Scores →</a>
   </div>
-  <div class="hero-stats">
-    <div class="stat-item">
-      <div class="stat-num">76</div>
-      <div class="stat-label">Products Tested</div>
-    </div>
-    <div class="stat-divider"></div>
-    <div class="stat-item">
-      <div class="stat-num">267</div>
-      <div class="stat-label">Use Cases</div>
-    </div>
-    <div class="stat-divider"></div>
-    <div class="stat-item">
-      <div class="stat-num">72</div>
-      <div class="stat-label">Best ARS Score</div>
-    </div>
-    <div class="stat-divider"></div>
-    <div class="stat-item">
-      <div class="stat-num">9</div>
-      <div class="stat-label">Worst ARS Score</div>
-    </div>
-  </div>
 </div>
 
-<!-- PROBLEM -->
+<!-- SCENARIOS -->
 <section id="problem">
   <div class="section-inner">
-    <div class="section-label">The Problem</div>
-    <h2 class="section-h">Same agent, same user — three different outcomes</h2>
-    <p class="section-sub">A sales rep asks their AI assistant to track a deal. The result depends entirely on whether your product is agent-ready.</p>
+    <div class="section-label">Three Roles. One Truth.</div>
+    <h2 class="section-h">Agent tasks span multiple tools.<br>ARS decides who gets picked.</h2>
+    <p class="section-sub">Non-technical users delegate complex workflows to AI agents. The agent decomposes the task — and for each tool slot, selects a product based on its training data and what it finds via web search.</p>
 
-    <div class="task-cards">
-      <!-- FAIL -->
-      <div class="task-card fail">
-        <div class="task-card-tag">✕ Fail — Asana ARS 42</div>
-        <div class="task-card-title">Create a task and update its status</div>
-        <div class="task-card-role">Sales rep → AI agent → Asana</div>
-        <div class="task-steps">
-          <div class="task-step">
-            <div class="step-icon ok">✓</div>
-            Agent authenticates via OAuth token
-          </div>
-          <div class="task-step">
-            <div class="step-icon ok">✓</div>
-            Calls <span class="mono">POST /tasks</span> — task created
-          </div>
-          <div class="task-step">
-            <div class="step-icon err">✕</div>
-            Status update fails silently — wrong enum value, no error returned
-          </div>
-          <div class="task-step">
-            <div class="step-icon err">✕</div>
-            Agent reports "Done" to user — task still shows "Pending"
-          </div>
-        </div>
-        <div class="task-result">Agent failed silently. User trusts the wrong outcome.</div>
-        <div class="tool-stack">
-          <span class="tool-pill">REST API</span>
-          <span class="tool-pill">OAuth</span>
-          <span class="tool-pill">Silent failure</span>
-        </div>
-      </div>
+    <div class="role-tabs">
+      <button class="role-tab active" onclick="switchRole('sales', this)">Sales / GTM</button>
+      <button class="role-tab" onclick="switchRole('pm', this)">Project Coordinator</button>
+      <button class="role-tab" onclick="switchRole('hr', this)">HR / Recruiting</button>
+    </div>
 
-      <!-- PARTIAL -->
-      <div class="task-card partial">
-        <div class="task-card-tag">⚠ Partial — HubSpot ARS 40</div>
-        <div class="task-card-title">Update a contact and log activity</div>
-        <div class="task-card-role">SDR → AI agent → HubSpot CRM</div>
-        <div class="task-steps">
-          <div class="task-step">
-            <div class="step-icon ok">✓</div>
-            Contact property updated via API
-          </div>
-          <div class="task-step">
-            <div class="step-icon warn">!</div>
-            Activity logged but missing association — not linked to deal
-          </div>
-          <div class="task-step">
-            <div class="step-icon warn">!</div>
-            Agent needs 3 clarification questions from the user
-          </div>
-          <div class="task-step">
-            <div class="step-icon err">✕</div>
-            Token consumed: 4,200 — 2× the expected budget
-          </div>
+    <!-- SALES -->
+    <div class="role-scenario active" id="role-sales">
+      <div class="scenario-wrap">
+        <div class="scenario-left">
+          <div class="scenario-role-tag">💼 Sales manager → AI agent</div>
+          <div class="prompt-bubble">"Find 50 SaaS companies that raised Series A in the last 90 days, get the decision-maker's email, add them to our CRM, and kick off an outreach sequence."</div>
+          <p class="scenario-context">A single natural-language request. The agent decomposes it into 4 tool calls — and picks a product for each one based on its training data and what it finds on the web.</p>
         </div>
-        <div class="task-result">Task done, but agent interrupted user twice. High token cost.</div>
-        <div class="tool-stack">
-          <span class="tool-pill">REST API</span>
-          <span class="tool-pill">High token use</span>
-          <span class="tool-pill">Interruptions</span>
-        </div>
-      </div>
-
-      <!-- PASS -->
-      <div class="task-card pass">
-        <div class="task-card-tag">✓ Pass — Linear ARS 54</div>
-        <div class="task-card-title">Create issue, assign, set priority</div>
-        <div class="task-card-role">Product manager → AI agent → Linear</div>
-        <div class="task-steps">
-          <div class="task-step">
-            <div class="step-icon ok">✓</div>
-            GraphQL mutation executes cleanly on first try
+        <div class="scenario-right">
+          <div class="agent-trace">
+            <div class="trace-header">
+              <span class="trace-header-dot"></span>
+              Agent execution trace
+            </div>
+            <div class="trace-step">
+              <div class="trace-type">Scraping</div>
+              <div class="trace-rows">
+                <div class="trace-row">
+                  <span class="ttag skip">Clay</span>
+                  <span class="abadge lo">ARS 11</span>
+                  <span class="trace-status err">✕ no web runbook found — skipped</span>
+                </div>
+                <div class="trace-row">
+                  <span class="ttag pick">Firecrawl</span>
+                  <span class="abadge hi">ARS 62</span>
+                  <span class="trace-status ok">✓ runbook found via search — selected</span>
+                </div>
+              </div>
+            </div>
+            <div class="trace-step">
+              <div class="trace-type">Email lookup</div>
+              <div class="trace-rows">
+                <div class="trace-row">
+                  <span class="ttag pick">Hunter.io</span>
+                  <span class="abadge hi">ARS 61</span>
+                  <span class="trace-status ok">✓ clean API + runbook — executes headlessly</span>
+                </div>
+              </div>
+            </div>
+            <div class="trace-step">
+              <div class="trace-type">CRM</div>
+              <div class="trace-rows">
+                <div class="trace-row">
+                  <span class="ttag skip">Salesforce</span>
+                  <span class="abadge lo">ARS 17</span>
+                  <span class="trace-status err">✕ auth flow blocks agent — skipped</span>
+                </div>
+                <div class="trace-row">
+                  <span class="ttag pick">HubSpot</span>
+                  <span class="abadge mid">ARS 40</span>
+                  <span class="trace-status warn">⚠ selected — needs 2 user confirmations</span>
+                </div>
+              </div>
+            </div>
+            <div class="trace-step">
+              <div class="trace-type">Outreach</div>
+              <div class="trace-rows">
+                <div class="trace-row">
+                  <span class="ttag">Instantly</span>
+                  <span class="trace-status err">✕ no runbook on web — agent pauses, asks user to complete manually</span>
+                </div>
+              </div>
+            </div>
           </div>
-          <div class="task-step">
-            <div class="step-icon ok">✓</div>
-            Assignee and priority set in single request
+          <div class="scenario-outcome">
+            <div class="outcome-pills">
+              <span class="opill ok">✓ 2 tools headless</span>
+              <span class="opill warn">⚠ 1 interrupted</span>
+              <span class="opill err">✕ 1 blocked</span>
+            </div>
+            <p class="outcome-insight"><strong>Clay lost a user it never knew it was competing for.</strong> Firecrawl had a verified runbook indexed on the web. The agent found it, trusted it, and executed without asking the user anything.</p>
           </div>
-          <div class="task-step">
-            <div class="step-icon ok">✓</div>
-            Zero user interruptions — agent had full context
-          </div>
-          <div class="task-step">
-            <div class="step-icon ok">✓</div>
-            Token consumed: 1,100 — within budget
-          </div>
-        </div>
-        <div class="task-result">Agent completed the task without user input. Zero friction.</div>
-        <div class="tool-stack">
-          <span class="tool-pill">GraphQL</span>
-          <span class="tool-pill">Low tokens</span>
-          <span class="tool-pill">Zero interrupts</span>
         </div>
       </div>
     </div>
+
+    <!-- PROJECT COORDINATOR -->
+    <div class="role-scenario" id="role-pm">
+      <div class="scenario-wrap">
+        <div class="scenario-left">
+          <div class="scenario-role-tag">📋 Project coordinator → AI agent</div>
+          <div class="prompt-bubble">"Find all overdue deliverables in our project tracker, email each owner a personalised reminder with context, and log the outreach thread in our CRM."</div>
+          <p class="scenario-context">Four tool categories, one session. The agent decides which PM tool, which email service, and which CRM to use — autonomously, based on what it knows and what's findable.</p>
+        </div>
+        <div class="scenario-right">
+          <div class="agent-trace">
+            <div class="trace-header">
+              <span class="trace-header-dot"></span>
+              Agent execution trace
+            </div>
+            <div class="trace-step">
+              <div class="trace-type">Task tracker</div>
+              <div class="trace-rows">
+                <div class="trace-row">
+                  <span class="ttag skip">Asana</span>
+                  <span class="abadge mid">ARS 42</span>
+                  <span class="trace-status err">✕ status enum errors, silent failures on filter</span>
+                </div>
+                <div class="trace-row">
+                  <span class="ttag pick">Linear</span>
+                  <span class="abadge hi">ARS 54</span>
+                  <span class="trace-status ok">✓ clean GraphQL + runbook — selected</span>
+                </div>
+              </div>
+            </div>
+            <div class="trace-step">
+              <div class="trace-type">Email lookup</div>
+              <div class="trace-rows">
+                <div class="trace-row">
+                  <span class="ttag pick">Hunter.io</span>
+                  <span class="abadge hi">ARS 61</span>
+                  <span class="trace-status ok">✓ verified runbook — executes headlessly</span>
+                </div>
+              </div>
+            </div>
+            <div class="trace-step">
+              <div class="trace-type">Email service</div>
+              <div class="trace-rows">
+                <div class="trace-row">
+                  <span class="ttag">Customer.io</span>
+                  <span class="trace-status err">✕ no runbook found</span>
+                </div>
+                <div class="trace-row">
+                  <span class="ttag">Mailchimp</span>
+                  <span class="trace-status err">✕ no runbook found — agent hands email draft to user</span>
+                </div>
+              </div>
+            </div>
+            <div class="trace-step">
+              <div class="trace-type">CRM log</div>
+              <div class="trace-rows">
+                <div class="trace-row">
+                  <span class="ttag skip">Salesforce</span>
+                  <span class="abadge lo">ARS 17</span>
+                  <span class="trace-status err">✕ skipped — too complex for autonomous execution</span>
+                </div>
+                <div class="trace-row">
+                  <span class="ttag pick">HubSpot</span>
+                  <span class="abadge mid">ARS 40</span>
+                  <span class="trace-status warn">⚠ selected — activity not auto-linked to deal</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="scenario-outcome">
+            <div class="outcome-pills">
+              <span class="opill ok">✓ 2 tools headless</span>
+              <span class="opill warn">⚠ 1 interrupted</span>
+              <span class="opill err">✕ 1 blocked</span>
+            </div>
+            <p class="outcome-insight"><strong>Asana lost to Linear on a task where both could theoretically work.</strong> Customer.io and Mailchimp weren't even in contention — the agent couldn't find usable instructions for either on the open web.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- HR -->
+    <div class="role-scenario" id="role-hr">
+      <div class="scenario-wrap">
+        <div class="scenario-left">
+          <div class="scenario-role-tag">🧑‍💼 HR manager → AI agent</div>
+          <div class="prompt-bubble">"Source 30 senior React engineers in Berlin, verify their work emails, score them for culture fit, and add the top candidates to our ATS with a draft outreach message."</div>
+          <p class="scenario-context">Sourcing, enrichment, ATS, and outreach — four tool categories. The agent picks one product per slot, silently, before the human ever sees a result.</p>
+        </div>
+        <div class="scenario-right">
+          <div class="agent-trace">
+            <div class="trace-header">
+              <span class="trace-header-dot"></span>
+              Agent execution trace
+            </div>
+            <div class="trace-step">
+              <div class="trace-type">Profile scraping</div>
+              <div class="trace-rows">
+                <div class="trace-row">
+                  <span class="ttag pick">Playwright</span>
+                  <span class="abadge hi">ARS 71</span>
+                  <span class="trace-status ok">✓ verified runbook, headless LinkedIn scrape</span>
+                </div>
+              </div>
+            </div>
+            <div class="trace-step">
+              <div class="trace-type">Email lookup</div>
+              <div class="trace-rows">
+                <div class="trace-row">
+                  <span class="ttag pick">Hunter.io</span>
+                  <span class="abadge hi">ARS 61</span>
+                  <span class="trace-status ok">✓ 28 of 30 verified headlessly</span>
+                </div>
+              </div>
+            </div>
+            <div class="trace-step">
+              <div class="trace-type">ATS</div>
+              <div class="trace-rows">
+                <div class="trace-row">
+                  <span class="ttag">Greenhouse</span>
+                  <span class="trace-status err">✕ no runbook found — fallback to CRM</span>
+                </div>
+                <div class="trace-row">
+                  <span class="ttag pick">HubSpot</span>
+                  <span class="abadge mid">ARS 40</span>
+                  <span class="trace-status warn">⚠ fallback — 3 confirmations needed</span>
+                </div>
+              </div>
+            </div>
+            <div class="trace-step">
+              <div class="trace-type">Outreach</div>
+              <div class="trace-rows">
+                <div class="trace-row">
+                  <span class="ttag">Email service</span>
+                  <span class="trace-status err">✕ no runbook — draft written, sending handed off to user</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="scenario-outcome">
+            <div class="outcome-pills">
+              <span class="opill ok">✓ 2 tools headless</span>
+              <span class="opill warn">⚠ 1 interrupted</span>
+              <span class="opill err">✕ 1 blocked</span>
+            </div>
+            <p class="outcome-insight"><strong>Greenhouse lost to HubSpot as the ATS</strong> — not because HubSpot is better for recruiting, but because it had runbooks and Greenhouse didn't. The agent used what it could find instructions for.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </div>
 </section>
 
@@ -1219,5 +1518,13 @@
   <a href="mailto:hello@docka.io">hello@docka.io</a>
 </footer>
 
+<script>
+function switchRole(id, tab) {
+  document.querySelectorAll('.role-scenario').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.role-tab').forEach(el => el.classList.remove('active'));
+  document.getElementById('role-' + id).classList.add('active');
+  tab.classList.add('active');
+}
+</script>
 </body>
 </html>
