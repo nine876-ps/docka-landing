@@ -725,25 +725,24 @@
   /* ROLE SCENARIOS */
   .role-tabs {
     display: flex;
-    gap: 0;
+    gap: 8px;
+    flex-wrap: wrap;
     margin-top: 40px;
-    border-bottom: 1.5px solid var(--border);
+    margin-bottom: 32px;
   }
   .role-tab {
-    padding: 10px 24px;
-    border: none;
-    background: none;
-    font-size: 14px;
+    padding: 7px 16px;
+    border: 1.5px solid var(--border);
+    background: var(--bg);
+    font-size: 13px;
     font-weight: 600;
-    color: var(--text-3);
+    color: var(--text-2);
     cursor: pointer;
-    border-bottom: 2px solid transparent;
-    margin-bottom: -1.5px;
-    transition: color 0.15s, border-color 0.15s;
-    border-radius: 0;
+    border-radius: 100px;
+    transition: all 0.15s;
   }
-  .role-tab:hover { color: var(--text-2); }
-  .role-tab.active { color: var(--blue); border-bottom-color: var(--blue); }
+  .role-tab:hover { border-color: var(--text-3); color: var(--text); }
+  .role-tab.active { background: var(--blue); border-color: var(--blue); color: #fff; }
   .role-scenario { display: none; }
   .role-scenario.active { display: block; }
   .scenario-wrap {
@@ -1112,6 +1111,17 @@
       <button class="role-tab active" onclick="switchRole('sales', this)">Sales / GTM</button>
       <button class="role-tab" onclick="switchRole('pm', this)">Project Coordinator</button>
       <button class="role-tab" onclick="switchRole('hr', this)">HR / Recruiting</button>
+      <button class="role-tab" onclick="switchRole('marketing', this)">Marketing</button>
+      <button class="role-tab" onclick="switchRole('cs', this)">Customer Success</button>
+      <button class="role-tab" onclick="switchRole('founder', this)">Founder / CEO</button>
+      <button class="role-tab" onclick="switchRole('finance', this)">Finance / Ops</button>
+      <button class="role-tab" onclick="switchRole('bd', this)">BD / Partnerships</button>
+      <button class="role-tab" onclick="switchRole('ea', this)">Exec Assistant</button>
+      <button class="role-tab" onclick="switchRole('procurement', this)">Procurement</button>
+      <button class="role-tab" onclick="switchRole('research', this)">Research Analyst</button>
+      <button class="role-tab" onclick="switchRole('community', this)">Community Manager</button>
+      <button class="role-tab" onclick="switchRole('consulting', this)">Consulting / Agency</button>
+      <button class="role-tab" onclick="switchRole('vc', this)">Investor / VC</button>
     </div>
 
     <!-- SALES -->
@@ -1335,6 +1345,540 @@
               <span class="opill err">✕ 1 blocked</span>
             </div>
             <p class="outcome-insight"><strong>Greenhouse lost to HubSpot as the ATS</strong> — not because HubSpot is better for recruiting, but because it had runbooks and Greenhouse didn't. The agent used what it could find instructions for.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MARKETING -->
+    <div class="role-scenario" id="role-marketing">
+      <div class="scenario-wrap">
+        <div class="scenario-left">
+          <div class="scenario-role-tag">📣 Marketing manager → AI agent</div>
+          <div class="prompt-bubble">"Build a prospect list from companies mentioning our category on social, segment by industry, load to our email tool, and launch a nurture campaign."</div>
+          <p class="scenario-context">Four tool categories, one marketing workflow. The agent picks scraping, CRM, and email tools — and the campaign either launches or stalls.</p>
+        </div>
+        <div class="scenario-right">
+          <div class="agent-trace">
+            <div class="trace-header"><span class="trace-header-dot"></span>Agent execution trace</div>
+            <div class="trace-step">
+              <div class="trace-type">Prospect scraping</div>
+              <div class="trace-rows">
+                <div class="trace-row"><span class="ttag pick">Firecrawl</span><span class="abadge hi">ARS 62</span><span class="trace-status ok">✓ runbook found — list built headlessly</span></div>
+              </div>
+            </div>
+            <div class="trace-step">
+              <div class="trace-type">CRM load</div>
+              <div class="trace-rows">
+                <div class="trace-row"><span class="ttag pick">HubSpot</span><span class="abadge mid">ARS 40</span><span class="trace-status warn">⚠ dynamic list API incomplete — 2 confirmations</span></div>
+              </div>
+            </div>
+            <div class="trace-step">
+              <div class="trace-type">Email platform</div>
+              <div class="trace-rows">
+                <div class="trace-row"><span class="ttag">Klaviyo</span><span class="trace-status err">✕ no runbook found</span></div>
+                <div class="trace-row"><span class="ttag">Customer.io</span><span class="trace-status err">✕ no runbook — campaign setup handed to user</span></div>
+              </div>
+            </div>
+            <div class="trace-step">
+              <div class="trace-type">Analytics</div>
+              <div class="trace-rows">
+                <div class="trace-row"><span class="ttag">Analytics tool</span><span class="trace-status err">✕ no runbook — skipped entirely</span></div>
+              </div>
+            </div>
+          </div>
+          <div class="scenario-outcome">
+            <div class="outcome-pills">
+              <span class="opill ok">✓ 1 tool headless</span>
+              <span class="opill warn">⚠ 1 interrupted</span>
+              <span class="opill err">✕ 2 blocked</span>
+            </div>
+            <p class="outcome-insight"><strong>Klaviyo and Customer.io both blocked.</strong> The agent built the list but couldn't launch the campaign. Neither email platform had a runbook indexed anywhere on the web.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CUSTOMER SUCCESS -->
+    <div class="role-scenario" id="role-cs">
+      <div class="scenario-wrap">
+        <div class="scenario-left">
+          <div class="scenario-role-tag">🤝 Customer success manager → AI agent</div>
+          <div class="prompt-bubble">"Find all enterprise accounts with no logins in 30 days, draft a personalised check-in for each, send it, and update their health score in our CRM."</div>
+          <p class="scenario-context">Retention is the metric. The agent needs to find at-risk accounts, reach out, and log it — three steps that each hit a different tool.</p>
+        </div>
+        <div class="scenario-right">
+          <div class="agent-trace">
+            <div class="trace-header"><span class="trace-header-dot"></span>Agent execution trace</div>
+            <div class="trace-step">
+              <div class="trace-type">CRM query</div>
+              <div class="trace-rows">
+                <div class="trace-row"><span class="ttag skip">Salesforce</span><span class="abadge lo">ARS 17</span><span class="trace-status err">✕ filter API blocked — skipped</span></div>
+                <div class="trace-row"><span class="ttag pick">HubSpot</span><span class="abadge mid">ARS 40</span><span class="trace-status warn">⚠ list filter incomplete — 2 confirmations</span></div>
+              </div>
+            </div>
+            <div class="trace-step">
+              <div class="trace-type">Contact lookup</div>
+              <div class="trace-rows">
+                <div class="trace-row"><span class="ttag pick">Hunter.io</span><span class="abadge hi">ARS 61</span><span class="trace-status ok">✓ verified headlessly for all accounts</span></div>
+              </div>
+            </div>
+            <div class="trace-step">
+              <div class="trace-type">Email send</div>
+              <div class="trace-rows">
+                <div class="trace-row"><span class="ttag">Customer.io</span><span class="trace-status err">✕ no runbook — agent drafts, asks user to send</span></div>
+              </div>
+            </div>
+            <div class="trace-step">
+              <div class="trace-type">Health score update</div>
+              <div class="trace-rows">
+                <div class="trace-row"><span class="ttag pick">HubSpot</span><span class="abadge mid">ARS 40</span><span class="trace-status warn">⚠ custom property not writable via API — manual step</span></div>
+              </div>
+            </div>
+          </div>
+          <div class="scenario-outcome">
+            <div class="outcome-pills">
+              <span class="opill ok">✓ 1 tool headless</span>
+              <span class="opill warn">⚠ 2 interrupted</span>
+              <span class="opill err">✕ 1 blocked</span>
+            </div>
+            <p class="outcome-insight"><strong>HubSpot appeared twice — and needed user input both times.</strong> The email never sent autonomously. A churn-prevention workflow became a manual task.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FOUNDER -->
+    <div class="role-scenario" id="role-founder">
+      <div class="scenario-wrap">
+        <div class="scenario-left">
+          <div class="scenario-role-tag">🚀 Founder / CEO → AI agent</div>
+          <div class="prompt-bubble">"Track all competitor funding announcements this week, extract the key signals, and send a briefing to my board and investors."</div>
+          <p class="scenario-context">Competitive intelligence on a weekly cadence. Research executes well — distribution is where it breaks.</p>
+        </div>
+        <div class="scenario-right">
+          <div class="agent-trace">
+            <div class="trace-header"><span class="trace-header-dot"></span>Agent execution trace</div>
+            <div class="trace-step">
+              <div class="trace-type">Web research</div>
+              <div class="trace-rows">
+                <div class="trace-row"><span class="ttag pick">Firecrawl</span><span class="abadge hi">ARS 62</span><span class="trace-status ok">✓ funding data scraped headlessly</span></div>
+              </div>
+            </div>
+            <div class="trace-step">
+              <div class="trace-type">Content extraction</div>
+              <div class="trace-rows">
+                <div class="trace-row"><span class="ttag pick">Jina AI</span><span class="abadge hi">ARS 70</span><span class="trace-status ok">✓ signals extracted and structured</span></div>
+              </div>
+            </div>
+            <div class="trace-step">
+              <div class="trace-type">Contact list</div>
+              <div class="trace-rows">
+                <div class="trace-row"><span class="ttag pick">HubSpot</span><span class="abadge mid">ARS 40</span><span class="trace-status warn">⚠ board/investor list partially accessible — 1 confirmation</span></div>
+              </div>
+            </div>
+            <div class="trace-step">
+              <div class="trace-type">Email send</div>
+              <div class="trace-rows">
+                <div class="trace-row"><span class="ttag">Email service</span><span class="trace-status err">✕ no runbook — briefing drafted, sending handed to user</span></div>
+              </div>
+            </div>
+          </div>
+          <div class="scenario-outcome">
+            <div class="outcome-pills">
+              <span class="opill ok">✓ 2 tools headless</span>
+              <span class="opill warn">⚠ 1 interrupted</span>
+              <span class="opill err">✕ 1 blocked</span>
+            </div>
+            <p class="outcome-insight"><strong>Research pipeline: flawless. Distribution: manual.</strong> The briefing was ready in minutes — but the agent couldn't send it. The founder still had to open their email client.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FINANCE -->
+    <div class="role-scenario" id="role-finance">
+      <div class="scenario-wrap">
+        <div class="scenario-left">
+          <div class="scenario-role-tag">💰 Finance / Ops manager → AI agent</div>
+          <div class="prompt-bubble">"Pull all overdue invoices, find each vendor's billing contact, send a payment reminder, and log the outreach in our accounting tool."</div>
+          <p class="scenario-context">A standard AR workflow. Finance tools have almost no agent runbooks — the agent hit a wall at step one.</p>
+        </div>
+        <div class="scenario-right">
+          <div class="agent-trace">
+            <div class="trace-header"><span class="trace-header-dot"></span>Agent execution trace</div>
+            <div class="trace-step">
+              <div class="trace-type">Invoice data</div>
+              <div class="trace-rows">
+                <div class="trace-row"><span class="ttag">Xero</span><span class="trace-status err">✕ no runbook found</span></div>
+                <div class="trace-row"><span class="ttag">QuickBooks</span><span class="trace-status err">✕ no runbook — agent asks user to export CSV manually</span></div>
+              </div>
+            </div>
+            <div class="trace-step">
+              <div class="trace-type">Contact lookup</div>
+              <div class="trace-rows">
+                <div class="trace-row"><span class="ttag pick">Hunter.io</span><span class="abadge hi">ARS 61</span><span class="trace-status ok">✓ vendor contacts found once user provided list</span></div>
+              </div>
+            </div>
+            <div class="trace-step">
+              <div class="trace-type">Email send</div>
+              <div class="trace-rows">
+                <div class="trace-row"><span class="ttag">Email service</span><span class="trace-status err">✕ no runbook — reminders drafted, not sent</span></div>
+              </div>
+            </div>
+            <div class="trace-step">
+              <div class="trace-type">Log outreach</div>
+              <div class="trace-rows">
+                <div class="trace-row"><span class="ttag pick">HubSpot</span><span class="abadge mid">ARS 40</span><span class="trace-status warn">⚠ CRM fallback — accounting tool has no runbook</span></div>
+              </div>
+            </div>
+          </div>
+          <div class="scenario-outcome">
+            <div class="outcome-pills">
+              <span class="opill ok">✓ 1 tool headless</span>
+              <span class="opill warn">⚠ 1 interrupted</span>
+              <span class="opill err">✕ 2 blocked</span>
+            </div>
+            <p class="outcome-insight"><strong>Finance tools are a blind spot.</strong> Xero and QuickBooks have zero runbooks indexed on the web. The agent stalled at step one and waited for a manual export.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BD -->
+    <div class="role-scenario" id="role-bd">
+      <div class="scenario-wrap">
+        <div class="scenario-left">
+          <div class="scenario-role-tag">🤝 BD / Partnerships manager → AI agent</div>
+          <div class="prompt-bubble">"Find 20 SaaS companies that would make strong integration partners, research their tech stack and BD contact, add to pipeline, and send a personalised pitch."</div>
+          <p class="scenario-context">Partnership sourcing is research-heavy and outreach-dependent. The agent excels at research — and stalls at send.</p>
+        </div>
+        <div class="scenario-right">
+          <div class="agent-trace">
+            <div class="trace-header"><span class="trace-header-dot"></span>Agent execution trace</div>
+            <div class="trace-step">
+              <div class="trace-type">Company research</div>
+              <div class="trace-rows">
+                <div class="trace-row"><span class="ttag pick">Firecrawl</span><span class="abadge hi">ARS 62</span><span class="trace-status ok">✓ 20 companies researched headlessly</span></div>
+              </div>
+            </div>
+            <div class="trace-step">
+              <div class="trace-type">BD contact</div>
+              <div class="trace-rows">
+                <div class="trace-row"><span class="ttag pick">Hunter.io</span><span class="abadge hi">ARS 61</span><span class="trace-status ok">✓ 17 of 20 contacts found headlessly</span></div>
+              </div>
+            </div>
+            <div class="trace-step">
+              <div class="trace-type">CRM pipeline</div>
+              <div class="trace-rows">
+                <div class="trace-row"><span class="ttag pick">HubSpot</span><span class="abadge mid">ARS 40</span><span class="trace-status warn">⚠ deal stage creation needs 2 confirmations</span></div>
+              </div>
+            </div>
+            <div class="trace-step">
+              <div class="trace-type">Outreach email</div>
+              <div class="trace-rows">
+                <div class="trace-row"><span class="ttag">Email service</span><span class="trace-status err">✕ no runbook — pitches drafted, handed off to user</span></div>
+              </div>
+            </div>
+          </div>
+          <div class="scenario-outcome">
+            <div class="outcome-pills">
+              <span class="opill ok">✓ 2 tools headless</span>
+              <span class="opill warn">⚠ 1 interrupted</span>
+              <span class="opill err">✕ 1 blocked</span>
+            </div>
+            <p class="outcome-insight"><strong>Research and enrichment: zero friction.</strong> The agent built a better partner list in 4 minutes than a human would in a day — then couldn't send a single email.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- EXEC ASSISTANT -->
+    <div class="role-scenario" id="role-ea">
+      <div class="scenario-wrap">
+        <div class="scenario-left">
+          <div class="scenario-role-tag">🗂 Executive assistant → AI agent</div>
+          <div class="prompt-bubble">"Research all 8 attendees for tomorrow's board meeting — recent news, LinkedIn updates, company changes — and add briefing notes to our CRM before 9am."</div>
+          <p class="scenario-context">Time-sensitive research across 8 people. The agent can scrape and structure — but logging to CRM at scale creates friction.</p>
+        </div>
+        <div class="scenario-right">
+          <div class="agent-trace">
+            <div class="trace-header"><span class="trace-header-dot"></span>Agent execution trace</div>
+            <div class="trace-step">
+              <div class="trace-type">Profile scraping</div>
+              <div class="trace-rows">
+                <div class="trace-row"><span class="ttag pick">Playwright</span><span class="abadge hi">ARS 71</span><span class="trace-status ok">✓ LinkedIn profiles scraped headlessly</span></div>
+              </div>
+            </div>
+            <div class="trace-step">
+              <div class="trace-type">News extraction</div>
+              <div class="trace-rows">
+                <div class="trace-row"><span class="ttag pick">Jina AI</span><span class="abadge hi">ARS 70</span><span class="trace-status ok">✓ recent articles and announcements extracted</span></div>
+              </div>
+            </div>
+            <div class="trace-step">
+              <div class="trace-type">CRM notes</div>
+              <div class="trace-rows">
+                <div class="trace-row"><span class="ttag pick">HubSpot</span><span class="abadge mid">ARS 40</span><span class="trace-status warn">⚠ contact matching needs 1 confirmation per person (×8)</span></div>
+              </div>
+            </div>
+            <div class="trace-step">
+              <div class="trace-type">Summary email</div>
+              <div class="trace-rows">
+                <div class="trace-row"><span class="ttag">Email service</span><span class="trace-status err">✕ no runbook — summary written, not sent</span></div>
+              </div>
+            </div>
+          </div>
+          <div class="scenario-outcome">
+            <div class="outcome-pills">
+              <span class="opill ok">✓ 2 tools headless</span>
+              <span class="opill warn">⚠ 1 interrupted</span>
+              <span class="opill err">✕ 1 blocked</span>
+            </div>
+            <p class="outcome-insight"><strong>Research was impeccable — 8 briefings in minutes.</strong> But CRM logging required 8 individual confirmations, and the final summary email was never sent.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PROCUREMENT -->
+    <div class="role-scenario" id="role-procurement">
+      <div class="scenario-wrap">
+        <div class="scenario-left">
+          <div class="scenario-role-tag">📦 Procurement manager → AI agent</div>
+          <div class="prompt-bubble">"Find 5 vendors in the project management category, compare their enterprise pricing and features, and send an RFP request to each procurement contact."</div>
+          <p class="scenario-context">Vendor evaluation is research-heavy. The agent handles discovery and enrichment well — but RFP distribution required a human.</p>
+        </div>
+        <div class="scenario-right">
+          <div class="agent-trace">
+            <div class="trace-header"><span class="trace-header-dot"></span>Agent execution trace</div>
+            <div class="trace-step">
+              <div class="trace-type">Vendor research</div>
+              <div class="trace-rows">
+                <div class="trace-row"><span class="ttag pick">Firecrawl</span><span class="abadge hi">ARS 62</span><span class="trace-status ok">✓ 5 vendors researched with pricing data</span></div>
+              </div>
+            </div>
+            <div class="trace-step">
+              <div class="trace-type">Contact lookup</div>
+              <div class="trace-rows">
+                <div class="trace-row"><span class="ttag pick">Hunter.io</span><span class="abadge hi">ARS 61</span><span class="trace-status ok">✓ procurement contacts found for 4 of 5 vendors</span></div>
+              </div>
+            </div>
+            <div class="trace-step">
+              <div class="trace-type">RFP email</div>
+              <div class="trace-rows">
+                <div class="trace-row"><span class="ttag">Email service</span><span class="trace-status err">✕ no runbook — RFPs drafted, not sent</span></div>
+              </div>
+            </div>
+            <div class="trace-step">
+              <div class="trace-type">Vendor tracking</div>
+              <div class="trace-rows">
+                <div class="trace-row"><span class="ttag pick">Notion</span><span class="abadge mid">ARS 37</span><span class="trace-status warn">⚠ page created but database relations failed — manual fix</span></div>
+              </div>
+            </div>
+          </div>
+          <div class="scenario-outcome">
+            <div class="outcome-pills">
+              <span class="opill ok">✓ 2 tools headless</span>
+              <span class="opill warn">⚠ 1 interrupted</span>
+              <span class="opill err">✕ 1 blocked</span>
+            </div>
+            <p class="outcome-insight"><strong>Discovery done. Outreach blocked.</strong> The agent built a vendor comparison in 6 minutes that would take a human 2 days — but the RFPs sat in a draft folder.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RESEARCH ANALYST -->
+    <div class="role-scenario" id="role-research">
+      <div class="scenario-wrap">
+        <div class="scenario-left">
+          <div class="scenario-role-tag">🔬 Research analyst → AI agent</div>
+          <div class="prompt-bubble">"Compile a competitive landscape on 30 companies: funding history, headcount changes, product launches in Q1. Export to a shareable doc and send to stakeholders."</div>
+          <p class="scenario-context">Data collection is the analyst's bottleneck. The agent eliminates it — but distribution still required a human in the loop.</p>
+        </div>
+        <div class="scenario-right">
+          <div class="agent-trace">
+            <div class="trace-header"><span class="trace-header-dot"></span>Agent execution trace</div>
+            <div class="trace-step">
+              <div class="trace-type">Data scraping</div>
+              <div class="trace-rows">
+                <div class="trace-row"><span class="ttag pick">Firecrawl</span><span class="abadge hi">ARS 62</span><span class="trace-status ok">✓ 30 company profiles scraped headlessly</span></div>
+              </div>
+            </div>
+            <div class="trace-step">
+              <div class="trace-type">Content extraction</div>
+              <div class="trace-rows">
+                <div class="trace-row"><span class="ttag pick">Jina AI</span><span class="abadge hi">ARS 70</span><span class="trace-status ok">✓ signals structured and normalised</span></div>
+              </div>
+            </div>
+            <div class="trace-step">
+              <div class="trace-type">Document creation</div>
+              <div class="trace-rows">
+                <div class="trace-row"><span class="ttag pick">Notion</span><span class="abadge mid">ARS 37</span><span class="trace-status warn">⚠ pages created but database structure needed manual fix</span></div>
+              </div>
+            </div>
+            <div class="trace-step">
+              <div class="trace-type">Stakeholder email</div>
+              <div class="trace-rows">
+                <div class="trace-row"><span class="ttag">Email service</span><span class="trace-status err">✕ no runbook — agent asks user to share Notion link manually</span></div>
+              </div>
+            </div>
+          </div>
+          <div class="scenario-outcome">
+            <div class="outcome-pills">
+              <span class="opill ok">✓ 2 tools headless</span>
+              <span class="opill warn">⚠ 1 interrupted</span>
+              <span class="opill err">✕ 1 blocked</span>
+            </div>
+            <p class="outcome-insight"><strong>Data collection that takes an analyst 3 days: done in 20 minutes.</strong> Distribution — the last 5% of the workflow — still required human hands.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- COMMUNITY -->
+    <div class="role-scenario" id="role-community">
+      <div class="scenario-wrap">
+        <div class="scenario-left">
+          <div class="scenario-role-tag">🌐 Community manager → AI agent</div>
+          <div class="prompt-bubble">"Find members who haven't engaged in 14 days, send each a personalised re-engagement message, and track which ones respond in our CRM."</div>
+          <p class="scenario-context">Churn prevention at scale. The agent can identify at-risk members — but sending re-engagement emails autonomously hit a wall.</p>
+        </div>
+        <div class="scenario-right">
+          <div class="agent-trace">
+            <div class="trace-header"><span class="trace-header-dot"></span>Agent execution trace</div>
+            <div class="trace-step">
+              <div class="trace-type">Member segmentation</div>
+              <div class="trace-rows">
+                <div class="trace-row"><span class="ttag pick">HubSpot</span><span class="abadge mid">ARS 40</span><span class="trace-status warn">⚠ activity filter incomplete — 3 manual confirmations</span></div>
+              </div>
+            </div>
+            <div class="trace-step">
+              <div class="trace-type">Email lookup</div>
+              <div class="trace-rows">
+                <div class="trace-row"><span class="ttag pick">Hunter.io</span><span class="abadge hi">ARS 61</span><span class="trace-status ok">✓ work emails verified headlessly</span></div>
+              </div>
+            </div>
+            <div class="trace-step">
+              <div class="trace-type">Re-engagement email</div>
+              <div class="trace-rows">
+                <div class="trace-row"><span class="ttag">Mailchimp</span><span class="trace-status err">✕ no runbook found</span></div>
+                <div class="trace-row"><span class="ttag">Customer.io</span><span class="trace-status err">✕ no runbook — messages drafted, not sent</span></div>
+              </div>
+            </div>
+            <div class="trace-step">
+              <div class="trace-type">Response tracking</div>
+              <div class="trace-rows">
+                <div class="trace-row"><span class="ttag pick">HubSpot</span><span class="abadge mid">ARS 40</span><span class="trace-status warn">⚠ reply tracking not automatable — manual log needed</span></div>
+              </div>
+            </div>
+          </div>
+          <div class="scenario-outcome">
+            <div class="outcome-pills">
+              <span class="opill ok">✓ 1 tool headless</span>
+              <span class="opill warn">⚠ 2 interrupted</span>
+              <span class="opill err">✕ 1 blocked</span>
+            </div>
+            <p class="outcome-insight"><strong>Identification: done. Re-engagement: manual.</strong> Mailchimp and Customer.io — the two most likely tools — had no runbooks. Messages were ready but never sent.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CONSULTING -->
+    <div class="role-scenario" id="role-consulting">
+      <div class="scenario-wrap">
+        <div class="scenario-left">
+          <div class="scenario-role-tag">💼 Consulting / agency account manager → AI agent</div>
+          <div class="prompt-bubble">"Pull last month's project progress from our tracker, CRM activity, and time logs. Compile a client report and send it with a summary note."</div>
+          <p class="scenario-context">Monthly reporting is the account manager's most repetitive task. The agent can aggregate — but final delivery still required a human.</p>
+        </div>
+        <div class="scenario-right">
+          <div class="agent-trace">
+            <div class="trace-header"><span class="trace-header-dot"></span>Agent execution trace</div>
+            <div class="trace-step">
+              <div class="trace-type">Project data</div>
+              <div class="trace-rows">
+                <div class="trace-row"><span class="ttag pick">Linear</span><span class="abadge hi">ARS 54</span><span class="trace-status ok">✓ issue history and velocity pulled headlessly</span></div>
+              </div>
+            </div>
+            <div class="trace-step">
+              <div class="trace-type">CRM activity</div>
+              <div class="trace-rows">
+                <div class="trace-row"><span class="ttag pick">HubSpot</span><span class="abadge mid">ARS 40</span><span class="trace-status warn">⚠ activity feed partial — some interactions missing</span></div>
+              </div>
+            </div>
+            <div class="trace-step">
+              <div class="trace-type">Time logs</div>
+              <div class="trace-rows">
+                <div class="trace-row"><span class="ttag">Harvest / Toggl</span><span class="trace-status err">✕ no runbook — agent estimates from Linear data</span></div>
+              </div>
+            </div>
+            <div class="trace-step">
+              <div class="trace-type">Client email</div>
+              <div class="trace-rows">
+                <div class="trace-row"><span class="ttag">Email service</span><span class="trace-status err">✕ no runbook — report compiled, agent asks user to send</span></div>
+              </div>
+            </div>
+          </div>
+          <div class="scenario-outcome">
+            <div class="outcome-pills">
+              <span class="opill ok">✓ 1 tool headless</span>
+              <span class="opill warn">⚠ 1 interrupted</span>
+              <span class="opill err">✕ 2 blocked</span>
+            </div>
+            <p class="outcome-insight"><strong>Data aggregation: automated. Client delivery: manual.</strong> Time tracking tools have no runbooks. The report was ready — but the account manager still had to hit send.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- VC -->
+    <div class="role-scenario" id="role-vc">
+      <div class="scenario-wrap">
+        <div class="scenario-left">
+          <div class="scenario-role-tag">📈 Investor / VC analyst → AI agent</div>
+          <div class="prompt-bubble">"Find all B2B SaaS seed and Series A rounds from this month, research each founding team, add to deal pipeline, and send first-touch outreach to each founder."</div>
+          <p class="scenario-context">Deal sourcing at scale. Research and enrichment execute cleanly — pipeline CRM and outreach created friction.</p>
+        </div>
+        <div class="scenario-right">
+          <div class="agent-trace">
+            <div class="trace-header"><span class="trace-header-dot"></span>Agent execution trace</div>
+            <div class="trace-step">
+              <div class="trace-type">Funding research</div>
+              <div class="trace-rows">
+                <div class="trace-row"><span class="ttag pick">Firecrawl</span><span class="abadge hi">ARS 62</span><span class="trace-status ok">✓ 34 rounds identified and scraped headlessly</span></div>
+              </div>
+            </div>
+            <div class="trace-step">
+              <div class="trace-type">Founder research</div>
+              <div class="trace-rows">
+                <div class="trace-row"><span class="ttag pick">Jina AI</span><span class="abadge hi">ARS 70</span><span class="trace-status ok">✓ background, prior exits, LinkedIn extracted</span></div>
+              </div>
+            </div>
+            <div class="trace-step">
+              <div class="trace-type">Deal pipeline</div>
+              <div class="trace-rows">
+                <div class="trace-row"><span class="ttag skip">Salesforce</span><span class="abadge lo">ARS 17</span><span class="trace-status err">✕ auth blocks agent — skipped</span></div>
+                <div class="trace-row"><span class="ttag pick">HubSpot</span><span class="abadge mid">ARS 40</span><span class="trace-status warn">⚠ deal stage mapping needs 2 confirmations</span></div>
+              </div>
+            </div>
+            <div class="trace-step">
+              <div class="trace-type">Founder outreach</div>
+              <div class="trace-rows">
+                <div class="trace-row"><span class="ttag pick">Hunter.io</span><span class="abadge hi">ARS 61</span><span class="trace-status ok">✓ founder emails found headlessly</span></div>
+                <div class="trace-row"><span class="ttag">Email service</span><span class="trace-status err">✕ no runbook — outreach drafted, agent hands off</span></div>
+              </div>
+            </div>
+          </div>
+          <div class="scenario-outcome">
+            <div class="outcome-pills">
+              <span class="opill ok">✓ 3 tools headless</span>
+              <span class="opill warn">⚠ 1 interrupted</span>
+              <span class="opill err">✕ 1 blocked</span>
+            </div>
+            <p class="outcome-insight"><strong>34 deals sourced and researched in one session.</strong> The agent found the founders' emails — it just couldn't send the outreach. A runbook gap that costs deals every week.</p>
           </div>
         </div>
       </div>
