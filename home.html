@@ -903,6 +903,147 @@
   }
   .outcome-insight strong { color: var(--text); }
 
+  /* FREE AUDIT SECTION */
+  .audit-includes {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 14px;
+    margin: 36px 0 48px;
+  }
+  .audit-include-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 14px;
+    color: var(--text-2);
+    line-height: 1.55;
+  }
+  .ai-icon {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--blue-bg);
+    border: 1px solid var(--blue-border);
+    color: var(--blue);
+    font-size: 10px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .audit-include-item strong { color: var(--text); font-weight: 700; }
+  .matrix-wrap {
+    overflow-x: auto;
+    margin-bottom: 32px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+  }
+  .matrix-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    min-width: 600px;
+  }
+  .matrix-table th {
+    padding: 12px 16px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--text-3);
+    background: var(--bg-2);
+    border-bottom: 1px solid var(--border);
+    text-align: left;
+    white-space: nowrap;
+  }
+  .matrix-table th.col-yours {
+    color: var(--blue);
+    background: var(--blue-bg);
+    border-bottom-color: var(--blue-border);
+  }
+  .matrix-table td {
+    padding: 11px 16px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text-2);
+    vertical-align: middle;
+  }
+  .matrix-table tr:last-child td { border-bottom: none; }
+  .matrix-table td.col-yours {
+    background: rgba(30,86,232,0.025);
+    border-left: 2px solid var(--blue-border);
+    border-right: 2px solid var(--blue-border);
+  }
+  .matrix-table tr:last-child td.col-yours { border-bottom: 2px solid var(--blue-border); }
+  .matrix-table th.col-yours:nth-child(2) { border-top-left-radius: 0; }
+  .uc-name { color: var(--text); font-weight: 500; font-size: 13px; }
+  .m-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 9px;
+    border-radius: 100px;
+    white-space: nowrap;
+  }
+  .m-badge.ok { background: var(--green-bg); color: var(--green); border: 1px solid #A7F3D0; }
+  .m-badge.warn { background: var(--orange-bg); color: var(--orange); border: 1px solid #FDE68A; }
+  .m-badge.err { background: var(--red-bg); color: var(--red); border: 1px solid #FECACA; }
+  .competitor-name { filter: blur(5px); user-select: none; }
+  .audit-form-wrap {
+    background: var(--bg-2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 28px 32px;
+  }
+  .audit-form-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 4px;
+  }
+  .audit-form-sub {
+    font-size: 13px;
+    color: var(--text-3);
+    margin-bottom: 20px;
+  }
+  .form-fields {
+    display: grid;
+    grid-template-columns: 1fr 1fr auto;
+    gap: 12px;
+    align-items: end;
+  }
+  @media (max-width: 680px) { .form-fields { grid-template-columns: 1fr; } }
+  .form-group { display: flex; flex-direction: column; gap: 6px; }
+  .form-group label { font-size: 12px; font-weight: 600; color: var(--text-2); }
+  .form-group input {
+    padding: 10px 14px;
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-sm);
+    font-size: 14px;
+    font-family: inherit;
+    color: var(--text);
+    background: var(--bg);
+    transition: border-color 0.15s;
+    outline: none;
+  }
+  .form-group input:focus { border-color: var(--blue); }
+  .form-group input::placeholder { color: var(--text-3); }
+  .form-note { font-size: 12px; color: var(--text-3); margin-top: 12px; }
+  .form-success {
+    display: none;
+    text-align: center;
+    padding: 20px;
+    color: var(--green);
+    font-weight: 600;
+    font-size: 15px;
+    background: var(--green-bg);
+    border-radius: var(--radius-sm);
+    border: 1px solid #A7F3D0;
+  }
+
   /* BRIDGE SECTION */
   .bridge-comparison {
     display: grid;
@@ -2279,6 +2420,116 @@
   </div>
 </section>
 
+<!-- FREE AUDIT -->
+<section id="audit">
+  <div class="section-inner">
+    <div class="section-label">Free Audit</div>
+    <h2 class="section-h">We run real agents through dozens of your use cases — and show how you stack up against competitors.</h2>
+    <p class="section-sub">Not a questionnaire. Not a doc review. We execute actual agent tasks against your live product and your competitors — then hand you a full structured report.</p>
+
+    <div class="audit-includes">
+      <div class="audit-include-item">
+        <div class="ai-icon">✓</div>
+        <span><strong>20–40 use cases tested</strong> — mapped to your real users' workflows, not generic API scenarios</span>
+      </div>
+      <div class="audit-include-item">
+        <div class="ai-icon">✓</div>
+        <span><strong>3 AI agents per use case</strong> — ChatGPT, Claude, and Gemini each run the same task independently</span>
+      </div>
+      <div class="audit-include-item">
+        <div class="ai-icon">✓</div>
+        <span><strong>Every failure classified</strong> — auth block · silent error · token amplifier · no headless path</span>
+      </div>
+      <div class="audit-include-item">
+        <div class="ai-icon">✓</div>
+        <span><strong>Direct competitor comparison</strong> — same tasks, same agents, same scoring methodology, side by side</span>
+      </div>
+      <div class="audit-include-item">
+        <div class="ai-icon">✓</div>
+        <span><strong>ARS score breakdown</strong> — your product and each competitor scored across all 4 dimensions</span>
+      </div>
+      <div class="audit-include-item">
+        <div class="ai-icon">✓</div>
+        <span><strong>Prioritized fix list</strong> — what to change, in what order, and expected impact on agent success rate</span>
+      </div>
+    </div>
+
+    <div class="matrix-wrap">
+      <table class="matrix-table">
+        <thead>
+          <tr>
+            <th style="width:34%">Use case</th>
+            <th class="col-yours">Your product</th>
+            <th><span class="competitor-name">Competitor One</span></th>
+            <th><span class="competitor-name">Competitor Two</span></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="uc-name">Create and assign task via API</td>
+            <td class="col-yours"><span class="m-badge ok">✓ Headless</span></td>
+            <td><span class="m-badge warn">⚠ 2 interruptions</span></td>
+            <td><span class="m-badge err">✕ Blocked</span></td>
+          </tr>
+          <tr>
+            <td class="uc-name">Update status programmatically</td>
+            <td class="col-yours"><span class="m-badge err">✕ Silent failure</span></td>
+            <td><span class="m-badge ok">✓ Headless</span></td>
+            <td><span class="m-badge warn">⚠ Wrong data returned</span></td>
+          </tr>
+          <tr>
+            <td class="uc-name">Filter records by multiple fields</td>
+            <td class="col-yours"><span class="m-badge warn">⚠ Enum values missing</span></td>
+            <td><span class="m-badge err">✕ Blocked</span></td>
+            <td><span class="m-badge ok">✓ Headless</span></td>
+          </tr>
+          <tr>
+            <td class="uc-name">Bulk update via API</td>
+            <td class="col-yours"><span class="m-badge err">✕ No headless path</span></td>
+            <td><span class="m-badge warn">⚠ 3 confirmations</span></td>
+            <td><span class="m-badge err">✕ No path</span></td>
+          </tr>
+          <tr>
+            <td class="uc-name">Export records headlessly</td>
+            <td class="col-yours"><span class="m-badge warn">⚠ Auth refresh required</span></td>
+            <td><span class="m-badge err">✕ Blocked</span></td>
+            <td><span class="m-badge ok">✓ Headless</span></td>
+          </tr>
+          <tr>
+            <td class="uc-name">Trigger notification to assignee</td>
+            <td class="col-yours"><span class="m-badge ok">✓ Headless</span></td>
+            <td><span class="m-badge ok">✓ Headless</span></td>
+            <td><span class="m-badge err">✕ No API endpoint</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="audit-form-wrap">
+      <div class="audit-form-title">Get your free agent readiness map</div>
+      <div class="audit-form-sub">Submit your product URL and we'll reply with the full report within 3 business days.</div>
+      <form class="audit-form" id="auditForm">
+        <div class="form-fields">
+          <div class="form-group">
+            <label for="audit-url">Product URL</label>
+            <input type="url" id="audit-url" name="product_url" placeholder="https://yourproduct.com" required>
+          </div>
+          <div class="form-group">
+            <label for="audit-email">Work email</label>
+            <input type="email" id="audit-email" name="email" placeholder="you@company.com" required>
+          </div>
+          <button type="submit" class="btn-primary" style="white-space:nowrap">Request Free Audit →</button>
+        </div>
+        <p class="form-note">No commitment. No sales call required. We run the audit and send you the report.</p>
+      </form>
+      <div class="form-success" id="auditSuccess">
+        ✓ Request received — we'll send your report within 3 business days.
+      </div>
+    </div>
+
+  </div>
+</section>
+
 <!-- CTA -->
 <section class="cta-section">
   <div class="section-label">Get Started</div>
@@ -2302,6 +2553,17 @@ function switchRole(id, tab) {
   document.getElementById('role-' + id).classList.add('active');
   tab.classList.add('active');
 }
+
+document.getElementById('auditForm').addEventListener('submit', function(e) {
+  e.preventDefault();
+  const url = document.getElementById('audit-url').value;
+  const email = document.getElementById('audit-email').value;
+  const subject = encodeURIComponent('Free Agent Readiness Audit — ' + url);
+  const body = encodeURIComponent('Product URL: ' + url + '\nContact email: ' + email);
+  window.open('mailto:hello@docka.io?subject=' + subject + '&body=' + body);
+  this.style.display = 'none';
+  document.getElementById('auditSuccess').style.display = 'block';
+});
 </script>
 </body>
 </html>
