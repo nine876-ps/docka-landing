@@ -1044,6 +1044,129 @@
     border: 1px solid #A7F3D0;
   }
 
+  /* WHAT IS RUNBOOK */
+  .runbook-anatomy {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 56px;
+    margin-top: 48px;
+    align-items: start;
+  }
+  @media (max-width: 760px) { .runbook-anatomy { grid-template-columns: 1fr; } }
+  .anatomy-point {
+    display: flex;
+    gap: 14px;
+    margin-bottom: 28px;
+  }
+  .anatomy-point:last-child { margin-bottom: 0; }
+  .anatomy-num {
+    font-size: 10px;
+    font-weight: 800;
+    color: var(--blue);
+    background: var(--blue-bg);
+    border: 1px solid var(--blue-border);
+    border-radius: 6px;
+    padding: 3px 7px;
+    flex-shrink: 0;
+    height: fit-content;
+    letter-spacing: 0.5px;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .anatomy-body strong {
+    display: block;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 5px;
+  }
+  .anatomy-body p { font-size: 13px; color: var(--text-2); line-height: 1.6; margin: 0; }
+  .runbook-card-mock {
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    position: sticky;
+    top: 80px;
+  }
+  .rc-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 16px;
+    background: var(--bg-3);
+    border-bottom: 1px solid var(--border);
+  }
+  .rc-type {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.2px;
+    color: var(--text-3);
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .rc-verified {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--green);
+    background: var(--green-bg);
+    border: 1px solid #A7F3D0;
+    padding: 2px 9px;
+    border-radius: 100px;
+  }
+  .rc-title {
+    padding: 14px 16px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
+    border-bottom: 1px solid var(--border);
+    line-height: 1.4;
+  }
+  .rc-fields { padding: 2px 0; }
+  .rc-field {
+    display: grid;
+    grid-template-columns: 82px 1fr;
+    gap: 12px;
+    padding: 8px 16px;
+    border-bottom: 1px solid var(--border);
+    align-items: start;
+  }
+  .rc-field:last-child { border-bottom: none; }
+  .rc-key {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--text-3);
+    padding-top: 1px;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .rc-val { font-size: 12px; color: var(--text-2); line-height: 1.55; }
+  .rc-steps { display: flex; flex-direction: column; gap: 3px; }
+  .rc-code {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--blue);
+    background: var(--blue-bg);
+    border: 1px solid var(--blue-border);
+    padding: 0 5px;
+    border-radius: 3px;
+  }
+  .rc-footer {
+    display: flex;
+    gap: 6px;
+    padding: 10px 16px;
+    background: var(--bg-3);
+    border-top: 1px solid var(--border);
+    flex-wrap: wrap;
+  }
+  .rc-agent {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--green);
+    background: var(--green-bg);
+    border: 1px solid #A7F3D0;
+    padding: 2px 9px;
+    border-radius: 100px;
+  }
+
   /* BRIDGE SECTION */
   .bridge-comparison {
     display: grid;
@@ -2239,6 +2362,95 @@
         <div class="mcp-icon">🎯</div>
         <h3>You control the narrative</h3>
         <p>Docka tests your product, documents exactly what works, and publishes verified runbooks under your brand. Agents that find your runbooks trust your product first.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHAT IS RUNBOOK -->
+<section id="what-is-runbook">
+  <div class="section-inner">
+    <div class="section-label">The Core Deliverable</div>
+    <h2 class="section-h">What is a runbook?</h2>
+    <p class="section-sub">A verified, structured instruction set for one specific agent task. Not a how-to article. Not API docs. A step-by-step execution guide — written for agents, tested with agents, indexed so agents find it via web search.</p>
+
+    <div class="runbook-anatomy">
+      <div class="runbook-anatomy-left">
+        <div class="anatomy-point">
+          <div class="anatomy-num">01</div>
+          <div class="anatomy-body">
+            <strong>One use case per runbook</strong>
+            <p>Each runbook covers exactly one task — create a record, send an email, update a status. Narrow scope means the agent can execute without ambiguity or clarification requests.</p>
+          </div>
+        </div>
+        <div class="anatomy-point">
+          <div class="anatomy-num">02</div>
+          <div class="anatomy-body">
+            <strong>Written for agents, not humans</strong>
+            <p>Explicit auth steps, exact API calls, enum values, error patterns, and a machine-verifiable success signal. No prose, no assumptions, no "see also" links.</p>
+          </div>
+        </div>
+        <div class="anatomy-point">
+          <div class="anatomy-num">03</div>
+          <div class="anatomy-body">
+            <strong>Verified with real agents before publication</strong>
+            <p>Every runbook is tested end-to-end with ChatGPT, Claude, and Gemini. If any agent fails the task, the runbook doesn't ship — it gets fixed first.</p>
+          </div>
+        </div>
+        <div class="anatomy-point">
+          <div class="anatomy-num">04</div>
+          <div class="anatomy-body">
+            <strong>Published and indexed for agent web search</strong>
+            <p>Hosted on your subdomain, structured for agent queries. When an agent searches "how to create a task in [Product] via API", it finds your runbook — not a Stack Overflow thread.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="runbook-card-mock">
+        <div class="rc-header">
+          <span class="rc-type">RUNBOOK</span>
+          <span class="rc-verified">✓ Verified</span>
+        </div>
+        <div class="rc-title">Create and assign a task in Linear via API</div>
+        <div class="rc-fields">
+          <div class="rc-field">
+            <span class="rc-key">Auth</span>
+            <span class="rc-val">Bearer token · scope: <span class="rc-code">issues:write</span></span>
+          </div>
+          <div class="rc-field">
+            <span class="rc-key">Method</span>
+            <span class="rc-val">GraphQL mutation · <span class="rc-code">POST /graphql</span></span>
+          </div>
+          <div class="rc-field">
+            <span class="rc-key">Steps</span>
+            <span class="rc-val rc-steps">
+              <span>1. IssueCreate with title + description</span>
+              <span>2. IssueUpdate — set assignee by userId</span>
+              <span>3. Verify: query issue → check assignee.id</span>
+            </span>
+          </div>
+          <div class="rc-field">
+            <span class="rc-key">On 401</span>
+            <span class="rc-val">Refresh token · retry once · abort if fails again</span>
+          </div>
+          <div class="rc-field">
+            <span class="rc-key">On 422</span>
+            <span class="rc-val">Check enum values in schema · do not retry blind</span>
+          </div>
+          <div class="rc-field">
+            <span class="rc-key">Success</span>
+            <span class="rc-val"><span class="rc-code">issue.assignee.id !== null</span></span>
+          </div>
+          <div class="rc-field">
+            <span class="rc-key">Tokens</span>
+            <span class="rc-val">~580 tokens</span>
+          </div>
+        </div>
+        <div class="rc-footer">
+          <span class="rc-agent">Claude 3.5 ✓</span>
+          <span class="rc-agent">GPT-4o ✓</span>
+          <span class="rc-agent">Gemini Pro ✓</span>
+        </div>
       </div>
     </div>
   </div>
