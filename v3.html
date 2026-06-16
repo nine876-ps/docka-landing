@@ -1,0 +1,1282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Docka — AI Agent Readiness for SaaS Products</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg:      #F2F1ED;
+    --bg-white:#ffffff;
+    --ink:     #0A0A0A;
+    --ink-muted:#6B6963;
+    --orange:  #E8562A;
+    --border:  #E0DDD8;
+    --dark:    #0A0A0A;
+    --radius:  6px;
+    --mono:    'JetBrains Mono', monospace;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── Utility ── */
+  .container { max-width: 1120px; margin: 0 auto; padding: 0 24px; }
+  .hl { background: var(--orange); color: #fff; padding: 2px 8px; display: inline; line-height: 1.4; }
+  .hl-dark { background: var(--ink); color: #fff; padding: 2px 8px; display: inline; line-height: 1.4; }
+
+  /* ── NAV ── */
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--bg);
+    border-bottom: 1px solid var(--border);
+    height: 60px;
+    display: flex;
+    align-items: center;
+  }
+  nav .container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+  }
+  .nav-logo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+    color: var(--ink);
+    font-weight: 700;
+    font-size: 17px;
+    letter-spacing: -0.3px;
+  }
+  .nav-logo-mark {
+    width: 28px; height: 28px;
+    background: var(--orange);
+    border-radius: 4px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .nav-logo-mark svg { width: 16px; height: 16px; fill: #fff; }
+  .nav-links {
+    display: flex;
+    gap: 28px;
+    list-style: none;
+  }
+  .nav-links a {
+    text-decoration: none;
+    color: var(--ink-muted);
+    font-size: 14px;
+    font-weight: 500;
+    transition: color 0.15s;
+  }
+  .nav-links a:hover { color: var(--ink); }
+  .nav-right {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .nav-right .login {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--ink-muted);
+    text-decoration: none;
+  }
+  .btn-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 8px 18px;
+    border-radius: 999px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    transition: opacity 0.15s;
+    border: none;
+  }
+  .btn-pill:hover { opacity: 0.85; }
+  .btn-pill-black { background: var(--ink); color: #fff; }
+  .btn-pill-outline { background: transparent; color: var(--ink); border: 1px solid var(--border); }
+  .btn-pill-orange { background: var(--orange); color: #fff; }
+  .btn-full {
+    display: block;
+    width: 100%;
+    padding: 13px 20px;
+    border-radius: 999px;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    text-align: center;
+    border: none;
+    transition: opacity 0.15s;
+  }
+  .btn-full:hover { opacity: 0.88; }
+  .btn-full-black { background: var(--ink); color: #fff; }
+  .btn-full-orange { background: var(--orange); color: #fff; }
+
+  /* ── Sections alternation ── */
+  section { background: var(--bg); }
+  section:nth-child(even) { background: var(--bg-white); }
+  section.section-dark { background: var(--dark) !important; color: #fff; }
+  section.section-white { background: var(--bg-white) !important; }
+  section.section-gray  { background: var(--bg) !important; }
+
+  /* ── HERO ── */
+  .hero {
+    padding: 80px 0 0;
+    text-align: center;
+  }
+  .pill-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    border: 1px solid var(--border);
+    background: var(--bg-white);
+    padding: 4px 14px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--ink-muted);
+    margin-bottom: 28px;
+  }
+  .pill-label .dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--orange);
+    display: inline-block;
+  }
+  .hero h1 {
+    font-size: clamp(38px, 5.5vw, 68px);
+    font-weight: 900;
+    letter-spacing: -2.5px;
+    line-height: 1.05;
+    max-width: 800px;
+    margin: 0 auto 20px;
+  }
+  .hero-subtitle {
+    font-size: 18px;
+    color: var(--ink-muted);
+    max-width: 480px;
+    margin: 0 auto 40px;
+  }
+  .hero-form-card {
+    background: var(--bg-white);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 28px 28px 24px;
+    max-width: 600px;
+    margin: 0 auto;
+    text-align: left;
+  }
+  .hero-form-card h3 {
+    font-size: 15px;
+    font-weight: 700;
+    margin-bottom: 16px;
+    color: var(--ink);
+  }
+  .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+  .form-input {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    font-size: 14px;
+    font-family: 'Inter', sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    outline: none;
+    transition: border-color 0.15s;
+  }
+  .form-input:focus { border-color: var(--ink); }
+  .form-input::placeholder { color: var(--ink-muted); }
+  .form-note {
+    font-size: 12px;
+    color: var(--ink-muted);
+    margin-top: 10px;
+    text-align: center;
+  }
+  .success-msg {
+    display: none;
+    padding: 12px 16px;
+    background: #f0fdf4;
+    border: 1px solid #86efac;
+    border-radius: var(--radius);
+    font-size: 14px;
+    color: #166534;
+    text-align: center;
+    margin-top: 10px;
+  }
+  .hero-canvas-wrap {
+    margin-top: 40px;
+    width: 100%;
+    line-height: 0;
+    overflow: hidden;
+  }
+  #heroCanvas {
+    width: 100%;
+    height: 220px;
+    display: block;
+  }
+
+  /* ── SOCIAL PROOF ── */
+  .social-proof {
+    padding: 22px 0;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    background: var(--bg-white);
+  }
+  .social-proof-inner {
+    display: flex;
+    align-items: center;
+    gap: 32px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .social-label {
+    font-size: 13px;
+    color: var(--ink-muted);
+    white-space: nowrap;
+  }
+  .logo-list {
+    display: flex;
+    gap: 28px;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .logo-item {
+    font-size: 14px;
+    font-weight: 700;
+    color: #C5C2BC;
+    letter-spacing: -0.2px;
+  }
+
+  /* ── PROBLEM ── */
+  .problem { padding: 96px 0; }
+  .problem-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: start; }
+  .problem-left h2 {
+    font-size: clamp(28px, 3.5vw, 44px);
+    font-weight: 900;
+    letter-spacing: -2px;
+    line-height: 1.1;
+    margin-bottom: 20px;
+  }
+  .problem-left p {
+    font-size: 16px;
+    color: var(--ink-muted);
+    line-height: 1.7;
+    margin-bottom: 32px;
+  }
+  .role-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 14px;
+    font-size: 13px;
+  }
+  .role-icon {
+    width: 34px; height: 34px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--bg);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+  .role-info { flex: 1; min-width: 0; }
+  .role-name { font-weight: 700; font-size: 12px; margin-bottom: 1px; }
+  .role-task { color: var(--ink-muted); font-size: 11px; line-height: 1.3; }
+  .role-arrow { color: var(--ink-muted); font-size: 12px; flex-shrink: 0; }
+  .task-dots {
+    display: flex; gap: 3px; align-items: center; flex-shrink: 0;
+  }
+  .td {
+    width: 20px; height: 20px;
+    border-radius: 3px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 9px;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+  .td-green  { background: #22c55e; }
+  .td-orange { background: #f59e0b; color: #fff; }
+  .td-red    { background: #ef4444; color: #fff; }
+  .outcome-cards {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-top: 32px;
+  }
+  .outcome-card {
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    background: var(--bg-white);
+  }
+  .outcome-card.orange-border { border-color: var(--orange); }
+  .outcome-card h4 {
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+  .outcome-card p { font-size: 13px; color: var(--ink-muted); line-height: 1.5; }
+
+  /* ── CAPABILITIES ── */
+  .capabilities { padding: 96px 0; }
+  .capabilities h2 {
+    font-size: clamp(28px, 3.5vw, 44px);
+    font-weight: 900;
+    letter-spacing: -2px;
+    line-height: 1.1;
+    max-width: 680px;
+    margin: 0 auto 56px;
+    text-align: center;
+  }
+  .metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    background: var(--bg-white);
+  }
+  .metric-card {
+    padding: 32px 28px;
+    border-right: 1px solid var(--border);
+  }
+  .metric-card:last-child { border-right: none; }
+  .metric-icon { font-size: 22px; margin-bottom: 16px; }
+  .metric-value {
+    font-size: 48px;
+    font-weight: 900;
+    letter-spacing: -3px;
+    line-height: 1;
+    margin-bottom: 6px;
+    color: var(--ink);
+  }
+  .metric-label { font-size: 14px; font-weight: 700; margin-bottom: 10px; }
+  .metric-desc { font-size: 13px; color: var(--ink-muted); line-height: 1.55; }
+
+  /* ── COMPARISON ── */
+  .comparison { padding: 96px 0; }
+  .comparison h2 {
+    font-size: clamp(28px, 3.5vw, 44px);
+    font-weight: 900;
+    letter-spacing: -2px;
+    line-height: 1.1;
+    max-width: 600px;
+    margin-bottom: 48px;
+  }
+  .comparison-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+  .comp-card {
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    background: var(--bg-white);
+  }
+  .comp-card-header {
+    padding: 20px 22px 16px;
+    border-bottom: 1px solid var(--border);
+    background: var(--bg);
+  }
+  .comp-card.featured .comp-card-header {
+    background: var(--orange);
+    border-bottom-color: transparent;
+  }
+  .comp-tag {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    padding: 3px 9px;
+    border-radius: 999px;
+    background: var(--bg-white);
+    color: var(--orange);
+    margin-bottom: 8px;
+  }
+  .comp-card-header h3 {
+    font-size: 17px;
+    font-weight: 900;
+    letter-spacing: -0.5px;
+    color: var(--ink);
+  }
+  .comp-card.featured .comp-card-header h3 { color: #fff; }
+  .comp-card-body { padding: 20px 22px; }
+  .pro-con-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    color: var(--ink-muted);
+    margin-bottom: 8px;
+    margin-top: 16px;
+    text-transform: uppercase;
+  }
+  .pro-con-label:first-child { margin-top: 0; }
+  .pro-con-item {
+    display: flex;
+    gap: 8px;
+    align-items: flex-start;
+    font-size: 13px;
+    line-height: 1.5;
+    margin-bottom: 5px;
+    color: var(--ink);
+  }
+  .pro-con-item .check { color: #22c55e; font-size: 14px; flex-shrink: 0; }
+  .pro-con-item .cross { color: #ef4444; font-size: 14px; flex-shrink: 0; }
+  .comparison-statement {
+    margin-top: 32px;
+    padding: 24px 28px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--ink);
+    line-height: 1.5;
+  }
+
+  /* ── REACH BLOCK ── */
+  .reach { padding: 96px 0; text-align: center; }
+  .reach-number {
+    font-size: clamp(100px, 18vw, 180px);
+    font-weight: 900;
+    letter-spacing: -8px;
+    line-height: 1;
+    color: var(--orange);
+    display: block;
+    margin-bottom: 16px;
+  }
+  .reach h2 {
+    font-size: clamp(24px, 3vw, 40px);
+    font-weight: 900;
+    letter-spacing: -1.5px;
+    color: #fff;
+    max-width: 640px;
+    margin: 0 auto 16px;
+    line-height: 1.15;
+  }
+  .reach p {
+    font-size: 16px;
+    color: rgba(255,255,255,0.55);
+    max-width: 520px;
+    margin: 0 auto;
+    line-height: 1.6;
+  }
+
+  /* ── RUNBOOK ── */
+  .runbook { padding: 96px 0; }
+  .runbook-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: start; }
+  .runbook h2 {
+    font-size: clamp(28px, 3.5vw, 42px);
+    font-weight: 900;
+    letter-spacing: -2px;
+    line-height: 1.1;
+    margin-bottom: 36px;
+  }
+  .rb-point { display: flex; gap: 14px; margin-bottom: 28px; align-items: flex-start; }
+  .rb-num {
+    font-family: var(--mono);
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--ink-muted);
+    min-width: 30px;
+    padding-top: 2px;
+  }
+  .rb-text h4 { font-size: 15px; font-weight: 700; margin-bottom: 4px; }
+  .rb-text p  { font-size: 14px; color: var(--ink-muted); line-height: 1.55; }
+
+  /* Task decomposition illustration */
+  .task-decomp { }
+  .task-main {
+    background: var(--ink);
+    color: #fff;
+    border-radius: 10px;
+    padding: 18px 20px;
+    font-size: 13px;
+    line-height: 1.55;
+    margin-bottom: 12px;
+    font-family: var(--mono);
+    position: relative;
+  }
+  .task-connector-area {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 12px;
+  }
+  .task-connector-line {
+    width: 1px; height: 24px;
+    background: var(--border);
+  }
+  .task-mini-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+  }
+  .task-mini {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 12px;
+    background: var(--bg-white);
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+  }
+  .task-mini-label { color: var(--ink); line-height: 1.35; }
+  .task-status {
+    font-size: 11px;
+    font-weight: 700;
+    padding: 2px 7px;
+    border-radius: 999px;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .ts-green  { background: #dcfce7; color: #166534; }
+  .ts-orange { background: #fef3c7; color: #92400e; }
+  .ts-red    { background: #fee2e2; color: #991b1b; }
+  .task-caption {
+    margin-top: 12px;
+    font-size: 12px;
+    color: var(--ink-muted);
+    line-height: 1.5;
+  }
+
+  /* ── FOR WHOM ── */
+  .for-whom { padding: 96px 0; }
+  .for-whom h2 {
+    font-size: clamp(28px, 3.5vw, 44px);
+    font-weight: 900;
+    letter-spacing: -2px;
+    line-height: 1.1;
+    max-width: 600px;
+    margin-bottom: 48px;
+  }
+  .whom-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+  .whom-card {
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 28px 26px;
+    background: var(--bg-white);
+  }
+  .whom-card h3 { font-size: 16px; font-weight: 700; margin-bottom: 8px; }
+  .whom-card p  { font-size: 14px; color: var(--ink-muted); line-height: 1.6; }
+
+  /* ── WHY DOCKA ── */
+  .why-docka { padding: 96px 0; }
+  .why-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: start; }
+  .why-left h2 {
+    font-size: clamp(28px, 3.5vw, 46px);
+    font-weight: 900;
+    letter-spacing: -2.5px;
+    line-height: 1.05;
+    color: #fff;
+    margin-bottom: 40px;
+  }
+  .why-point {
+    display: flex;
+    gap: 14px;
+    margin-bottom: 24px;
+    align-items: flex-start;
+  }
+  .why-num {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: rgba(255,255,255,0.35);
+    min-width: 30px;
+    padding-top: 3px;
+  }
+  .why-content h4 { font-size: 15px; font-weight: 700; color: #fff; margin-bottom: 3px; }
+  .why-content p  { font-size: 13px; color: rgba(255,255,255,0.55); line-height: 1.55; }
+
+  /* Dark glass form */
+  .dark-form-card {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.10);
+    border-radius: 16px;
+    padding: 30px 26px;
+  }
+  .dark-form-card h3 {
+    font-size: 16px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 6px;
+  }
+  .dark-form-card .form-sub {
+    font-size: 13px;
+    color: rgba(255,255,255,0.5);
+    margin-bottom: 22px;
+    line-height: 1.5;
+  }
+  .form-label {
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+    margin-bottom: 5px;
+    color: rgba(255,255,255,0.6);
+  }
+  .dark-input {
+    width: 100%;
+    padding: 11px 14px;
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: var(--radius);
+    font-size: 14px;
+    font-family: 'Inter', sans-serif;
+    background: rgba(255,255,255,0.06);
+    color: #fff;
+    outline: none;
+    margin-bottom: 14px;
+    transition: border-color 0.15s;
+  }
+  .dark-input:focus { border-color: rgba(255,255,255,0.35); }
+  .dark-input::placeholder { color: rgba(255,255,255,0.3); }
+  .dark-note {
+    font-size: 12px;
+    color: rgba(255,255,255,0.35);
+    margin-top: 10px;
+    text-align: center;
+    line-height: 1.5;
+  }
+  .dark-success {
+    display: none;
+    padding: 12px 16px;
+    background: rgba(34,197,94,0.15);
+    border: 1px solid rgba(34,197,94,0.3);
+    border-radius: var(--radius);
+    font-size: 14px;
+    color: #4ade80;
+    text-align: center;
+    margin-top: 10px;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 28px 0;
+    background: var(--bg);
+  }
+  .footer-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 14px;
+  }
+  .footer-brand { font-weight: 700; font-size: 15px; color: var(--ink); }
+  .footer-links {
+    display: flex;
+    gap: 24px;
+    list-style: none;
+  }
+  .footer-links a {
+    font-size: 13px;
+    color: var(--ink-muted);
+    text-decoration: none;
+  }
+  .footer-links a:hover { color: var(--ink); }
+  .footer-email { font-size: 13px; color: var(--ink-muted); }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    .problem-grid, .runbook-grid, .why-grid { grid-template-columns: 1fr; }
+    .metrics-grid { grid-template-columns: 1fr; }
+    .metric-card { border-right: none; border-bottom: 1px solid var(--border); }
+    .metric-card:last-child { border-bottom: none; }
+    .comparison-grid { grid-template-columns: 1fr; }
+    .whom-grid { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 760px) {
+    .problem-grid { gap: 40px; }
+    .hero h1 { letter-spacing: -1.5px; }
+    .outcome-cards { grid-template-columns: 1fr; }
+    .form-row { grid-template-columns: 1fr; }
+    .nav-links { display: none; }
+    .task-mini-grid { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 640px) {
+    .hero { padding: 52px 0 0; }
+    .hero-form-card { padding: 20px 16px 18px; }
+    .capabilities h2, .comparison h2, .for-whom h2 { max-width: 100%; }
+    .footer-inner { flex-direction: column; align-items: flex-start; }
+    .social-proof-inner { flex-direction: column; gap: 16px; align-items: flex-start; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════ NAV ═══════════════════════════ -->
+<nav>
+  <div class="container">
+    <a href="#" class="nav-logo">
+      <div class="nav-logo-mark">
+        <svg viewBox="0 0 16 16"><rect x="2" y="2" width="5" height="5" rx="1"/><rect x="9" y="2" width="5" height="5" rx="1"/><rect x="2" y="9" width="5" height="5" rx="1"/><rect x="9" y="9" width="5" height="5" rx="1"/></svg>
+      </div>
+      Docka
+    </a>
+    <ul class="nav-links">
+      <li><a href="research.html">Research</a></li>
+      <li><a href="#how">How it works</a></li>
+      <li><a href="#pricing">Pricing</a></li>
+    </ul>
+    <div class="nav-right">
+      <a href="#" class="login">Log in</a>
+      <a href="#hero-form" class="btn-pill btn-pill-black">Get started →</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ═══════════════════════════ HERO ═══════════════════════════ -->
+<section class="hero section-gray">
+  <div class="container">
+    <div class="pill-label"><span class="dot"></span> AI Agent Readiness</div>
+    <h1>Give your users the ability to use <span class="hl">all your product</span> via AI agents.</h1>
+    <p class="hero-subtitle">Docka makes your product as reliable as APIs.</p>
+
+    <div class="hero-form-card" id="hero-form">
+      <h3>Check how AI agent-ready is your product</h3>
+      <form id="heroForm" onsubmit="submitHeroForm(event)">
+        <div class="form-row">
+          <input class="form-input" type="url" name="url" placeholder="https://yourproduct.com" required>
+          <input class="form-input" type="email" name="email" placeholder="you@company.com" required>
+        </div>
+        <button type="submit" class="btn-full btn-full-black">Get your free readiness report →</button>
+        <p class="form-note">20–40 use cases tested. Full competitor comparison. Free.</p>
+      </form>
+      <div class="success-msg" id="heroSuccess">Thanks! Check your inbox within 3 business days.</div>
+    </div>
+  </div>
+  <div class="hero-canvas-wrap">
+    <canvas id="heroCanvas"></canvas>
+  </div>
+</section>
+
+<!-- ═══════════════════════════ SOCIAL PROOF ═══════════════════════════ -->
+<section class="social-proof section-white">
+  <div class="container">
+    <div class="social-proof-inner">
+      <span class="social-label">Trusted by SaaS teams at —</span>
+      <div class="logo-list">
+        <span class="logo-item">Notion</span>
+        <span class="logo-item">Linear</span>
+        <span class="logo-item">HubSpot</span>
+        <span class="logo-item">Salesforce</span>
+        <span class="logo-item">Asana</span>
+        <span class="logo-item">Greenhouse</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════ PROBLEM ═══════════════════════════ -->
+<section class="problem section-white">
+  <div class="container">
+    <div class="problem-grid">
+      <div class="problem-left">
+        <h2>The problem: millions of users delegate complex tasks to <span class="hl">AI agents</span>.</h2>
+        <p>A single user request decomposes into dozens of smaller sub-tasks. If any one of them fails, the entire workflow fails — and the user blames your product.</p>
+        <div class="outcome-cards">
+          <div class="outcome-card orange-border">
+            <h4>Capture new users</h4>
+            <p>When AI models suggest tools for a task, your product wins because agents can execute it reliably.</p>
+          </div>
+          <div class="outcome-card">
+            <h4>Retain existing users</h4>
+            <p>As users increasingly delegate work to AI agents, products that agents can operate reliably get used more.</p>
+          </div>
+        </div>
+      </div>
+      <div class="problem-right">
+        <div class="role-row">
+          <div class="role-icon">💼</div>
+          <div class="role-info">
+            <div class="role-name">Sales Manager</div>
+            <div class="role-task">Find 50 leads, verify emails, add to CRM, start sequence</div>
+          </div>
+          <div class="role-arrow">→</div>
+          <div class="task-dots">
+            <div class="td td-green"></div>
+            <div class="td td-green"></div>
+            <div class="td td-orange"></div>
+            <div class="td td-red">✕</div>
+          </div>
+        </div>
+        <div class="role-row">
+          <div class="role-icon">📋</div>
+          <div class="role-info">
+            <div class="role-name">Project Coordinator</div>
+            <div class="role-task">Pull overdue tasks, email owners, update CRM</div>
+          </div>
+          <div class="role-arrow">→</div>
+          <div class="task-dots">
+            <div class="td td-green"></div>
+            <div class="td td-orange"></div>
+            <div class="td td-red">✕</div>
+            <div class="td td-red">✕</div>
+          </div>
+        </div>
+        <div class="role-row">
+          <div class="role-icon">🧑‍💼</div>
+          <div class="role-info">
+            <div class="role-name">HR Manager</div>
+            <div class="role-task">Source engineers, verify emails, add to ATS</div>
+          </div>
+          <div class="role-arrow">→</div>
+          <div class="task-dots">
+            <div class="td td-green"></div>
+            <div class="td td-green"></div>
+            <div class="td td-red">✕</div>
+            <div class="td td-red">✕</div>
+          </div>
+        </div>
+        <div class="role-row">
+          <div class="role-icon">📣</div>
+          <div class="role-info">
+            <div class="role-name">Marketing Manager</div>
+            <div class="role-task">Build prospect list, load to email tool, launch campaign</div>
+          </div>
+          <div class="role-arrow">→</div>
+          <div class="task-dots">
+            <div class="td td-green"></div>
+            <div class="td td-orange"></div>
+            <div class="td td-red">✕</div>
+            <div class="td td-red">✕</div>
+          </div>
+        </div>
+        <div class="role-row">
+          <div class="role-icon">🤝</div>
+          <div class="role-info">
+            <div class="role-name">Customer Success</div>
+            <div class="role-task">Find inactive accounts, send check-ins, update health score</div>
+          </div>
+          <div class="role-arrow">→</div>
+          <div class="task-dots">
+            <div class="td td-green"></div>
+            <div class="td td-green"></div>
+            <div class="td td-orange"></div>
+            <div class="td td-red">✕</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════ CAPABILITIES ═══════════════════════════ -->
+<section class="capabilities section-gray">
+  <div class="container">
+    <h2 id="how">From login to task completion, Docka powers agents that <span class="hl">reliably operate on the web</span>.</h2>
+    <div class="metrics-grid">
+      <div class="metric-card">
+        <div class="metric-icon">⚡</div>
+        <div class="metric-value">−60%</div>
+        <div class="metric-label">Token consumption</div>
+        <p class="metric-desc">Runbooks give agents precise instructions — no guessing, no retries, minimal token waste.</p>
+      </div>
+      <div class="metric-card">
+        <div class="metric-icon">⏱</div>
+        <div class="metric-value">−4×</div>
+        <div class="metric-label">Time to complete</div>
+        <p class="metric-desc">Agents follow a tested path with no dead ends, no backtracking, no unnecessary clarifications.</p>
+      </div>
+      <div class="metric-card">
+        <div class="metric-icon">🔕</div>
+        <div class="metric-value">≈0</div>
+        <div class="metric-label">User interruptions</div>
+        <p class="metric-desc">From auth to success signal — the agent executes without asking the user anything.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════ COMPARISON ═══════════════════════════ -->
+<section class="comparison section-white">
+  <div class="container">
+    <h2>The existing solutions and where they fall short</h2>
+    <div class="comparison-grid">
+
+      <!-- MCP -->
+      <div class="comp-card">
+        <div class="comp-card-header">
+          <h3>MCP</h3>
+        </div>
+        <div class="comp-card-body">
+          <div class="pro-con-label">Strengths</div>
+          <div class="pro-con-item"><span class="check">✓</span> Contains precise context</div>
+          <div class="pro-con-item"><span class="check">✓</span> Powerful, full-featured</div>
+          <div class="pro-con-label">Limitations</div>
+          <div class="pro-con-item"><span class="cross">✕</span> Must be discovered by the user</div>
+          <div class="pro-con-item"><span class="cross">✕</span> Must be installed</div>
+          <div class="pro-con-item"><span class="cross">✕</span> Requires technical knowledge</div>
+        </div>
+      </div>
+
+      <!-- Skills -->
+      <div class="comp-card">
+        <div class="comp-card-header">
+          <h3>Skills</h3>
+        </div>
+        <div class="comp-card-body">
+          <div class="pro-con-label">Strengths</div>
+          <div class="pro-con-item"><span class="check">✓</span> Professionally crafted instructions</div>
+          <div class="pro-con-item"><span class="check">✓</span> Well-structured for the agent</div>
+          <div class="pro-con-label">Limitations</div>
+          <div class="pro-con-item"><span class="cross">✕</span> Must be discovered by the user</div>
+          <div class="pro-con-item"><span class="cross">✕</span> Must be installed</div>
+          <div class="pro-con-item"><span class="cross">✕</span> Requires technical knowledge</div>
+        </div>
+      </div>
+
+      <!-- Runbooks — featured -->
+      <div class="comp-card featured">
+        <div class="comp-card-header">
+          <span class="comp-tag">Our solution</span>
+          <h3>Let agents use your product <span class="hl-dark">like it's an API</span></h3>
+        </div>
+        <div class="comp-card-body">
+          <div class="pro-con-label">Strengths</div>
+          <div class="pro-con-item"><span class="check">✓</span> Agent-agnostic — works with ChatGPT, Claude, Gemini</div>
+          <div class="pro-con-item"><span class="check">✓</span> Zero effort on the user's end</div>
+          <div class="pro-con-item"><span class="check">✓</span> High discoverability via web search</div>
+          <div class="pro-con-item"><span class="check">✓</span> Suitable for any AI skill level</div>
+          <div class="pro-con-item"><span class="check">✓</span> Users accomplish more with fewer tokens</div>
+          <div class="pro-con-label">Trade-off</div>
+          <div class="pro-con-item"><span class="cross">✕</span> Contains less context than MCP and Skills</div>
+        </div>
+      </div>
+
+    </div>
+    <div class="comparison-statement">
+      Runbooks scale faster than any API and are easier to maintain. And it's a fully turnkey service — your engineering team does nothing.
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════ REACH BLOCK ═══════════════════════════ -->
+<section class="reach section-dark">
+  <div class="container">
+    <span class="reach-number">90%</span>
+    <h2>of users never install plugins, skills, or MCP servers.</h2>
+    <p>Anything a user can do in a browser, their AI agent can too — if your product has runbooks.</p>
+  </div>
+</section>
+
+<!-- ═══════════════════════════ WHAT IS A RUNBOOK ═══════════════════════════ -->
+<section class="runbook section-white">
+  <div class="container">
+    <div class="runbook-grid">
+      <div class="runbook-left">
+        <h2>What is a runbook?</h2>
+        <div class="rb-point">
+          <div class="rb-num">01</div>
+          <div class="rb-text">
+            <h4>One task per runbook</h4>
+            <p>Each runbook covers exactly one task. Narrow scope means agents execute without ambiguity.</p>
+          </div>
+        </div>
+        <div class="rb-point">
+          <div class="rb-num">02</div>
+          <div class="rb-text">
+            <h4>Written for agents, not humans</h4>
+            <p>Explicit auth steps, exact API calls, enum values, error patterns, and a machine-verifiable success signal.</p>
+          </div>
+        </div>
+        <div class="rb-point">
+          <div class="rb-num">03</div>
+          <div class="rb-text">
+            <h4>Verified with real agents</h4>
+            <p>Tested end-to-end with ChatGPT, Claude, and Gemini. If any agent fails, the runbook doesn't ship.</p>
+          </div>
+        </div>
+        <div class="rb-point">
+          <div class="rb-num">04</div>
+          <div class="rb-text">
+            <h4>Published and indexed for agent web search</h4>
+            <p>Hosted on your subdomain, structured for agent queries — not for Google, for agents.</p>
+          </div>
+        </div>
+      </div>
+      <div class="runbook-right task-decomp">
+        <div class="task-main">
+          "Add Susan as the new project coordinator to Project Banana, make her the owner of the 'Cars' and 'Wheels' tables, and draft an email to the marketing department announcing the change."
+        </div>
+        <div class="task-connector-area">
+          <div class="task-connector-line"></div>
+        </div>
+        <div class="task-mini-grid">
+          <div class="task-mini">
+            <span class="task-mini-label">Find project "Banana"</span>
+            <span class="task-status ts-green">✓ Done</span>
+          </div>
+          <div class="task-mini">
+            <span class="task-mini-label">Find user "Susan"</span>
+            <span class="task-status ts-green">✓ Done</span>
+          </div>
+          <div class="task-mini">
+            <span class="task-mini-label">Assign coordinator role</span>
+            <span class="task-status ts-green">✓ Done</span>
+          </div>
+          <div class="task-mini">
+            <span class="task-mini-label">Set table ownership: Cars</span>
+            <span class="task-status ts-orange">⚠ Enum error</span>
+          </div>
+          <div class="task-mini">
+            <span class="task-mini-label">Set table ownership: Wheels</span>
+            <span class="task-status ts-red">✕ Blocked</span>
+          </div>
+          <div class="task-mini">
+            <span class="task-mini-label">Draft announcement email</span>
+            <span class="task-status ts-red">✕ Blocked</span>
+          </div>
+        </div>
+        <p class="task-caption">When "Set table ownership" fails, everything downstream fails too. Runbooks prevent this.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════ FOR WHOM ═══════════════════════════ -->
+<section class="for-whom section-gray">
+  <div class="container">
+    <h2>Docka is built for every team that cares about product-led growth.</h2>
+    <div class="whom-grid">
+      <div class="whom-card">
+        <h3>CEOs</h3>
+        <p>Beat direct competitors by being the first product in your category that's 100% AI agent-ready.</p>
+      </div>
+      <div class="whom-card">
+        <h3>Product Leaders</h3>
+        <p>Ship AI readiness 10× faster than building full MCP and API coverage from scratch.</p>
+      </div>
+      <div class="whom-card">
+        <h3>Growth Teams</h3>
+        <p>Unlock a new acquisition channel: AI agent-driven product discovery and recommendation.</p>
+      </div>
+      <div class="whom-card">
+        <h3>CS &amp; Support Teams</h3>
+        <p>Make your documentation and support workflows operable by AI agents — zero engineering required.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════ WHY DOCKA (dark CTA) ═══════════════════════════ -->
+<section class="why-docka section-dark" id="pricing">
+  <div class="container">
+    <div class="why-grid">
+      <div class="why-left">
+        <h2>Why runbooks. <span style="color:var(--orange)">Why Docka.</span></h2>
+        <div class="why-point">
+          <div class="why-num">01</div>
+          <div class="why-content">
+            <h4>First runbooks covering core use cases in 14 days</h4>
+            <p>No engineering from your team. We handle everything.</p>
+          </div>
+        </div>
+        <div class="why-point">
+          <div class="why-num">02</div>
+          <div class="why-content">
+            <h4>Free audit: which APIs and flows to prioritize for AI agents</h4>
+            <p>A concrete roadmap for your engineering team, not guesswork.</p>
+          </div>
+        </div>
+        <div class="why-point">
+          <div class="why-num">03</div>
+          <div class="why-content">
+            <h4>Outcompete your category</h4>
+            <p>Be the first 100% AI agent-ready product in your space, 10× faster than building it yourself.</p>
+          </div>
+        </div>
+        <div class="why-point">
+          <div class="why-num">04</div>
+          <div class="why-content">
+            <h4>Free agent-readiness map vs. your direct competitors</h4>
+            <p>Same use cases, same agents, side-by-side scoring. No strings attached.</p>
+          </div>
+        </div>
+        <div class="why-point">
+          <div class="why-num">05</div>
+          <div class="why-content">
+            <h4>External expertise on what actually works</h4>
+            <p>We bring best practices from across dozens of products, not just yours.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="why-right">
+        <div class="dark-form-card">
+          <h3>Get your free agent-readiness report</h3>
+          <p class="form-sub">Submit your product URL and we'll reply within 3 business days with the full report.</p>
+          <form id="darkForm" onsubmit="submitDarkForm(event)">
+            <label class="form-label" for="darkUrl">Product URL</label>
+            <input class="dark-input" id="darkUrl" type="url" name="url" placeholder="https://yourproduct.com" required>
+            <label class="form-label" for="darkEmail">Work email</label>
+            <input class="dark-input" id="darkEmail" type="email" name="email" placeholder="you@company.com" required>
+            <button type="submit" class="btn-full btn-full-orange">Request free audit →</button>
+            <p class="dark-note">No commitment. No sales call. We run the tests and send you the results.</p>
+          </form>
+          <div class="dark-success" id="darkSuccess">Sent! We'll reply with your report within 3 business days.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════ FOOTER ═══════════════════════════ -->
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <span class="footer-brand">Docka</span>
+      <ul class="footer-links">
+        <li><a href="research.html">Research</a></li>
+        <li><a href="home.html">Home</a></li>
+      </ul>
+      <span class="footer-email">hello@docka.io</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* ── Form handlers ── */
+function submitHeroForm(e) {
+  e.preventDefault();
+  const form = e.target;
+  const url   = form.url.value;
+  const email = form.email.value;
+  const subject = encodeURIComponent("Agent-Readiness Report Request");
+  const body    = encodeURIComponent("Product URL: " + url + "\nWork email: " + email + "\n\nPlease run the readiness audit and send me the report.");
+  window.location.href = "mailto:hello@docka.io?subject=" + subject + "&body=" + body;
+  form.style.display = "none";
+  document.getElementById("heroSuccess").style.display = "block";
+}
+
+function submitDarkForm(e) {
+  e.preventDefault();
+  const form = e.target;
+  const url   = document.getElementById("darkUrl").value;
+  const email = document.getElementById("darkEmail").value;
+  const subject = encodeURIComponent("Agent-Readiness Audit Request");
+  const body    = encodeURIComponent("Product URL: " + url + "\nWork email: " + email + "\n\nPlease run the audit and send me the full report.");
+  window.location.href = "mailto:hello@docka.io?subject=" + subject + "&body=" + body;
+  form.style.display = "none";
+  document.getElementById("darkSuccess").style.display = "block";
+}
+
+/* ── Pixel canvas ── */
+(function() {
+  var canvas = document.getElementById("heroCanvas");
+  var CELL = 8;
+
+  function drawCanvas() {
+    var W = canvas.parentElement.offsetWidth;
+    var H = 220;
+    canvas.width  = W;
+    canvas.height = H;
+    var ctx = canvas.getContext("2d");
+
+    var cols = Math.ceil(W / CELL);
+    var rows = Math.ceil(H / CELL);
+
+    // palette: top to bottom
+    var palette = [
+      "#95D5B2", // 0 lightest green (top)
+      "#52B788", // 1
+      "#2D6A4F", // 2
+      "#1B4332", // 3 dark green
+      "#F4A261", // 4 orange
+      "#E76F51", // 5
+      "#E63946", // 6 red
+    ];
+
+    // Compute terrain height for each column (in rows from top)
+    function terrainHeight(col) {
+      var x = col / cols;
+      // Combine two sine waves for organic shape
+      var h = 0.45
+        + 0.18 * Math.sin(x * Math.PI * 2.1 + 0.5)
+        + 0.10 * Math.sin(x * Math.PI * 5.3 + 1.2)
+        + 0.06 * Math.sin(x * Math.PI * 11.7 + 0.8);
+      // clamp 0.15 .. 0.85
+      return Math.max(0.15, Math.min(0.85, h));
+    }
+
+    // Seeded pseudo-random for consistent noise
+    function seededRand(col, row) {
+      var n = col * 2999 + row * 7919;
+      n = ((n >> 16) ^ n) * 0x45d9f3b;
+      n = ((n >> 16) ^ n) * 0x45d9f3b;
+      n = (n >> 16) ^ n;
+      return (n & 0xffff) / 0xffff;
+    }
+
+    for (var c = 0; c < cols; c++) {
+      var th = terrainHeight(c);             // fraction of canvas height
+      var surfaceRow = Math.floor(th * rows); // first "terrain" row
+
+      for (var r = 0; r < rows; r++) {
+        var x = c * CELL;
+        var y = r * CELL;
+        var color;
+
+        if (r < surfaceRow) {
+          // sky — transparent / bg color
+          color = "#F2F1ED";
+        } else {
+          // depth inside terrain: 0 = surface, 1 = bottom
+          var depth = (r - surfaceRow) / Math.max(1, rows - surfaceRow);
+
+          if (depth < 0.12)      color = palette[0];
+          else if (depth < 0.25) color = palette[1];
+          else if (depth < 0.42) color = palette[2];
+          else if (depth < 0.58) color = palette[3];
+          else if (depth < 0.72) color = palette[4];
+          else if (depth < 0.84) color = palette[5];
+          else                   color = palette[6];
+
+          // 12% dark noise overlay
+          var rnd = seededRand(c, r);
+          if (rnd < 0.07)       color = "#0A0A0A";
+          else if (rnd < 0.12)  color = "#1B1B1B";
+        }
+
+        ctx.fillStyle = color;
+        ctx.fillRect(x, y, CELL, CELL);
+      }
+    }
+  }
+
+  document.addEventListener("DOMContentLoaded", drawCanvas);
+  window.addEventListener("resize", drawCanvas);
+  // Also draw immediately if DOM already ready
+  if (document.readyState !== "loading") drawCanvas();
+})();
+</script>
+</body>
+</html>
