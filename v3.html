@@ -452,31 +452,34 @@
     padding: 80px 0;
   }
   .turnkey-inner {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 64px;
+    display: flex;
+    flex-direction: column;
     align-items: center;
+    text-align: center;
+    max-width: 720px;
+    margin: 0 auto;
+    gap: 0;
   }
-  @media (max-width: 760px) { .turnkey-inner { grid-template-columns: 1fr; gap: 32px; } }
   .turnkey-eyebrow {
     font-size: 11px;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 1.2px;
     color: var(--orange);
-    margin-bottom: 16px;
+    margin-bottom: 20px;
   }
   .turnkey-h {
-    font-size: clamp(28px, 3.5vw, 42px);
+    font-size: clamp(32px, 4vw, 52px);
     font-weight: 900;
-    letter-spacing: -1.2px;
-    line-height: 1.1;
+    letter-spacing: -1.5px;
+    line-height: 1.05;
     color: var(--ink);
+    margin-bottom: 32px;
   }
   .turnkey-pill {
     display: inline-flex;
     align-items: center;
-    background: rgba(232,86,42,0.15);
+    background: rgba(232,86,42,0.12);
     color: var(--orange);
     border: 1px solid rgba(232,86,42,0.3);
     border-radius: 100px;
@@ -487,18 +490,19 @@
     margin-bottom: 16px;
   }
   .turnkey-statement {
-    font-size: clamp(22px, 3vw, 34px);
+    font-size: clamp(18px, 2.2vw, 26px);
     font-weight: 900;
-    letter-spacing: -0.8px;
+    letter-spacing: -0.5px;
     color: var(--ink);
-    line-height: 1.15;
-    margin-bottom: 16px;
+    line-height: 1.2;
+    margin-bottom: 12px;
   }
   .turnkey-desc {
-    font-size: 15px;
+    font-size: 16px;
     color: rgba(10,10,10,0.55);
     line-height: 1.65;
-    max-width: 440px;
+    max-width: 520px;
+    margin-bottom: 32px;
   }
 
   .comparison-statement {
@@ -1034,16 +1038,12 @@
 <!-- ═══════════════════════════ TURNKEY ═══════════════════════════ -->
 <section class="turnkey-section section-gray">
   <div class="container turnkey-inner">
-    <div class="turnkey-left">
-      <div class="turnkey-eyebrow">Zero engineering overhead</div>
-      <div class="turnkey-h">Runbooks scale faster than any API and are easier to maintain.</div>
-    </div>
-    <div class="turnkey-right">
-      <div class="turnkey-pill">Fully turnkey</div>
-      <div class="turnkey-statement">Your engineering team does nothing.</div>
-      <div class="turnkey-desc">We write, test, publish, and maintain every runbook. You get the results — faster agent adoption, lower churn, new users — without a single sprint.</div>
-      <a href="mailto:hello@docka.io" class="btn btn-black btn-lg" style="margin-top:20px">Get started →</a>
-    </div>
+    <div class="turnkey-eyebrow">Zero engineering overhead</div>
+    <div class="turnkey-h">Runbooks scale faster than any API and are easier to maintain.</div>
+    <div class="turnkey-pill">Fully turnkey</div>
+    <div class="turnkey-statement">Your engineering team does nothing.</div>
+    <div class="turnkey-desc">We write, test, publish, and maintain every runbook. You get the results — faster agent adoption, lower churn, new users — without a single sprint.</div>
+    <a href="#pricing" class="btn-pill btn-pill-black" style="font-size:16px;padding:12px 32px">Get started →</a>
   </div>
 </section>
 
