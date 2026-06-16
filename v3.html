@@ -539,11 +539,11 @@
   .runbook { padding: 96px 0; }
   .runbook-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: start; }
   .runbook h2 {
-    font-size: clamp(28px, 3.5vw, 42px);
+    font-size: clamp(36px, 5vw, 64px);
     font-weight: 900;
-    letter-spacing: -2px;
-    line-height: 1.1;
-    margin-bottom: 36px;
+    letter-spacing: -2.5px;
+    line-height: 1.05;
+    margin-bottom: 40px;
   }
   .rb-point { display: flex; gap: 14px; margin-bottom: 28px; align-items: flex-start; }
   .rb-num {
@@ -552,48 +552,64 @@
     font-weight: 500;
     color: var(--ink-muted);
     min-width: 30px;
-    padding-top: 2px;
+    padding-top: 3px;
   }
   .rb-text h4 { font-size: 15px; font-weight: 700; margin-bottom: 4px; }
   .rb-text p  { font-size: 14px; color: var(--ink-muted); line-height: 1.55; }
 
   /* Task decomposition illustration */
   .task-decomp { }
+  .rb-card {
+    background: #C8D8EC;
+    border-radius: 12px;
+    padding: 20px;
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 12px;
+  }
+  .rb-card::before {
+    content: ''; position: absolute; inset: 0;
+    background-image: radial-gradient(circle, rgba(255,255,255,0.35) 1px, transparent 1px);
+    background-size: 18px 18px;
+    pointer-events: none;
+  }
+  .rb-card-accent-tr { position: absolute; top: 0; right: 0; width: 20px; height: 20px; background: #9CAFD4; }
+  .rb-card-accent-bl { position: absolute; bottom: 0; left: 0; display: flex; }
+  .rb-card-accent-bl span { width: 18px; height: 18px; display: block; }
   .task-main {
     background: var(--ink);
     color: #fff;
-    border-radius: 10px;
-    padding: 18px 20px;
+    border-radius: 8px;
+    padding: 16px 18px;
     font-size: 13px;
     line-height: 1.55;
-    margin-bottom: 12px;
     font-family: var(--mono);
     position: relative;
+    z-index: 1;
   }
   .task-connector-area {
     display: flex;
     justify-content: center;
-    margin-bottom: 12px;
+    margin: 10px 0;
+    position: relative; z-index: 1;
   }
-  .task-connector-line {
-    width: 1px; height: 24px;
-    background: var(--border);
-  }
+  .task-connector-line { width: 1px; height: 20px; background: rgba(255,255,255,0.4); }
   .task-mini-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 8px;
+    gap: 6px;
+    position: relative; z-index: 1;
   }
   .task-mini {
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 10px 12px;
-    background: var(--bg-white);
+    border: 1px solid rgba(255,255,255,0.6);
+    border-radius: 7px;
+    padding: 9px 11px;
+    background: #fff;
     font-size: 12px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 8px;
+    gap: 6px;
   }
   .task-mini-label { color: var(--ink); line-height: 1.35; }
   .task-status {
@@ -609,7 +625,7 @@
   .ts-red    { background: #fee2e2; color: #991b1b; }
   .task-caption {
     margin-top: 12px;
-    font-size: 12px;
+    font-size: 13px;
     color: var(--ink-muted);
     line-height: 1.5;
   }
@@ -1138,36 +1154,43 @@
         </div>
       </div>
       <div class="runbook-right task-decomp">
-        <div class="task-main">
-          "Add Susan as the new project coordinator to Project Banana, make her the owner of the 'Cars' and 'Wheels' tables, and draft an email to the marketing department announcing the change."
-        </div>
-        <div class="task-connector-area">
-          <div class="task-connector-line"></div>
-        </div>
-        <div class="task-mini-grid">
-          <div class="task-mini">
-            <span class="task-mini-label">Find project "Banana"</span>
-            <span class="task-status ts-green">✓ Done</span>
+        <div class="rb-card">
+          <div class="rb-card-accent-tr"></div>
+          <div class="task-main">
+            "Add Susan as the new project coordinator to Project Banana, make her the owner of the 'Cars' and 'Wheels' tables, and draft an email to the marketing department announcing the change."
           </div>
-          <div class="task-mini">
-            <span class="task-mini-label">Find user "Susan"</span>
-            <span class="task-status ts-green">✓ Done</span>
+          <div class="task-connector-area">
+            <div class="task-connector-line"></div>
           </div>
-          <div class="task-mini">
-            <span class="task-mini-label">Assign coordinator role</span>
-            <span class="task-status ts-green">✓ Done</span>
+          <div class="task-mini-grid">
+            <div class="task-mini">
+              <span class="task-mini-label">Find project "Banana"</span>
+              <span class="task-status ts-green">✓ Done</span>
+            </div>
+            <div class="task-mini">
+              <span class="task-mini-label">Find user "Susan"</span>
+              <span class="task-status ts-green">✓ Done</span>
+            </div>
+            <div class="task-mini">
+              <span class="task-mini-label">Assign coordinator role</span>
+              <span class="task-status ts-green">✓ Done</span>
+            </div>
+            <div class="task-mini">
+              <span class="task-mini-label">Set table ownership: Cars</span>
+              <span class="task-status ts-orange">⚠ Enum error</span>
+            </div>
+            <div class="task-mini">
+              <span class="task-mini-label">Set table ownership: Wheels</span>
+              <span class="task-status ts-red">✕ Blocked</span>
+            </div>
+            <div class="task-mini">
+              <span class="task-mini-label">Draft announcement email</span>
+              <span class="task-status ts-red">✕ Blocked</span>
+            </div>
           </div>
-          <div class="task-mini">
-            <span class="task-mini-label">Set table ownership: Cars</span>
-            <span class="task-status ts-orange">⚠ Enum error</span>
-          </div>
-          <div class="task-mini">
-            <span class="task-mini-label">Set table ownership: Wheels</span>
-            <span class="task-status ts-red">✕ Blocked</span>
-          </div>
-          <div class="task-mini">
-            <span class="task-mini-label">Draft announcement email</span>
-            <span class="task-status ts-red">✕ Blocked</span>
+          <div class="rb-card-accent-bl">
+            <span style="background:#C5D849"></span>
+            <span style="background:#F4A0B5"></span>
           </div>
         </div>
         <p class="task-caption">When "Set table ownership" fails, everything downstream fails too. Runbooks prevent this.</p>
