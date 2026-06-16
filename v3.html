@@ -450,76 +450,50 @@
   }
   .pro-con-item .check { color: #22c55e; font-size: 14px; flex-shrink: 0; }
   .pro-con-item .cross { color: #ef4444; font-size: 14px; flex-shrink: 0; }
-  /* TURNKEY SECTION */
-  section.turnkey-section {
-    padding: 80px 0;
-  }
-  .turnkey-inner {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    max-width: 720px;
-    margin: 0 auto;
-    gap: 0;
-  }
-  .turnkey-eyebrow {
-    font-size: 11px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 1.2px;
-    color: var(--orange);
-    margin-bottom: 20px;
-  }
-  .turnkey-h {
-    font-size: clamp(32px, 4vw, 52px);
-    font-weight: 900;
-    letter-spacing: -1.5px;
-    line-height: 1.05;
-    color: var(--ink);
-    margin-bottom: 32px;
-  }
-  .turnkey-pill {
-    display: inline-flex;
-    align-items: center;
-    background: rgba(232,86,42,0.12);
-    color: var(--orange);
-    border: 1px solid rgba(232,86,42,0.3);
-    border-radius: 100px;
-    padding: 4px 14px;
-    font-size: 12px;
-    font-weight: 700;
-    letter-spacing: 0.3px;
-    margin-bottom: 16px;
-  }
-  .turnkey-statement {
-    font-size: clamp(18px, 2.2vw, 26px);
-    font-weight: 900;
-    letter-spacing: -0.5px;
-    color: var(--ink);
-    line-height: 1.2;
-    margin-bottom: 12px;
-  }
-  .turnkey-desc {
-    font-size: 16px;
-    color: rgba(10,10,10,0.55);
-    line-height: 1.65;
-    max-width: 520px;
-    margin-bottom: 32px;
-  }
+  /* ── BRIDGE SECTION ── */
+  .bridge-section { padding: 96px 0; }
+  .bridge-eyebrow { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: var(--orange); margin-bottom: 16px; }
+  .bridge-h { font-size: clamp(28px, 4vw, 52px); font-weight: 900; letter-spacing: -2px; line-height: 1.06; margin-bottom: 14px; }
+  .bridge-sub { font-size: 17px; color: var(--ink-muted); line-height: 1.7; max-width: 560px; margin-bottom: 48px; }
+  .bridge-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 3px; border-radius: 12px; overflow: hidden; margin-bottom: 40px; }
+  .bridge-box { padding: 28px 22px; }
+  .bb-pink   { background: #FFD6D6; }
+  .bb-slate  { background: #E2E8F0; }
+  .bb-blue   { background: #DBEAFE; }
+  .bb-yellow { background: #FEF9C3; }
+  .bridge-box-h { font-size: 16px; font-weight: 800; letter-spacing: -0.2px; line-height: 1.35; margin-bottom: 10px; }
+  .bridge-box-label { font-size: 10px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; color: rgba(0,0,0,0.4); }
+  @media (max-width: 680px) { .bridge-grid { grid-template-columns: repeat(2, 1fr); } }
 
-  .comparison-statement {
-    display: none; /* replaced by turnkey section */
-    margin-top: 32px;
-    padding: 24px 28px;
-    background: var(--bg);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    font-size: 16px;
-    font-weight: 700;
-    color: var(--ink);
-    line-height: 1.5;
+  /* ── FOR WHOM (card visual style) ── */
+  .for-whom { padding: 96px 0; }
+  .for-whom > .container > h2 {
+    font-size: clamp(28px, 3.5vw, 44px); font-weight: 900; letter-spacing: -2px;
+    line-height: 1.1; max-width: 600px; margin-bottom: 48px;
   }
+  .fw-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+  .fw-card { }
+  .fw-visual {
+    position: relative; height: 200px; border-radius: 10px; overflow: hidden;
+    background: #C8D8EC; margin-bottom: 14px;
+  }
+  .fw-visual::before {
+    content: ''; position: absolute; inset: 0;
+    background-image: radial-gradient(circle, rgba(255,255,255,0.35) 1px, transparent 1px);
+    background-size: 18px 18px;
+  }
+  .fw-title-box {
+    position: absolute; bottom: 16px; left: 14px; z-index: 1;
+    background: #fff; padding: 10px 14px; border-radius: 3px;
+    font-size: clamp(18px, 2.2vw, 24px); font-weight: 900;
+    letter-spacing: -0.5px; line-height: 1.2; max-width: 78%;
+  }
+  .fw-accent-tr { position: absolute; top: 0; right: 0; width: 22px; height: 22px; }
+  .fw-accents-bl { position: absolute; bottom: 0; left: 0; display: flex; }
+  .fw-a1, .fw-a2 { width: 20px; height: 20px; }
+  .fw-card-label { font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--ink-muted); margin-bottom: 8px; }
+  .fw-card-desc { font-size: 14px; color: var(--ink-muted); line-height: 1.65; }
+  @media (max-width: 640px) { .fw-grid { grid-template-columns: 1fr; } }
 
   /* ── REACH BLOCK ── */
   .reach { padding: 96px 0; text-align: center; }
@@ -635,29 +609,6 @@
     line-height: 1.5;
   }
 
-  /* ── FOR WHOM ── */
-  .for-whom { padding: 96px 0; }
-  .for-whom h2 {
-    font-size: clamp(28px, 3.5vw, 44px);
-    font-weight: 900;
-    letter-spacing: -2px;
-    line-height: 1.1;
-    max-width: 600px;
-    margin-bottom: 48px;
-  }
-  .whom-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 16px;
-  }
-  .whom-card {
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 28px 26px;
-    background: var(--bg-white);
-  }
-  .whom-card h3 { font-size: 16px; font-weight: 700; margin-bottom: 8px; }
-  .whom-card p  { font-size: 14px; color: var(--ink-muted); line-height: 1.6; }
 
   /* ── WHY DOCKA ── */
   .why-docka { padding: 96px 0; }
@@ -989,6 +940,9 @@
 
       </div><!-- /showcase-panel -->
     </div><!-- /showcase-grid -->
+    <div style="text-align:center;margin-top:40px">
+      <a href="#pricing" class="btn-pill btn-pill-black" style="font-size:16px;padding:12px 32px">Get started →</a>
+    </div>
   </div>
 </section>
 
@@ -1105,14 +1059,30 @@
   </div>
 </section>
 
-<!-- ═══════════════════════════ TURNKEY ═══════════════════════════ -->
-<section class="turnkey-section section-gray">
-  <div class="container turnkey-inner">
-    <div class="turnkey-eyebrow">Zero engineering overhead</div>
-    <div class="turnkey-h">Runbooks scale faster than any API and are easier to maintain.</div>
-    <div class="turnkey-pill">Fully turnkey</div>
-    <div class="turnkey-statement">Your engineering team does nothing.</div>
-    <div class="turnkey-desc">We write, test, publish, and maintain every runbook. You get the results — faster agent adoption, lower churn, new users — without a single sprint.</div>
+<!-- ═══════════════════════════ BRIDGE SECTION ═══════════════════════════ -->
+<section class="bridge-section section-white">
+  <div class="container">
+    <div class="bridge-eyebrow">Bridge between AI and the digital world</div>
+    <h2 class="bridge-h">The browser is the web's<br>native interface.</h2>
+    <p class="bridge-sub">Now your agents can use it seamlessly to deliver new possibilities.</p>
+    <div class="bridge-grid">
+      <div class="bridge-box bb-pink">
+        <div class="bridge-box-h">Handles auth, flows &amp; dynamic content</div>
+        <div class="bridge-box-label">Authentication</div>
+      </div>
+      <div class="bridge-box bb-slate">
+        <div class="bridge-box-h">Mirrors human interaction</div>
+        <div class="bridge-box-label">Natural behavior</div>
+      </div>
+      <div class="bridge-box bb-blue">
+        <div class="bridge-box-h">Adjusts to updates &amp; changes</div>
+        <div class="bridge-box-label">Adaptive</div>
+      </div>
+      <div class="bridge-box bb-yellow">
+        <div class="bridge-box-h">Navigates unpredictable UI. Works everywhere.</div>
+        <div class="bridge-box-label">Universal</div>
+      </div>
+    </div>
     <a href="#pricing" class="btn-pill btn-pill-black" style="font-size:16px;padding:12px 32px">Get started →</a>
   </div>
 </section>
@@ -1205,23 +1175,60 @@
 <section class="for-whom section-gray">
   <div class="container">
     <h2>Docka is built for every team that cares about product-led growth.</h2>
-    <div class="whom-grid">
-      <div class="whom-card">
-        <h3>CEOs</h3>
-        <p>Beat direct competitors by being the first product in your category that's 100% AI agent-ready.</p>
+    <div class="fw-grid">
+
+      <div class="fw-card">
+        <div class="fw-visual">
+          <div class="fw-accent-tr" style="background:#9CAFD4"></div>
+          <div class="fw-title-box">Win the AI-first race</div>
+          <div class="fw-accents-bl">
+            <div class="fw-a1" style="background:#C5D849"></div>
+            <div class="fw-a2" style="background:#F4A0B5"></div>
+          </div>
+        </div>
+        <div class="fw-card-label">CEOs &amp; Founders</div>
+        <div class="fw-card-desc">Beat direct competitors by being the first product in your category that's 100% AI agent-ready.</div>
       </div>
-      <div class="whom-card">
-        <h3>Product Leaders</h3>
-        <p>Ship AI readiness 10× faster than building full MCP and API coverage from scratch.</p>
+
+      <div class="fw-card">
+        <div class="fw-visual">
+          <div class="fw-accent-tr" style="background:#F4A0B5"></div>
+          <div class="fw-title-box">Ship 10× faster</div>
+          <div class="fw-accents-bl">
+            <div class="fw-a1" style="background:#9CAFD4"></div>
+            <div class="fw-a2" style="background:#C5D849"></div>
+          </div>
+        </div>
+        <div class="fw-card-label">Product Leaders</div>
+        <div class="fw-card-desc">Ship AI readiness 10× faster than building full MCP and API coverage from scratch.</div>
       </div>
-      <div class="whom-card">
-        <h3>Growth Teams</h3>
-        <p>Unlock a new acquisition channel: AI agent-driven product discovery and recommendation.</p>
+
+      <div class="fw-card">
+        <div class="fw-visual">
+          <div class="fw-accent-tr" style="background:#C5D849"></div>
+          <div class="fw-title-box">New acquisition channel</div>
+          <div class="fw-accents-bl">
+            <div class="fw-a1" style="background:#F4A0B5"></div>
+            <div class="fw-a2" style="background:#9CAFD4"></div>
+          </div>
+        </div>
+        <div class="fw-card-label">Growth Teams</div>
+        <div class="fw-card-desc">Unlock AI agent-driven product discovery and recommendation as a new growth channel.</div>
       </div>
-      <div class="whom-card">
-        <h3>CS &amp; Support Teams</h3>
-        <p>Make your documentation and support workflows operable by AI agents — zero engineering required.</p>
+
+      <div class="fw-card">
+        <div class="fw-visual">
+          <div class="fw-accent-tr" style="background:#C5D849"></div>
+          <div class="fw-title-box">Agent-ready support</div>
+          <div class="fw-accents-bl">
+            <div class="fw-a1" style="background:#9CAFD4"></div>
+            <div class="fw-a2" style="background:#F4A0B5"></div>
+          </div>
+        </div>
+        <div class="fw-card-label">CS &amp; Support Teams</div>
+        <div class="fw-card-desc">Make your documentation and workflows operable by AI agents — zero engineering required.</div>
       </div>
+
     </div>
   </div>
 </section>
