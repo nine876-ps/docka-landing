@@ -369,15 +369,21 @@
     border-radius: 12px;
     overflow: hidden;
     background: var(--bg-white);
+    display: flex;
+    flex-direction: column;
   }
   .comp-card-header {
-    padding: 20px 22px 16px;
+    padding: 24px 24px 20px;
     border-bottom: 1px solid var(--border);
     background: var(--bg);
+    min-height: 80px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
   }
   .comp-card.featured .comp-card-header {
     background: var(--orange);
-    border-bottom-color: transparent;
+    border-bottom-color: rgba(255,255,255,0.2);
   }
   .comp-tag {
     display: inline-block;
@@ -386,18 +392,31 @@
     letter-spacing: 0.5px;
     padding: 3px 9px;
     border-radius: 999px;
-    background: var(--bg-white);
+    background: rgba(255,255,255,0.9);
     color: var(--orange);
     margin-bottom: 8px;
+    width: fit-content;
   }
   .comp-card-header h3 {
-    font-size: 17px;
+    font-size: 18px;
     font-weight: 900;
     letter-spacing: -0.5px;
     color: var(--ink);
+    line-height: 1.2;
   }
   .comp-card.featured .comp-card-header h3 { color: #fff; }
-  .comp-card-body { padding: 20px 22px; }
+  .comp-card-body { padding: 20px 24px; flex: 1; }
+  .comparison-cta {
+    text-align: center;
+    margin-top: 52px;
+  }
+  .comparison-cta-text {
+    font-size: clamp(20px, 2.4vw, 28px);
+    font-weight: 900;
+    letter-spacing: -0.8px;
+    margin-bottom: 20px;
+    line-height: 1.2;
+  }
   .pro-con-label {
     font-size: 11px;
     font-weight: 700;
@@ -1048,21 +1067,26 @@
       <div class="comp-card featured">
         <div class="comp-card-header">
           <span class="comp-tag">Our solution</span>
-          <h3>Let agents use your product <span class="hl-dark">like it's an API</span></h3>
+          <h3>Runbooks</h3>
         </div>
         <div class="comp-card-body">
           <div class="pro-con-label">Strengths</div>
-          <div class="pro-con-item"><span class="check">✓</span> Agent-agnostic — works with ChatGPT, Claude, Gemini</div>
+          <div class="pro-con-item"><span class="check">✓</span> Agent-agnostic — ChatGPT, Claude, Gemini</div>
           <div class="pro-con-item"><span class="check">✓</span> Zero effort on the user's end</div>
           <div class="pro-con-item"><span class="check">✓</span> High discoverability via web search</div>
-          <div class="pro-con-item"><span class="check">✓</span> Suitable for any AI skill level</div>
-          <div class="pro-con-item"><span class="check">✓</span> Users accomplish more with fewer tokens</div>
+          <div class="pro-con-item"><span class="check">✓</span> Works for any AI skill level</div>
           <div class="pro-con-label">Trade-off</div>
-          <div class="pro-con-item"><span class="cross">✕</span> Contains less context than MCP and Skills</div>
+          <div class="pro-con-item"><span class="cross">✕</span> Less context per call than MCP or Skills</div>
         </div>
       </div>
 
     </div>
+
+    <div class="comparison-cta">
+      <div class="comparison-cta-text">Let agents use your product like it's an API</div>
+      <a href="#pricing" class="btn-pill btn-pill-black" style="font-size:16px;padding:12px 32px">Get started →</a>
+    </div>
+
   </div>
 </section>
 
