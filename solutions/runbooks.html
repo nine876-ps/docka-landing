@@ -25,15 +25,16 @@
   .nav-logo { display: flex; align-items: center; gap: 8px; text-decoration: none; color: var(--ink); font-weight: 700; font-size: 17px; letter-spacing: -0.3px; }
   .nav-logo-mark { width: 28px; height: 28px; background: var(--orange); border-radius: 4px; display: flex; align-items: center; justify-content: center; }
   .nav-logo-mark svg { width: 16px; height: 16px; fill: #fff; }
-  .nav-links { display: flex; gap: 28px; list-style: none; position: relative; }
+  .nav-links { display: flex; gap: 28px; list-style: none; align-items: stretch; }
+  .nav-links li { display: flex; align-items: center; }
   .nav-links a { text-decoration: none; color: var(--ink-muted); font-size: 14px; font-weight: 500; transition: color 0.15s; }
   .nav-links a:hover { color: var(--ink); }
-  .nav-dropdown { position: relative; }
+  .nav-dropdown { position: relative; display: flex; align-items: center; }
   .nav-dropdown-trigger { text-decoration: none; color: var(--ink-muted); font-size: 14px; font-weight: 500; cursor: pointer; transition: color 0.15s; display: flex; align-items: center; gap: 4px; user-select: none; }
   .nav-dropdown-trigger:hover { color: var(--ink); }
   .nav-dropdown-trigger svg { width: 10px; height: 10px; stroke: currentColor; fill: none; stroke-width: 2; transition: transform 0.2s; }
   .nav-dropdown.open .nav-dropdown-trigger svg { transform: rotate(180deg); }
-  .dropdown-menu { position: absolute; top: calc(100% + 14px); left: 0; background: #fff; border: 1px solid var(--border); border-radius: 14px; padding: 8px; min-width: 270px; box-shadow: 0 8px 40px rgba(0,0,0,0.10); opacity: 0; pointer-events: none; transform: translateY(-6px); transition: opacity 0.18s ease, transform 0.18s ease; z-index: 200; }
+  .dropdown-menu { position: absolute; top: calc(100% + 8px); left: 0; background: #fff; border: 1px solid var(--border); border-radius: 14px; padding: 8px; min-width: 270px; box-shadow: 0 8px 40px rgba(0,0,0,0.10); opacity: 0; pointer-events: none; transform: translateY(-6px); transition: opacity 0.18s ease, transform 0.18s ease; z-index: 200; }
   .nav-dropdown.open .dropdown-menu { opacity: 1; pointer-events: auto; transform: translateY(0); }
   .dropdown-item { display: flex; align-items: center; gap: 14px; padding: 9px 10px; text-decoration: none; color: var(--ink); font-size: 15px; font-weight: 500; border-radius: 8px; transition: background 0.12s; }
   .dropdown-item:hover { background: var(--bg); color: var(--ink); }
