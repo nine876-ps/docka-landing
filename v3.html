@@ -85,6 +85,36 @@
     transition: color 0.15s;
   }
   .nav-links a:hover { color: var(--ink); }
+  /* ── Dropdown ── */
+  .nav-dropdown { position: relative; }
+  .nav-dropdown-trigger {
+    display: flex; align-items: center; gap: 4px; cursor: pointer; user-select: none;
+  }
+  .nav-dropdown-trigger svg { width: 10px; height: 10px; stroke: currentColor; fill: none; stroke-width: 2; transition: transform 0.2s; }
+  .nav-dropdown:hover .nav-dropdown-trigger svg { transform: rotate(180deg); }
+  .dropdown-menu {
+    position: absolute; top: calc(100% + 14px); left: -16px;
+    background: #fff; border: 1px solid var(--border); border-radius: 14px;
+    padding: 8px; min-width: 270px;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.10);
+    opacity: 0; pointer-events: none;
+    transform: translateY(-6px);
+    transition: opacity 0.18s ease, transform 0.18s ease;
+    z-index: 200;
+  }
+  .nav-dropdown:hover .dropdown-menu { opacity: 1; pointer-events: auto; transform: translateY(0); }
+  .dropdown-item {
+    display: flex; align-items: center; gap: 14px;
+    padding: 9px 10px; text-decoration: none;
+    color: var(--ink); font-size: 15px; font-weight: 500;
+    border-radius: 8px; transition: background 0.12s;
+  }
+  .dropdown-item:hover { background: var(--bg); color: var(--ink); }
+  .dropdown-icon {
+    width: 40px; height: 40px; background: #F2F1ED; border-radius: 8px;
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  }
+  .dropdown-icon svg { width: 20px; height: 20px; stroke: var(--ink); fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
   .nav-right {
     display: flex;
     align-items: center;
@@ -783,7 +813,33 @@
       Docka
     </a>
     <ul class="nav-links">
-      <li><a href="research.html">Research</a></li>
+      <li class="nav-dropdown">
+        <a href="#" class="nav-dropdown-trigger" onclick="return false">Solutions
+          <svg viewBox="0 0 10 6"><polyline points="1,1 5,5 9,1"/></svg>
+        </a>
+        <div class="dropdown-menu">
+          <a href="solutions/runbooks.html" class="dropdown-item">
+            <div class="dropdown-icon"><svg viewBox="0 0 24 24"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="8" x2="16" y2="8"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="8" y1="16" x2="13" y2="16"/></svg></div>
+            <span>Runbooks</span>
+          </a>
+          <a href="solutions/runbook-map.html" class="dropdown-item">
+            <div class="dropdown-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="5" r="2"/><circle cx="5" cy="19" r="2"/><circle cx="19" cy="19" r="2"/><line x1="12" y1="7" x2="5.5" y2="17"/><line x1="12" y1="7" x2="18.5" y2="17"/><line x1="7" y1="19" x2="17" y2="19"/></svg></div>
+            <span>Runbook Map</span>
+          </a>
+          <a href="solutions/ai-readiness.html" class="dropdown-item">
+            <div class="dropdown-icon"><svg viewBox="0 0 24 24"><polyline points="22,12 18,12 15,21 9,3 6,12 2,12"/></svg></div>
+            <span>AI Readiness Audit</span>
+          </a>
+          <a href="solutions/maintenance.html" class="dropdown-item">
+            <div class="dropdown-icon"><svg viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg></div>
+            <span>Maintenance</span>
+          </a>
+          <a href="solutions/upskilling.html" class="dropdown-item">
+            <div class="dropdown-icon"><svg viewBox="0 0 24 24"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg></div>
+            <span>Team Up-Skilling</span>
+          </a>
+        </div>
+      </li>
       <li><a href="#how">How it works</a></li>
       <li><a href="#pricing">Pricing</a></li>
     </ul>
@@ -1329,7 +1385,8 @@
     <div class="footer-inner">
       <span class="footer-brand">Docka</span>
       <ul class="footer-links">
-        <li><a href="research.html">Research</a></li>
+        <li><a href="solutions/runbooks.html">Runbooks</a></li>
+        <li><a href="solutions/ai-readiness.html">AI Audit</a></li>
         <li><a href="home.html">Home</a></li>
       </ul>
       <span class="footer-email">hello@docka.io</span>
