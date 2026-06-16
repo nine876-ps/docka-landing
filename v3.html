@@ -447,7 +447,63 @@
   }
   .pro-con-item .check { color: #22c55e; font-size: 14px; flex-shrink: 0; }
   .pro-con-item .cross { color: #ef4444; font-size: 14px; flex-shrink: 0; }
+  /* TURNKEY SECTION */
+  .turnkey-section {
+    background: var(--bg-dark);
+    padding: 80px 0;
+  }
+  .turnkey-inner {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 64px;
+    align-items: center;
+  }
+  @media (max-width: 760px) { .turnkey-inner { grid-template-columns: 1fr; gap: 32px; } }
+  .turnkey-eyebrow {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    color: var(--orange);
+    margin-bottom: 16px;
+  }
+  .turnkey-h {
+    font-size: clamp(28px, 3.5vw, 42px);
+    font-weight: 900;
+    letter-spacing: -1.2px;
+    line-height: 1.1;
+    color: #fff;
+  }
+  .turnkey-pill {
+    display: inline-flex;
+    align-items: center;
+    background: rgba(232,86,42,0.15);
+    color: var(--orange);
+    border: 1px solid rgba(232,86,42,0.3);
+    border-radius: 100px;
+    padding: 4px 14px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+    margin-bottom: 16px;
+  }
+  .turnkey-statement {
+    font-size: clamp(22px, 3vw, 34px);
+    font-weight: 900;
+    letter-spacing: -0.8px;
+    color: #fff;
+    line-height: 1.15;
+    margin-bottom: 16px;
+  }
+  .turnkey-desc {
+    font-size: 15px;
+    color: rgba(255,255,255,0.5);
+    line-height: 1.65;
+    max-width: 440px;
+  }
+
   .comparison-statement {
+    display: none; /* replaced by turnkey section */
     margin-top: 32px;
     padding: 24px 28px;
     background: var(--bg);
@@ -973,8 +1029,21 @@
       </div>
 
     </div>
-    <div class="comparison-statement">
-      Runbooks scale faster than any API and are easier to maintain. And it's a fully turnkey service — your engineering team does nothing.
+  </div>
+</section>
+
+<!-- ═══════════════════════════ TURNKEY ═══════════════════════════ -->
+<section class="turnkey-section">
+  <div class="container turnkey-inner">
+    <div class="turnkey-left">
+      <div class="turnkey-eyebrow">Zero engineering overhead</div>
+      <div class="turnkey-h">Runbooks scale faster than any API and are easier to maintain.</div>
+    </div>
+    <div class="turnkey-right">
+      <div class="turnkey-pill">Fully turnkey</div>
+      <div class="turnkey-statement">Your engineering team does nothing.</div>
+      <div class="turnkey-desc">We write, test, publish, and maintain every runbook. You get the results — faster agent adoption, lower churn, new users — without a single sprint.</div>
+      <a href="mailto:hello@docka.io" class="btn btn-black btn-lg" style="margin-top:20px">Get started →</a>
     </div>
   </div>
 </section>
