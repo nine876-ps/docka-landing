@@ -271,75 +271,47 @@
     letter-spacing: -0.2px;
   }
 
-  /* ── PROBLEM ── */
-  .problem { padding: 96px 0; }
-  .problem-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: start; }
-  .problem-left h2 {
-    font-size: clamp(28px, 3.5vw, 44px);
-    font-weight: 900;
-    letter-spacing: -2px;
-    line-height: 1.1;
-    margin-bottom: 20px;
-  }
-  .problem-left p {
-    font-size: 16px;
-    color: var(--ink-muted);
-    line-height: 1.7;
-    margin-bottom: 32px;
-  }
-  .role-row {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 14px;
-    font-size: 13px;
-  }
-  .role-icon {
-    width: 34px; height: 34px;
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    background: var(--bg);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 16px;
-    flex-shrink: 0;
-  }
-  .role-info { flex: 1; min-width: 0; }
-  .role-name { font-weight: 700; font-size: 12px; margin-bottom: 1px; }
-  .role-task { color: var(--ink-muted); font-size: 11px; line-height: 1.3; }
-  .role-arrow { color: var(--ink-muted); font-size: 12px; flex-shrink: 0; }
-  .task-dots {
-    display: flex; gap: 3px; align-items: center; flex-shrink: 0;
-  }
-  .td {
-    width: 20px; height: 20px;
-    border-radius: 3px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 9px;
-    font-weight: 700;
-    flex-shrink: 0;
-  }
-  .td-green  { background: #22c55e; }
-  .td-orange { background: #f59e0b; color: #fff; }
-  .td-red    { background: #ef4444; color: #fff; }
-  .outcome-cards {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 16px;
-    margin-top: 32px;
-  }
-  .outcome-card {
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 20px;
-    background: var(--bg-white);
-  }
-  .outcome-card.orange-border { border-color: var(--orange); }
-  .outcome-card h4 {
-    font-size: 14px;
-    font-weight: 700;
-    margin-bottom: 6px;
-  }
-  .outcome-card p { font-size: 13px; color: var(--ink-muted); line-height: 1.5; }
+  /* ── PROBLEM STATEMENT ── */
+  .prob-stmt { padding: 80px 0 56px; text-align: center; }
+  .prob-stmt-inner { max-width: 720px; margin: 0 auto; }
+  .prob-stmt h2 { font-size: clamp(30px, 4vw, 50px); font-weight: 900; letter-spacing: -2px; line-height: 1.08; margin-bottom: 20px; }
+  .prob-stmt p { font-size: 18px; color: var(--ink-muted); line-height: 1.7; }
+
+  /* ── ROLE CAROUSEL ── */
+  .role-carousel { padding: 64px 0 80px; }
+  .carousel-wrap { max-width: 680px; margin: 0 auto; }
+  .role-card { display: none; border-radius: 16px; background: var(--bg-white); border: 2px solid var(--border); padding: 36px 40px; }
+  .role-card.active { display: block; border-color: var(--orange); animation: cardIn 0.3s ease; }
+  @keyframes cardIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+  .rc-header { display: flex; align-items: center; gap: 14px; margin-bottom: 6px; }
+  .rc-icon { width: 44px; height: 44px; border-radius: 10px; background: var(--bg); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
+  .rc-role { font-size: 18px; font-weight: 900; letter-spacing: -0.3px; }
+  .rc-goal { font-size: 13px; color: var(--ink-muted); margin-bottom: 24px; padding-left: 58px; line-height: 1.4; }
+  .subtask-list { display: flex; flex-direction: column; gap: 8px; }
+  .subtask-row { display: flex; align-items: center; gap: 10px; padding: 10px 14px; border-radius: 8px; background: var(--bg); border: 1px solid transparent; }
+  .subtask-row.fail { background: #fff5f5; border-color: #fecaca; }
+  .subtask-step { font-size: 11px; font-weight: 700; color: var(--ink-muted); width: 18px; flex-shrink: 0; }
+  .subtask-label { flex: 1; font-size: 14px; line-height: 1.45; }
+  .subtask-status { flex-shrink: 0; padding: 2px 10px; border-radius: 100px; font-size: 11px; font-weight: 700; white-space: nowrap; }
+  .status-ok { background: #dcfce7; color: #15803d; }
+  .status-fail { background: #fee2e2; color: #dc2626; }
+  .carousel-nav { display: flex; justify-content: center; align-items: center; gap: 20px; margin-top: 24px; }
+  .carousel-btn { width: 36px; height: 36px; border-radius: 50%; border: 1px solid var(--border); background: var(--bg-white); cursor: pointer; font-size: 16px; display: flex; align-items: center; justify-content: center; transition: all 0.15s; color: var(--ink); line-height: 1; }
+  .carousel-btn:hover { border-color: var(--ink); }
+  .carousel-dots { display: flex; gap: 7px; align-items: center; }
+  .carousel-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--border); cursor: pointer; transition: all 0.25s; }
+  .carousel-dot.active { background: var(--orange); width: 22px; border-radius: 4px; }
+
+  /* ── OUTCOME SECTION ── */
+  .outcome-section { padding: 80px 0; }
+  .outcome-section > .container > h2 { font-size: clamp(22px, 2.8vw, 32px); font-weight: 900; letter-spacing: -1px; text-align: center; margin-bottom: 40px; }
+  .outcome-grid-v2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; max-width: 840px; margin: 0 auto; }
+  .outcome-card-v2 { border: 1px solid var(--border); border-radius: 16px; padding: 32px; }
+  .outcome-card-v2.accent { border-color: var(--orange); }
+  .oc-icon { font-size: 30px; margin-bottom: 14px; }
+  .outcome-card-v2 h3 { font-size: 17px; font-weight: 800; margin-bottom: 8px; }
+  .outcome-card-v2 p { font-size: 14px; color: var(--ink-muted); line-height: 1.65; }
+  @media (max-width: 640px) { .outcome-grid-v2 { grid-template-columns: 1fr; } }
 
   /* ── CAPABILITIES ── */
   .capabilities { padding: 96px 0; }
@@ -765,7 +737,7 @@
 
   /* ── RESPONSIVE ── */
   @media (max-width: 900px) {
-    .problem-grid, .runbook-grid, .why-grid { grid-template-columns: 1fr; }
+    .runbook-grid, .why-grid { grid-template-columns: 1fr; }
     .metrics-grid { grid-template-columns: 1fr; }
     .metric-card { border-right: none; border-bottom: 1px solid var(--border); }
     .metric-card:last-child { border-bottom: none; }
@@ -773,7 +745,7 @@
     .whom-grid { grid-template-columns: 1fr; }
   }
   @media (max-width: 760px) {
-    .problem-grid { gap: 40px; }
+
     .hero h1 { letter-spacing: -1.5px; }
     .outcome-cards { grid-template-columns: 1fr; }
     .form-row { grid-template-columns: 1fr; }
@@ -854,95 +826,154 @@
   </div>
 </section>
 
-<!-- ═══════════════════════════ PROBLEM ═══════════════════════════ -->
-<section class="problem section-white">
+<!-- ═══════════════════════════ PROBLEM STATEMENT ═══════════════════════════ -->
+<section class="prob-stmt section-white">
   <div class="container">
-    <div class="problem-grid">
-      <div class="problem-left">
-        <h2>The problem: millions of users delegate complex tasks to <span class="hl">AI agents</span>.</h2>
-        <p>A single user request decomposes into dozens of smaller sub-tasks. If any one of them fails, the entire workflow fails — and the user blames your product.</p>
-        <div class="outcome-cards">
-          <div class="outcome-card orange-border">
-            <h4>Capture new users</h4>
-            <p>When AI models suggest tools for a task, your product wins because agents can execute it reliably.</p>
+    <div class="prob-stmt-inner">
+      <h2>The problem: millions of users delegate complex tasks to <span class="hl">AI agents</span>.</h2>
+      <p>A single user request decomposes into dozens of smaller sub-tasks. If any one of them fails, the entire workflow fails — and the user blames your product.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════ ROLE CARDS ═══════════════════════════ -->
+<section class="role-carousel section-gray">
+  <div class="container">
+    <div class="carousel-wrap" id="carouselWrap">
+
+      <div class="role-card active">
+        <div class="rc-header"><div class="rc-icon">💼</div><div class="rc-role">Sales Manager</div></div>
+        <div class="rc-goal">Find 50 qualified leads, verify contacts, and get them into the pipeline</div>
+        <div class="subtask-list">
+          <div class="subtask-row">
+            <span class="subtask-step">1</span>
+            <span class="subtask-label">Find 50 ICP leads on Apollo or LinkedIn</span>
+            <span class="subtask-status status-ok">✓ Works</span>
           </div>
-          <div class="outcome-card">
-            <h4>Retain existing users</h4>
-            <p>As users increasingly delegate work to AI agents, products that agents can operate reliably get used more.</p>
+          <div class="subtask-row">
+            <span class="subtask-step">2</span>
+            <span class="subtask-label">Verify email addresses before outreach</span>
+            <span class="subtask-status status-ok">✓ Works</span>
+          </div>
+          <div class="subtask-row fail">
+            <span class="subtask-step">3</span>
+            <span class="subtask-label">Add leads to HubSpot CRM and enroll in sequence</span>
+            <span class="subtask-status status-fail">✕ Blocked</span>
           </div>
         </div>
       </div>
-      <div class="problem-right">
-        <div class="role-row">
-          <div class="role-icon">💼</div>
-          <div class="role-info">
-            <div class="role-name">Sales Manager</div>
-            <div class="role-task">Find 50 leads, verify emails, add to CRM, start sequence</div>
+
+      <div class="role-card">
+        <div class="rc-header"><div class="rc-icon">📋</div><div class="rc-role">Project Coordinator</div></div>
+        <div class="rc-goal">Surface overdue tasks, notify owners, and keep the CRM in sync</div>
+        <div class="subtask-list">
+          <div class="subtask-row">
+            <span class="subtask-step">1</span>
+            <span class="subtask-label">Pull overdue tasks from Asana or Jira</span>
+            <span class="subtask-status status-ok">✓ Works</span>
           </div>
-          <div class="role-arrow">→</div>
-          <div class="task-dots">
-            <div class="td td-green"></div>
-            <div class="td td-green"></div>
-            <div class="td td-orange"></div>
-            <div class="td td-red">✕</div>
+          <div class="subtask-row fail">
+            <span class="subtask-step">2</span>
+            <span class="subtask-label">Email task owners with status updates</span>
+            <span class="subtask-status status-fail">✕ Blocked</span>
           </div>
-        </div>
-        <div class="role-row">
-          <div class="role-icon">📋</div>
-          <div class="role-info">
-            <div class="role-name">Project Coordinator</div>
-            <div class="role-task">Pull overdue tasks, email owners, update CRM</div>
-          </div>
-          <div class="role-arrow">→</div>
-          <div class="task-dots">
-            <div class="td td-green"></div>
-            <div class="td td-orange"></div>
-            <div class="td td-red">✕</div>
-            <div class="td td-red">✕</div>
+          <div class="subtask-row fail">
+            <span class="subtask-step">3</span>
+            <span class="subtask-label">Update deal status in HubSpot CRM</span>
+            <span class="subtask-status status-fail">✕ Blocked</span>
           </div>
         </div>
-        <div class="role-row">
-          <div class="role-icon">🧑‍💼</div>
-          <div class="role-info">
-            <div class="role-name">HR Manager</div>
-            <div class="role-task">Source engineers, verify emails, add to ATS</div>
+      </div>
+
+      <div class="role-card">
+        <div class="rc-header"><div class="rc-icon">🧑‍💼</div><div class="rc-role">HR Manager</div></div>
+        <div class="rc-goal">Build a shortlist of engineers, verify contacts, and log them in the ATS</div>
+        <div class="subtask-list">
+          <div class="subtask-row">
+            <span class="subtask-step">1</span>
+            <span class="subtask-label">Source 20 engineers matching role criteria on LinkedIn</span>
+            <span class="subtask-status status-ok">✓ Works</span>
           </div>
-          <div class="role-arrow">→</div>
-          <div class="task-dots">
-            <div class="td td-green"></div>
-            <div class="td td-green"></div>
-            <div class="td td-red">✕</div>
-            <div class="td td-red">✕</div>
+          <div class="subtask-row">
+            <span class="subtask-step">2</span>
+            <span class="subtask-label">Verify email addresses via Hunter or Clearbit</span>
+            <span class="subtask-status status-ok">✓ Works</span>
           </div>
-        </div>
-        <div class="role-row">
-          <div class="role-icon">📣</div>
-          <div class="role-info">
-            <div class="role-name">Marketing Manager</div>
-            <div class="role-task">Build prospect list, load to email tool, launch campaign</div>
-          </div>
-          <div class="role-arrow">→</div>
-          <div class="task-dots">
-            <div class="td td-green"></div>
-            <div class="td td-orange"></div>
-            <div class="td td-red">✕</div>
-            <div class="td td-red">✕</div>
+          <div class="subtask-row fail">
+            <span class="subtask-step">3</span>
+            <span class="subtask-label">Add shortlisted candidates to Greenhouse ATS</span>
+            <span class="subtask-status status-fail">✕ Blocked</span>
           </div>
         </div>
-        <div class="role-row">
-          <div class="role-icon">🤝</div>
-          <div class="role-info">
-            <div class="role-name">Customer Success</div>
-            <div class="role-task">Find inactive accounts, send check-ins, update health score</div>
+      </div>
+
+      <div class="role-card">
+        <div class="rc-header"><div class="rc-icon">📣</div><div class="rc-role">Marketing Manager</div></div>
+        <div class="rc-goal">Build a prospect list and launch a targeted email campaign</div>
+        <div class="subtask-list">
+          <div class="subtask-row">
+            <span class="subtask-step">1</span>
+            <span class="subtask-label">Build enriched prospect list from Clay or Apollo</span>
+            <span class="subtask-status status-ok">✓ Works</span>
           </div>
-          <div class="role-arrow">→</div>
-          <div class="task-dots">
-            <div class="td td-green"></div>
-            <div class="td td-green"></div>
-            <div class="td td-orange"></div>
-            <div class="td td-red">✕</div>
+          <div class="subtask-row fail">
+            <span class="subtask-step">2</span>
+            <span class="subtask-label">Upload contacts to Klaviyo or Mailchimp</span>
+            <span class="subtask-status status-fail">✕ Blocked</span>
+          </div>
+          <div class="subtask-row fail">
+            <span class="subtask-step">3</span>
+            <span class="subtask-label">Launch drip campaign and track opens</span>
+            <span class="subtask-status status-fail">✕ Blocked</span>
           </div>
         </div>
+      </div>
+
+      <div class="role-card">
+        <div class="rc-header"><div class="rc-icon">🤝</div><div class="rc-role">Customer Success Manager</div></div>
+        <div class="rc-goal">Identify at-risk accounts, reach out proactively, and update health scores</div>
+        <div class="subtask-list">
+          <div class="subtask-row">
+            <span class="subtask-step">1</span>
+            <span class="subtask-label">Find accounts with no activity in the last 30 days</span>
+            <span class="subtask-status status-ok">✓ Works</span>
+          </div>
+          <div class="subtask-row">
+            <span class="subtask-step">2</span>
+            <span class="subtask-label">Draft personalized check-in messages per account</span>
+            <span class="subtask-status status-ok">✓ Works</span>
+          </div>
+          <div class="subtask-row fail">
+            <span class="subtask-step">3</span>
+            <span class="subtask-label">Update health scores and notes in Gainsight</span>
+            <span class="subtask-status status-fail">✕ Blocked</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div class="carousel-nav">
+      <button class="carousel-btn" id="carouselPrev">←</button>
+      <div class="carousel-dots" id="carouselDots"></div>
+      <button class="carousel-btn" id="carouselNext">→</button>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════ NEW VS RETAIN ═══════════════════════════ -->
+<section class="outcome-section section-white">
+  <div class="container">
+    <h2>Why agent-readiness matters for your product</h2>
+    <div class="outcome-grid-v2">
+      <div class="outcome-card-v2 accent">
+        <div class="oc-icon">🚀</div>
+        <h3>Capture new users</h3>
+        <p>When AI models suggest tools for a task, your product wins the recommendation — because agents can execute it reliably end-to-end.</p>
+      </div>
+      <div class="outcome-card-v2">
+        <div class="oc-icon">🔁</div>
+        <h3>Retain existing users</h3>
+        <p>Users who delegate to agents stick with products they trust. If your product fails in an agentic workflow, they switch to one that doesn't.</p>
       </div>
     </div>
   </div>
@@ -1342,8 +1373,41 @@ function submitDarkForm(e) {
 
   document.addEventListener("DOMContentLoaded", drawCanvas);
   window.addEventListener("resize", drawCanvas);
-  // Also draw immediately if DOM already ready
   if (document.readyState !== "loading") drawCanvas();
+})();
+
+// Role card carousel
+(function() {
+  const cards = Array.from(document.querySelectorAll('.role-card'));
+  const dotsEl = document.getElementById('carouselDots');
+  const prevBtn = document.getElementById('carouselPrev');
+  const nextBtn = document.getElementById('carouselNext');
+  const wrap = document.getElementById('carouselWrap');
+  if (!cards.length || !dotsEl) return;
+  let current = 0, timer;
+
+  cards.forEach((_, i) => {
+    const d = document.createElement('div');
+    d.className = 'carousel-dot' + (i === 0 ? ' active' : '');
+    d.addEventListener('click', () => { stopTimer(); goTo(i); startTimer(); });
+    dotsEl.appendChild(d);
+  });
+
+  function goTo(idx) {
+    cards[current].classList.remove('active');
+    dotsEl.children[current].classList.remove('active');
+    current = (idx + cards.length) % cards.length;
+    cards[current].classList.add('active');
+    dotsEl.children[current].classList.add('active');
+  }
+  function startTimer() { timer = setInterval(() => goTo(current + 1), 4000); }
+  function stopTimer() { clearInterval(timer); }
+
+  prevBtn.addEventListener('click', () => { stopTimer(); goTo(current - 1); startTimer(); });
+  nextBtn.addEventListener('click', () => { stopTimer(); goTo(current + 1); startTimer(); });
+  wrap.addEventListener('mouseenter', stopTimer);
+  wrap.addEventListener('mouseleave', startTimer);
+  startTimer();
 })();
 </script>
 </body>
