@@ -231,6 +231,37 @@
   }
   #heroCanvas { display: block; width: 100%; height: 100%; }
 
+  /* ── BOTTLENECK ── */
+  .bottleneck-section { padding: 96px 0; }
+  .bottleneck-heading {
+    font-size: clamp(32px, 4.5vw, 58px);
+    font-weight: 900;
+    letter-spacing: -2px;
+    line-height: 1.1;
+    margin: 12px 0 40px;
+    max-width: 820px;
+  }
+  .bottleneck-body {
+    max-width: 780px;
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+  }
+  .bottleneck-body p {
+    font-size: clamp(17px, 1.8vw, 20px);
+    color: var(--ink-muted);
+    line-height: 1.75;
+  }
+  .bottleneck-body em { font-style: italic; color: var(--ink); }
+  .bottleneck-body code {
+    font-family: var(--mono);
+    font-size: 0.88em;
+    background: rgba(255,255,255,0.07);
+    padding: 2px 6px;
+    border-radius: 4px;
+    color: var(--ink);
+  }
+
   /* ── PROBLEM ── */
   .problem-grid {
     display: grid;
@@ -832,6 +863,21 @@
   </div>
   <div class="hero-canvas-wrap">
     <canvas id="heroCanvas"></canvas>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═══════════════════════════ INVISIBLE BOTTLENECK ═══════════════════════════ -->
+<section class="bottleneck-section">
+  <div class="container">
+    <div class="section-label">THE INVISIBLE BOTTLENECK</div>
+    <h2 class="bottleneck-heading">The agent is not broken.<br>Your product environment is.</h2>
+    <div class="bottleneck-body">
+      <p>Teams integrating AI agents with their product often see uneven results. They blame the model, try a different provider, get the same thing. The real problem is usually the product itself — not how it's built, but how it's <em>exposed</em> to agents.</p>
+      <p>Undocumented API error codes mean the agent retries blindly, spending tokens on guesses instead of advancing the task. Workflows documented for humans — with implicit context, screenshots, and assumed knowledge — mean the agent reverse-engineers your product step by step, then fails at the edge case on step four. API responses that signal failure with a <code>200 OK</code> mean the agent has no idea it went wrong until three steps later. A UI flow with no machine-readable runbook means every agent session starts from zero.</p>
+      <p>These are product-readiness problems, not agent problems. And they compound. A product with ambiguous APIs and no structured runbooks will defeat any agent you give it to. A product with clear task definitions, documented failure modes, and verified runbooks will make any agent dramatically more effective — without changing a single line of agent code.</p>
+    </div>
   </div>
 </section>
 
