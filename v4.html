@@ -230,6 +230,25 @@
     overflow: hidden;
   }
   #heroCanvas { display: block; width: 100%; height: 100%; }
+  .hero-canvas-label {
+    position: absolute; bottom: 28px;
+    display: flex; flex-direction: column; gap: 4px;
+    pointer-events: none;
+  }
+  .hero-canvas-label-left { left: 5%; }
+  .hero-canvas-label-right { right: 5%; text-align: right; }
+  .hcl-tag {
+    font-size: 11px; font-weight: 700; letter-spacing: 1.5px;
+    text-transform: uppercase; color: rgba(255,255,255,0.35);
+  }
+  .hcl-desc { font-size: 12px; color: rgba(255,255,255,0.2); }
+  .hero-canvas-label-right .hcl-tag { color: rgba(232,86,42,0.7); }
+  .hero-canvas-label-right .hcl-desc { color: rgba(255,255,255,0.3); }
+  .hero-canvas-divider {
+    position: absolute; top: 10%; bottom: 10%; left: 47%;
+    width: 1px; background: rgba(255,255,255,0.07);
+    pointer-events: none;
+  }
 
   /* ── BOTTLENECK ── */
   .bottleneck-section { padding: 96px 0; }
@@ -681,56 +700,44 @@
     font-size: 14.5px;
   }
 
-  /* ── AGENT FAILS MAP ── */
-  .fails-card {
-    margin-top: 40px;
-    background: var(--bg-1);
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    padding: 24px;
-  }
-  #failsSvg { display: block; width: 100%; max-width: 800px; height: 460px; margin: 0 auto; }
-  .fail-node-circle { fill: #161616; cursor: pointer; transition: stroke-width 0.2s, filter 0.2s; }
-  .fail-node-circle:hover { stroke-width: 3; filter: drop-shadow(0 0 12px rgba(232,86,42,0.4)); }
-  .fail-node-label { fill: #fff; font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 600; pointer-events: none; text-anchor: middle; }
-  .fail-node-sub { fill: rgba(255,255,255,0.4); font-family: 'Inter', sans-serif; font-size: 10px; pointer-events: none; text-anchor: middle; }
-  .fail-center-label { fill: #fff; font-family: 'Inter', sans-serif; font-size: 16px; font-weight: 800; pointer-events: none; text-anchor: middle; }
-  .fail-line { stroke: rgba(255,255,255,0.15); stroke-width: 1; stroke-dasharray: 4 4; }
-  .fail-detail {
-    margin-top: 24px;
-    background: var(--bg-2);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 24px;
-    min-height: 140px;
-  }
-  .fail-detail-header {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 14px;
-  }
-  .fail-detail h3 { font-size: 22px; }
-  .severity-badge {
-    padding: 4px 12px;
-    border-radius: 999px;
-    font-size: 11px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.8px;
-  }
-  .severity-critical { background: rgba(232,42,42,0.18); color: #ff6b6b; }
-  .severity-high { background: rgba(232,86,42,0.18); color: var(--orange); }
-  .severity-medium { background: rgba(232,180,42,0.18); color: #FFD466; }
-  .fail-detail-desc { color: var(--ink-muted); line-height: 1.65; margin-bottom: 14px; }
-  .fail-detail-fix {
-    padding: 12px 16px;
-    border-left: 2px solid var(--orange);
-    background: rgba(232,86,42,0.06);
-    font-size: 14px;
-    color: var(--ink);
-  }
-  .fail-detail-fix strong { color: var(--orange); }
+  /* ── RUNBOOK MAP DASHBOARD ── */
+  .rm-dash { background:#0C0C0C; border:1px solid rgba(255,255,255,0.1); border-radius:14px; overflow:hidden; font-family:'Inter',sans-serif; font-size:13px; line-height:1.4; }
+  .rm-hdr { display:flex; align-items:center; justify-content:space-between; padding:13px 20px; background:#111; border-bottom:1px solid rgba(255,255,255,0.07); }
+  .rm-hdr-l { display:flex; align-items:center; gap:12px; }
+  .rm-title { font-size:13px; font-weight:700; color:#fff; letter-spacing:.2px; }
+  .rm-live { font-size:11px; color:#22C55E; display:flex; align-items:center; gap:4px; }
+  .rm-live::before { content:'●'; font-size:7px; animation:rmBlink 2s infinite; }
+  @keyframes rmBlink { 0%,100%{opacity:1}50%{opacity:.3} }
+  .rm-hdr-r { display:flex; gap:20px; }
+  .rm-stat { font-size:11px; color:rgba(255,255,255,0.3); }
+  .rm-stat b { color:rgba(255,255,255,0.65); font-weight:600; }
+  .rm-body { display:grid; grid-template-columns:220px 1fr; border-bottom:1px solid rgba(255,255,255,0.07); }
+  .rm-sidebar { border-right:1px solid rgba(255,255,255,0.07); }
+  .rm-plbl { padding:10px 16px 8px; font-size:10px; font-weight:700; letter-spacing:1.5px; text-transform:uppercase; color:rgba(255,255,255,0.25); border-bottom:1px solid rgba(255,255,255,0.05); }
+  .rm-plbl-note { font-weight:400; letter-spacing:0; text-transform:none; font-size:10px; color:rgba(255,255,255,0.18); }
+  .rm-ucitem { display:flex; align-items:center; gap:9px; padding:9px 16px; cursor:pointer; border-bottom:1px solid rgba(255,255,255,0.04); transition:background .1s; }
+  .rm-ucitem:hover { background:rgba(255,255,255,0.04); }
+  .rm-ucitem.sel { background:rgba(255,255,255,0.06); }
+  .rm-ucdot { width:7px; height:7px; border-radius:50%; flex-shrink:0; }
+  .rm-ucinfo { flex:1; min-width:0; }
+  .rm-ucname { color:rgba(255,255,255,0.8); font-size:12px; font-weight:500; }
+  .rm-uctok { font-size:10px; color:rgba(255,255,255,0.25); font-family:'JetBrains Mono',monospace; margin-top:1px; }
+  .rm-badge { font-size:9px; font-weight:700; padding:2px 5px; border-radius:3px; flex-shrink:0; }
+  .rm-mapwrap { padding:10px 16px 16px; }
+  .rm-mapwrap svg { width:100%; height:auto; display:block; margin-top:6px; }
+  .rm-matrixwrap { padding:10px 20px 20px; }
+  .rm-mtable { width:100%; border-collapse:collapse; margin-top:6px; }
+  .rm-mtable th { padding:6px 10px; font-size:10px; font-weight:700; letter-spacing:.5px; color:rgba(255,255,255,0.28); text-align:left; border-bottom:1px solid rgba(255,255,255,0.07); }
+  .rm-mtable td { padding:7px 10px; border-bottom:1px solid rgba(255,255,255,0.04); vertical-align:middle; }
+  .rm-mtable tr:hover td { background:rgba(255,255,255,0.02); }
+  .rm-mtable tr.sel td { background:rgba(255,255,255,0.05); }
+  .rm-muc { display:flex; align-items:center; gap:8px; }
+  .rm-muc-name { font-size:12px; color:rgba(255,255,255,0.75); font-weight:500; }
+  .rm-score { display:flex; align-items:center; gap:6px; }
+  .rm-barbg { width:40px; height:3px; background:rgba(255,255,255,0.08); border-radius:2px; flex-shrink:0; }
+  .rm-bar { height:3px; border-radius:2px; }
+  .rm-pct { font-family:'JetBrains Mono',monospace; font-size:11px; min-width:30px; }
+  @media(max-width:768px) { .rm-body{grid-template-columns:1fr} .rm-sidebar{border-right:none;border-bottom:1px solid rgba(255,255,255,0.07)} .rm-hdr-r{display:none} }
 
   /* ── FINAL CTA ── */
   .final-cta {
@@ -863,6 +870,15 @@
   </div>
   <div class="hero-canvas-wrap">
     <canvas id="heroCanvas"></canvas>
+    <div class="hero-canvas-label hero-canvas-label-left">
+      <span class="hcl-tag">Without runbooks</span>
+      <span class="hcl-desc">Agents guess, loop, fail</span>
+    </div>
+    <div class="hero-canvas-label hero-canvas-label-right">
+      <span class="hcl-tag">With Docka</span>
+      <span class="hcl-desc">Structured. Tested. Reliable.</span>
+    </div>
+    <div class="hero-canvas-divider"></div>
   </div>
 </section>
 
@@ -1249,22 +1265,44 @@
 
 <div class="divider"></div>
 
-<!-- ═══════════════════════════ AGENT FAILS MAP ═══════════════════════════ -->
+<!-- ═══════════════════════════ RUNBOOK MAP ═══════════════════════════ -->
 <section>
   <div class="container">
-    <div class="section-label">Agent Fails Map</div>
-    <h2>Interactive map of agent failure modes.</h2>
-    <p class="section-sub">Click any node to see how agents fail and what fixes it.</p>
-
-    <div class="fails-card">
-      <svg id="failsSvg" viewBox="0 0 800 460" xmlns="http://www.w3.org/2000/svg"></svg>
-      <div class="fail-detail" id="failDetail">
-        <div class="fail-detail-header">
-          <h3 id="failName">Token Loops</h3>
-          <span class="severity-badge severity-critical" id="failSeverity">Critical</span>
+    <div class="section-label">Runbook Map</div>
+    <h2>Every use-case. Every agent. One dashboard.</h2>
+    <p class="section-sub">See how your runbooks connect, how each one performs across different AI agents, and which ones need attention — at a glance.</p>
+    <div style="margin-top:40px">
+      <div class="rm-dash" id="rmDash">
+        <!-- HEADER -->
+        <div class="rm-hdr">
+          <div class="rm-hdr-l">
+            <span class="rm-title">Runbook Map</span>
+            <span class="rm-live">Live</span>
+          </div>
+          <div class="rm-hdr-r">
+            <span class="rm-stat"><b>8</b> use-cases</span>
+            <span class="rm-stat"><b>4</b> agents</span>
+            <span class="rm-stat">avg readiness <b>L2.4</b></span>
+            <span class="rm-stat">last run <b>2h ago</b></span>
+          </div>
         </div>
-        <p class="fail-detail-desc" id="failDesc">Agent calls the same endpoint repeatedly, context window fills. One stuck session can burn $10+ in tokens.</p>
-        <div class="fail-detail-fix"><strong>Fix:</strong> <span id="failFix">Runbooks define loop-breaking exit conditions.</span></div>
+
+        <!-- BODY: sidebar + map -->
+        <div class="rm-body">
+          <div class="rm-sidebar" id="rmSidebar">
+            <div class="rm-plbl">Use-cases</div>
+          </div>
+          <div class="rm-mapwrap">
+            <div class="rm-plbl">Connection Map <span class="rm-plbl-note">node = runbook · edge label = token cost range</span></div>
+            <svg id="rmSvg" viewBox="0 0 560 340" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet"></svg>
+          </div>
+        </div>
+
+        <!-- MATRIX -->
+        <div class="rm-matrixwrap">
+          <div class="rm-plbl">Readiness Matrix <span class="rm-plbl-note">% = agent success rate per use-case</span></div>
+          <table class="rm-mtable" id="rmMtable"></table>
+        </div>
       </div>
     </div>
   </div>
@@ -1666,91 +1704,311 @@ document.querySelectorAll('.step').forEach(step => {
   window.addEventListener('resize', resize);
 })();
 
-/* ═══════════════════════════ AGENT FAILS MAP ═══════════════════════════ */
-(function drawFailsMap() {
-  const svg = document.getElementById('failsSvg');
-  if (!svg) return;
-  const W = 800, H = 460;
-  const cx = W / 2, cy = H / 2;
-  const r = 175; // distance from center
-  const nodes = [
-    { id: 'token-loops',    angle: 120, color: '#ff6b6b', name: 'Token Loops',         sub: 'Critical', severity: 'critical',
-      desc: 'Agent calls the same endpoint repeatedly, context window fills. One stuck session can burn $10+ in tokens.',
-      fix:  'Runbooks define loop-breaking exit conditions.' },
-    { id: 'auth',           angle: 60,  color: '#E8562A', name: 'Auth Failures',       sub: 'High',     severity: 'high',
-      desc: 'Expired tokens, wrong scopes, missing headers. Agent retries with wrong credentials indefinitely.',
-      fix:  'Runbooks include re-auth sequences and scope requirements.' },
-    { id: 'schema',         angle: 0,   color: '#E8562A', name: 'Schema Drift',        sub: 'High',     severity: 'high',
-      desc: 'API response format changed. Agent can\'t parse the response and fails silently.',
-      fix:  'Runbooks are re-validated on every API version bump.' },
-    { id: 'state',          angle: 300, color: '#FFD466', name: 'State Confusion',     sub: 'Medium',   severity: 'medium',
-      desc: 'Agent loses track of session state between API calls. Creates duplicate resources or skips steps.',
-      fix:  'Runbooks define explicit state checkpoints.' },
-    { id: 'ratelimit',      angle: 240, color: '#FFD466', name: 'Rate Limit Spirals',  sub: 'Medium',   severity: 'medium',
-      desc: 'Agent hits rate limit, retries immediately, triggers more limits. Exponential backoff not implemented.',
-      fix:  'Runbooks specify retry delays and backoff strategies.' },
-    { id: 'context',        angle: 180, color: '#E8562A', name: 'Missing Context',     sub: 'High',     severity: 'high',
-      desc: 'No runbook for this task. Agent improvises, takes wrong API path, fails unpredictably.',
-      fix:  'Full task coverage with verified success criteria.' }
+/* ═══════════════════════════ RUNBOOK MAP DASHBOARD ═══════════════════════════ */
+(function buildRunbookMap() {
+  const root = document.getElementById('rmDash');
+  if (!root) return;
+
+  const UC = [
+    { id:'auth',     label:'Authenticate',  short:'Auth',   level:4, tokens:'1–2k',  x:75,  y:170 },
+    { id:'create',   label:'Create Index',  short:'Create', level:3, tokens:'3–6k',  x:205, y:95  },
+    { id:'webhooks', label:'Webhooks',      short:'Hooks',  level:1, tokens:'4–8k',  x:205, y:250 },
+    { id:'search',   label:'Search Query',  short:'Search', level:3, tokens:'2–4k',  x:350, y:120 },
+    { id:'bulk',     label:'Bulk Import',   short:'Bulk',   level:2, tokens:'8–15k', x:350, y:215 },
+    { id:'delete',   label:'Delete Index',  short:'Delete', level:1, tokens:'2–4k',  x:350, y:285 },
+    { id:'update',   label:'Update Doc',    short:'Update', level:2, tokens:'3–5k',  x:475, y:90  },
+    { id:'export',   label:'Export Data',   short:'Export', level:3, tokens:'5–10k', x:475, y:200 }
   ];
 
-  // build lines first (so they go under nodes)
-  let html = '';
-  nodes.forEach(n => {
-    const rad = (n.angle * Math.PI) / 180;
-    const nx = cx + Math.cos(rad) * r;
-    const ny = cy - Math.sin(rad) * r;
-    html += `<line class="fail-line" x1="${cx}" y1="${cy}" x2="${nx}" y2="${ny}" />`;
-  });
+  const EDGES = [
+    { f:'auth',    t:'create',   lbl:'1–3k' },
+    { f:'auth',    t:'webhooks', lbl:'4–8k' },
+    { f:'create',  t:'search',   lbl:'2–4k' },
+    { f:'create',  t:'bulk',     lbl:'8–15k'},
+    { f:'create',  t:'export',   lbl:'5–8k' },
+    { f:'create',  t:'delete',   lbl:'2–4k' },
+    { f:'bulk',    t:'search',   lbl:'2–3k' },
+    { f:'search',  t:'update',   lbl:'3–5k' },
+    { f:'webhooks',t:'search',   lbl:'2–4k' }
+  ];
 
-  // center node
-  html += `<circle cx="${cx}" cy="${cy}" r="55" fill="#E8562A" stroke="rgba(255,255,255,0.2)" stroke-width="2"/>`;
-  html += `<text class="fail-center-label" x="${cx}" y="${cy - 4}">AGENT</text>`;
-  html += `<text class="fail-center-label" x="${cx}" y="${cy + 14}">FAILS</text>`;
+  const AGENTS = ['Claude 3.5', 'GPT-4o', 'Gemini 1.5', 'Llama 3.3'];
 
-  // outer nodes
-  nodes.forEach((n, i) => {
-    const rad = (n.angle * Math.PI) / 180;
-    const nx = cx + Math.cos(rad) * r;
-    const ny = cy - Math.sin(rad) * r;
-    html += `<g class="fail-node" data-id="${n.id}" data-idx="${i}" style="cursor:pointer">`;
-    html += `<circle class="fail-node-circle" cx="${nx}" cy="${ny}" r="42" stroke="${n.color}" stroke-width="2"/>`;
-    // split name into up to 2 lines if needed
-    const parts = n.name.split(' ');
-    if (parts.length > 1 && n.name.length > 12) {
-      html += `<text class="fail-node-label" x="${nx}" y="${ny - 2}">${parts[0]}</text>`;
-      html += `<text class="fail-node-label" x="${nx}" y="${ny + 14}">${parts.slice(1).join(' ')}</text>`;
-    } else {
-      html += `<text class="fail-node-label" x="${nx}" y="${ny + 4}">${n.name}</text>`;
-    }
-    html += `<text class="fail-node-sub" x="${nx}" y="${ny + 60}">${n.sub}</text>`;
-    html += `</g>`;
-  });
+  const MATRIX = {
+    auth:     [98, 91, 96, 78],
+    create:   [94, 71, 82, 44],
+    search:   [91, 84, 88, 61],
+    bulk:     [61, 38, 59, 22],
+    update:   [73, 65, 70, 38],
+    delete:   [42, 31, 38, 18],
+    export:   [88, 72, 79, 51],
+    webhooks: [35, 28, 32, 12]
+  };
 
-  svg.innerHTML = html;
+  const LCOL = { 1:'#EF4444', 2:'#F59E0B', 3:'#22C55E', 4:'#3B82F6' };
+  const LNAME = { 1:'Unfunctional', 2:'Semi-functional', 3:'Fully-functional', 4:'Optimized' };
+  const R = 26;
+  const ARROW_OFFSET = 14;
 
-  function showDetail(n) {
-    document.getElementById('failName').textContent = n.name;
-    const sev = document.getElementById('failSeverity');
-    sev.textContent = n.sub;
-    sev.className = 'severity-badge severity-' + n.severity;
-    document.getElementById('failDesc').textContent = n.desc;
-    document.getElementById('failFix').textContent = n.fix;
-    // highlight active node
-    svg.querySelectorAll('.fail-node-circle').forEach(c => c.setAttribute('stroke-width', '2'));
-    const active = svg.querySelector(`.fail-node[data-id="${n.id}"] .fail-node-circle`);
-    if (active) {
-      active.setAttribute('stroke-width', '3.5');
-      active.setAttribute('stroke', '#E8562A');
-    }
+  const ucById = {};
+  UC.forEach(u => { ucById[u.id] = u; });
+
+  function scoreColor(s) {
+    if (s >= 90) return '#22C55E';
+    if (s >= 70) return '#84CC16';
+    if (s >= 50) return '#F59E0B';
+    return '#EF4444';
   }
 
-  svg.querySelectorAll('.fail-node').forEach((el, i) => {
-    el.addEventListener('click', () => showDetail(nodes[i]));
+  /* ───── SIDEBAR ───── */
+  const sidebar = document.getElementById('rmSidebar');
+  UC.forEach(u => {
+    const col = LCOL[u.level];
+    const item = document.createElement('div');
+    item.className = 'rm-ucitem';
+    item.dataset.id = u.id;
+    item.innerHTML = `
+      <span class="rm-ucdot" style="background:${col}"></span>
+      <div class="rm-ucinfo">
+        <div class="rm-ucname">${u.label}</div>
+        <div class="rm-uctok">${u.tokens} tok</div>
+      </div>
+      <span class="rm-badge" style="background:${col}33;color:${col}">L${u.level}</span>
+    `;
+    item.addEventListener('click', () => setSelected(u.id));
+    sidebar.appendChild(item);
   });
 
-  // default = token loops (index 0)
-  showDetail(nodes[0]);
+  /* ───── SVG ───── */
+  const svg = document.getElementById('rmSvg');
+  const SVGNS = 'http://www.w3.org/2000/svg';
+
+  // defs
+  const defs = document.createElementNS(SVGNS, 'defs');
+  defs.innerHTML = `
+    <marker id="rm-arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="rgba(255,255,255,0.3)"/>
+    </marker>
+    <marker id="rm-arr-sel" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="rgba(232,86,42,0.75)"/>
+    </marker>
+  `;
+  svg.appendChild(defs);
+
+  // edges group (rendered first, behind nodes)
+  const edgesG = document.createElementNS(SVGNS, 'g');
+  edgesG.setAttribute('id', 'rmEdges');
+  svg.appendChild(edgesG);
+
+  const edgeEls = [];
+  EDGES.forEach((e, i) => {
+    const a = ucById[e.f], b = ucById[e.t];
+    const dx = b.x - a.x, dy = b.y - a.y;
+    const len = Math.sqrt(dx*dx + dy*dy);
+    const ux = dx / len, uy = dy / len;
+    const sx = a.x + ux * (R + 2);
+    const sy = a.y + uy * (R + 2);
+    const ex = b.x - ux * (R + ARROW_OFFSET);
+    const ey = b.y - uy * (R + ARROW_OFFSET);
+    let mx = (sx + ex) / 2;
+    let my = (sy + ey) / 2;
+
+    // curve only for create→export to clear other labels
+    let pathD;
+    let labelX, labelY;
+    if (e.f === 'create' && e.t === 'export') {
+      // perpendicular offset (right side relative to direction)
+      const px = -uy, py = ux;
+      const cOff = 28;
+      const cx = mx + px * cOff;
+      const cy = my + py * cOff;
+      pathD = `M ${sx} ${sy} Q ${cx} ${cy} ${ex} ${ey}`;
+      // approximate label at quadratic midpoint t=0.5
+      labelX = 0.25 * sx + 0.5 * cx + 0.25 * ex;
+      labelY = 0.25 * sy + 0.5 * cy + 0.25 * ey - 5;
+    } else {
+      pathD = `M ${sx} ${sy} L ${ex} ${ey}`;
+      labelX = mx;
+      labelY = my - 5;
+    }
+
+    const path = document.createElementNS(SVGNS, 'path');
+    path.setAttribute('d', pathD);
+    path.setAttribute('fill', 'none');
+    path.setAttribute('stroke', 'rgba(255,255,255,0.15)');
+    path.setAttribute('stroke-width', '1');
+    path.setAttribute('marker-end', 'url(#rm-arr)');
+    path.dataset.f = e.f;
+    path.dataset.t = e.t;
+    edgesG.appendChild(path);
+
+    const lbl = document.createElementNS(SVGNS, 'text');
+    lbl.setAttribute('x', labelX);
+    lbl.setAttribute('y', labelY);
+    lbl.setAttribute('text-anchor', 'middle');
+    lbl.setAttribute('font-size', '9');
+    lbl.setAttribute('font-family', "'JetBrains Mono', monospace");
+    lbl.setAttribute('fill', 'rgba(255,255,255,0.28)');
+    lbl.textContent = e.lbl;
+    lbl.dataset.f = e.f;
+    lbl.dataset.t = e.t;
+    edgesG.appendChild(lbl);
+
+    edgeEls.push({ path, lbl, f: e.f, t: e.t });
+  });
+
+  // nodes group
+  const nodesG = document.createElementNS(SVGNS, 'g');
+  nodesG.setAttribute('id', 'rmNodes');
+  svg.appendChild(nodesG);
+
+  const nodeEls = {};
+  UC.forEach(u => {
+    const col = LCOL[u.level];
+    const g = document.createElementNS(SVGNS, 'g');
+    g.style.cursor = 'pointer';
+    g.dataset.id = u.id;
+
+    const halo = document.createElementNS(SVGNS, 'circle');
+    halo.setAttribute('cx', u.x);
+    halo.setAttribute('cy', u.y);
+    halo.setAttribute('r', R + 5);
+    halo.setAttribute('fill', 'none');
+    halo.setAttribute('stroke', col);
+    halo.setAttribute('stroke-width', '0');
+    halo.setAttribute('opacity', '0.6');
+    g.appendChild(halo);
+
+    const circle = document.createElementNS(SVGNS, 'circle');
+    circle.setAttribute('cx', u.x);
+    circle.setAttribute('cy', u.y);
+    circle.setAttribute('r', R);
+    circle.setAttribute('fill', col + '22');
+    circle.setAttribute('stroke', col);
+    circle.setAttribute('stroke-width', '1.5');
+    g.appendChild(circle);
+
+    const lbl = document.createElementNS(SVGNS, 'text');
+    lbl.setAttribute('x', u.x);
+    lbl.setAttribute('y', u.y + 4);
+    lbl.setAttribute('text-anchor', 'middle');
+    lbl.setAttribute('font-size', '9');
+    lbl.setAttribute('font-weight', '700');
+    lbl.setAttribute('fill', '#fff');
+    lbl.setAttribute('font-family', "'Inter', sans-serif");
+    lbl.style.pointerEvents = 'none';
+    lbl.textContent = u.short;
+    g.appendChild(lbl);
+
+    const badgeRect = document.createElementNS(SVGNS, 'rect');
+    badgeRect.setAttribute('x', u.x - 10);
+    badgeRect.setAttribute('y', u.y + R + 5);
+    badgeRect.setAttribute('width', 20);
+    badgeRect.setAttribute('height', 12);
+    badgeRect.setAttribute('rx', 2);
+    badgeRect.setAttribute('fill', col + '33');
+    g.appendChild(badgeRect);
+
+    const badgeText = document.createElementNS(SVGNS, 'text');
+    badgeText.setAttribute('x', u.x);
+    badgeText.setAttribute('y', u.y + R + 14);
+    badgeText.setAttribute('text-anchor', 'middle');
+    badgeText.setAttribute('font-size', '8');
+    badgeText.setAttribute('font-weight', '700');
+    badgeText.setAttribute('fill', col);
+    badgeText.setAttribute('font-family', "'Inter', sans-serif");
+    badgeText.style.pointerEvents = 'none';
+    badgeText.textContent = 'L' + u.level;
+    g.appendChild(badgeText);
+
+    g.addEventListener('click', () => setSelected(u.id));
+
+    nodesG.appendChild(g);
+    nodeEls[u.id] = { g, halo, circle };
+  });
+
+  /* ───── MATRIX ───── */
+  const mtable = document.getElementById('rmMtable');
+  let thead = '<thead><tr><th>USE-CASE</th>';
+  AGENTS.forEach(a => { thead += `<th>${a.toUpperCase()}</th>`; });
+  thead += '</tr></thead>';
+  let tbody = '<tbody>';
+  UC.forEach(u => {
+    const col = LCOL[u.level];
+    const scores = MATRIX[u.id] || [];
+    tbody += `<tr data-id="${u.id}">`;
+    tbody += `<td><div class="rm-muc"><span class="rm-ucdot" style="background:${col}"></span><span class="rm-muc-name">${u.label}</span></div></td>`;
+    scores.forEach(s => {
+      const c = scoreColor(s);
+      tbody += `<td><div class="rm-score"><div class="rm-barbg"><div class="rm-bar" style="width:${s}%;background:${c}"></div></div><span class="rm-pct" style="color:${c}">${s}%</span></div></td>`;
+    });
+    tbody += '</tr>';
+  });
+  tbody += '</tbody>';
+  mtable.innerHTML = thead + tbody;
+
+  // matrix row click
+  mtable.querySelectorAll('tbody tr').forEach(tr => {
+    tr.style.cursor = 'pointer';
+    tr.addEventListener('click', () => setSelected(tr.dataset.id));
+  });
+
+  /* ───── SELECTION ───── */
+  let selected = null;
+
+  function setSelected(id) {
+    selected = (selected === id) ? null : id;
+
+    // sidebar
+    sidebar.querySelectorAll('.rm-ucitem').forEach(el => {
+      el.classList.toggle('sel', el.dataset.id === selected);
+    });
+
+    // matrix
+    mtable.querySelectorAll('tbody tr').forEach(tr => {
+      tr.classList.toggle('sel', tr.dataset.id === selected);
+    });
+
+    // nodes
+    Object.keys(nodeEls).forEach(nid => {
+      const ne = nodeEls[nid];
+      const u = ucById[nid];
+      const col = LCOL[u.level];
+      if (nid === selected) {
+        ne.circle.setAttribute('fill', col + '44');
+        ne.circle.setAttribute('stroke', '#E8562A');
+        ne.circle.setAttribute('stroke-width', '2.5');
+        ne.halo.setAttribute('stroke', '#E8562A');
+        ne.halo.setAttribute('stroke-width', '1.5');
+      } else {
+        ne.circle.setAttribute('fill', col + '22');
+        ne.circle.setAttribute('stroke', col);
+        ne.circle.setAttribute('stroke-width', '1.5');
+        ne.halo.setAttribute('stroke-width', '0');
+      }
+    });
+
+    // edges
+    edgeEls.forEach(e => {
+      const connected = selected && (e.f === selected || e.t === selected);
+      if (selected === null) {
+        e.path.setAttribute('stroke', 'rgba(255,255,255,0.15)');
+        e.path.setAttribute('stroke-width', '1');
+        e.path.setAttribute('marker-end', 'url(#rm-arr)');
+        e.lbl.setAttribute('fill', 'rgba(255,255,255,0.28)');
+      } else if (connected) {
+        e.path.setAttribute('stroke', 'rgba(232,86,42,0.65)');
+        e.path.setAttribute('stroke-width', '1.5');
+        e.path.setAttribute('marker-end', 'url(#rm-arr-sel)');
+        e.lbl.setAttribute('fill', 'rgba(232,86,42,0.7)');
+      } else {
+        e.path.setAttribute('stroke', 'rgba(255,255,255,0.06)');
+        e.path.setAttribute('stroke-width', '1');
+        e.path.setAttribute('marker-end', 'url(#rm-arr)');
+        e.lbl.setAttribute('fill', 'rgba(255,255,255,0.1)');
+      }
+    });
+  }
 })();
 </script>
 
