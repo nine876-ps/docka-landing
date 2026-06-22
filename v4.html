@@ -700,44 +700,45 @@
     font-size: 14.5px;
   }
 
-  /* ── RUNBOOK MAP DASHBOARD ── */
-  .rm-dash { background:#0C0C0C; border:1px solid rgba(255,255,255,0.1); border-radius:14px; overflow:hidden; font-family:'Inter',sans-serif; font-size:13px; line-height:1.4; }
-  .rm-hdr { display:flex; align-items:center; justify-content:space-between; padding:13px 20px; background:#111; border-bottom:1px solid rgba(255,255,255,0.07); }
-  .rm-hdr-l { display:flex; align-items:center; gap:12px; }
-  .rm-title { font-size:13px; font-weight:700; color:#fff; letter-spacing:.2px; }
-  .rm-live { font-size:11px; color:#22C55E; display:flex; align-items:center; gap:4px; }
-  .rm-live::before { content:'●'; font-size:7px; animation:rmBlink 2s infinite; }
-  @keyframes rmBlink { 0%,100%{opacity:1}50%{opacity:.3} }
-  .rm-hdr-r { display:flex; gap:20px; }
-  .rm-stat { font-size:11px; color:rgba(255,255,255,0.3); }
-  .rm-stat b { color:rgba(255,255,255,0.65); font-weight:600; }
-  .rm-body { display:grid; grid-template-columns:220px 1fr; border-bottom:1px solid rgba(255,255,255,0.07); }
-  .rm-sidebar { border-right:1px solid rgba(255,255,255,0.07); }
-  .rm-plbl { padding:10px 16px 8px; font-size:10px; font-weight:700; letter-spacing:1.5px; text-transform:uppercase; color:rgba(255,255,255,0.25); border-bottom:1px solid rgba(255,255,255,0.05); }
-  .rm-plbl-note { font-weight:400; letter-spacing:0; text-transform:none; font-size:10px; color:rgba(255,255,255,0.18); }
-  .rm-ucitem { display:flex; align-items:center; gap:9px; padding:9px 16px; cursor:pointer; border-bottom:1px solid rgba(255,255,255,0.04); transition:background .1s; }
-  .rm-ucitem:hover { background:rgba(255,255,255,0.04); }
-  .rm-ucitem.sel { background:rgba(255,255,255,0.06); }
-  .rm-ucdot { width:7px; height:7px; border-radius:50%; flex-shrink:0; }
-  .rm-ucinfo { flex:1; min-width:0; }
-  .rm-ucname { color:rgba(255,255,255,0.8); font-size:12px; font-weight:500; }
-  .rm-uctok { font-size:10px; color:rgba(255,255,255,0.25); font-family:'JetBrains Mono',monospace; margin-top:1px; }
-  .rm-badge { font-size:9px; font-weight:700; padding:2px 5px; border-radius:3px; flex-shrink:0; }
-  .rm-mapwrap { padding:10px 16px 16px; }
-  .rm-mapwrap svg { width:100%; height:auto; display:block; margin-top:6px; }
-  .rm-matrixwrap { padding:10px 20px 20px; }
-  .rm-mtable { width:100%; border-collapse:collapse; margin-top:6px; }
-  .rm-mtable th { padding:6px 10px; font-size:10px; font-weight:700; letter-spacing:.5px; color:rgba(255,255,255,0.28); text-align:left; border-bottom:1px solid rgba(255,255,255,0.07); }
-  .rm-mtable td { padding:7px 10px; border-bottom:1px solid rgba(255,255,255,0.04); vertical-align:middle; }
-  .rm-mtable tr:hover td { background:rgba(255,255,255,0.02); }
-  .rm-mtable tr.sel td { background:rgba(255,255,255,0.05); }
-  .rm-muc { display:flex; align-items:center; gap:8px; }
-  .rm-muc-name { font-size:12px; color:rgba(255,255,255,0.75); font-weight:500; }
-  .rm-score { display:flex; align-items:center; gap:6px; }
-  .rm-barbg { width:40px; height:3px; background:rgba(255,255,255,0.08); border-radius:2px; flex-shrink:0; }
-  .rm-bar { height:3px; border-radius:2px; }
-  .rm-pct { font-family:'JetBrains Mono',monospace; font-size:11px; min-width:30px; }
-  @media(max-width:768px) { .rm-body{grid-template-columns:1fr} .rm-sidebar{border-right:none;border-bottom:1px solid rgba(255,255,255,0.07)} .rm-hdr-r{display:none} }
+  /* ── RUNBOOK MAP TABLE ── */
+  .rmap-wrap { padding:32px 0 8px; }
+  .rmap-top { display:flex; align-items:center; justify-content:space-between; margin-bottom:20px; }
+  .rmap-brand { display:flex; align-items:center; gap:12px; }
+  .rmap-mk { width:30px; height:30px; border-radius:7px; background:var(--orange); display:grid; grid-template-columns:1fr 1fr; gap:3px; padding:7px; }
+  .rmap-mk i { background:#fff; border-radius:1px; }
+  .rmap-ttl { font-weight:800; font-size:18px; letter-spacing:-.4px; }
+  .rmap-live { font-family:'JetBrains Mono',monospace; font-size:12px; color:#3fae6b; margin-left:10px; }
+  .rmap-meta { font-family:'JetBrains Mono',monospace; font-size:12px; color:rgba(255,255,255,0.35); }
+  .rmap-card { background:#141418; border:1px solid #23232b; border-radius:12px; overflow:hidden; overflow-x:auto; }
+  .rmap-card table { width:100%; border-collapse:collapse; }
+  .rmap-card th { text-align:left; font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:1.1px; color:rgba(255,255,255,0.35); padding:14px 18px 12px; border-bottom:1px solid #23232b; white-space:nowrap; }
+  .rmap-card th.c { text-align:center; }
+  .rmap-card td { padding:0 18px; border-bottom:1px solid #23232b; height:58px; vertical-align:middle; }
+  .rmap-card tr:last-child td { border-bottom:none; }
+  .rmap-card tr.fix td { background:rgba(232,86,42,.06); }
+  .rmap-card tr.fix td:first-child { box-shadow:inset 3px 0 0 var(--orange); }
+  .rmap-job { font-weight:700; font-size:15px; }
+  .rmap-doc { font-family:'JetBrains Mono',monospace; font-size:12px; color:rgba(255,255,255,0.35); }
+  .rmap-m { width:120px; }
+  .rmap-mcell { display:flex; flex-direction:column; align-items:center; gap:5px; }
+  .rmap-pct { font-family:'JetBrains Mono',monospace; font-size:13px; font-weight:500; }
+  .rmap-bar { width:74px; height:5px; border-radius:3px; background:#26262e; overflow:hidden; }
+  .rmap-bar i { display:block; height:100%; border-radius:3px; }
+  .rmap-r .rmap-pct { color:#e0563a; } .rmap-r .rmap-bar i { background:#e0563a; }
+  .rmap-a .rmap-pct { color:#d99021; } .rmap-a .rmap-bar i { background:#d99021; }
+  .rmap-g .rmap-pct { color:#3fae6b; } .rmap-g .rmap-bar i { background:#3fae6b; }
+  .rmap-lvl { display:inline-block; font-family:'JetBrains Mono',monospace; font-size:12px; font-weight:700; padding:3px 9px; border-radius:5px; }
+  .rmap-l1 { background:rgba(224,86,58,.16); color:#e0563a; }
+  .rmap-l2 { background:rgba(217,144,33,.16); color:#d99021; }
+  .rmap-l3 { background:rgba(63,174,107,.16); color:#3fae6b; }
+  .rmap-l4 { background:rgba(91,135,245,.16); color:#5b87f5; }
+  .rmap-after { font-family:'JetBrains Mono',monospace; font-size:13px; font-weight:700; color:#3fae6b; }
+  .rmap-next { font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--orange); }
+  .rmap-none { font-size:12px; color:rgba(255,255,255,0.22); }
+  .rmap-legend { display:flex; gap:24px; margin-top:18px; align-items:center; flex-wrap:wrap; }
+  .rmap-lg { display:flex; align-items:center; gap:8px; font-size:12px; color:rgba(255,255,255,0.4); }
+  .rmap-foot { margin-top:14px; font-size:12px; color:rgba(255,255,255,0.22); line-height:1.5; font-style:italic; }
+  .rmap-foot b { color:rgba(255,255,255,0.4); font-style:normal; font-weight:600; }
 
   /* ── FINAL CTA ── */
   .final-cta {
@@ -825,41 +826,6 @@
   .flow-hint { font-size: 11px; color: rgba(255,255,255,0.35); margin-top: 6px; font-weight: 400; font-style: italic; }
   @media (max-width: 768px) { .usecase-list { grid-template-columns: 1fr; } }
 
-  /* ── RM VIEW TOGGLE ── */
-  .rm-view-toggle { display:flex; border:1px solid rgba(255,255,255,0.1); border-radius:6px; overflow:hidden; }
-  .rm-vtab { background:transparent; border:none; padding:5px 14px; font-size:11px; font-weight:600; color:rgba(255,255,255,0.35); cursor:pointer; font-family:'Inter',sans-serif; transition:all .15s; }
-  .rm-vtab.active { background:rgba(255,255,255,0.08); color:#fff; }
-  .rm-hidden { display:none; }
-  /* ── RM BIZ TABLE ── */
-  .rm-biz-wrap { padding:0 20px 4px; overflow-x:auto; }
-  .rm-biztable { width:100%; border-collapse:collapse; font-size:12px; }
-  .rm-biztable th { padding:8px 10px; font-size:10px; font-weight:700; letter-spacing:.5px; text-transform:uppercase; color:rgba(255,255,255,0.28); text-align:left; border-bottom:1px solid rgba(255,255,255,0.07); white-space:nowrap; }
-  .rm-biztable td { padding:9px 10px; border-bottom:1px solid rgba(255,255,255,0.04); vertical-align:middle; }
-  .rm-biztable tr:hover td { background:rgba(255,255,255,0.02); }
-  .rm-biz-name { display:flex; align-items:center; gap:8px; color:rgba(255,255,255,0.8); font-weight:500; font-size:12px; }
-  .rm-biz-pri { display:flex; gap:2px; }
-  .rm-biz-star { color: var(--orange); font-size:11px; }
-  .rm-biz-star.dim { color:rgba(255,255,255,0.12); }
-  .rm-biz-pct { font-family:'JetBrains Mono',monospace; font-size:11px; }
-  .rm-biz-arr { font-family:'JetBrains Mono',monospace; font-size:11px; color:rgba(255,255,255,0.6); }
-  .rm-biz-saved { font-family:'JetBrains Mono',monospace; font-size:11px; color:#22C55E; font-weight:600; }
-  .rm-oneshot-bar { display:flex; align-items:center; gap:6px; }
-  .rm-os-track { position:relative; width:80px; height:4px; background:rgba(255,255,255,0.08); border-radius:2px; flex-shrink:0; }
-  .rm-os-now { position:absolute; left:0; top:0; height:4px; border-radius:2px; background:#EF4444; }
-  .rm-os-tgt { position:absolute; top:-3px; width:2px; height:10px; background:#22C55E; border-radius:1px; }
-  .rm-os-label { font-family:'JetBrains Mono',monospace; font-size:10px; color:rgba(255,255,255,0.45); }
-  .rm-tok { font-family:'JetBrains Mono',monospace; font-size:11px; color:rgba(255,255,255,0.4); }
-  .rm-biz-summary {
-    margin:0 20px 20px; padding:16px 20px;
-    background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08);
-    border-radius:10px; display:grid; grid-template-columns:repeat(4,1fr); gap:16px;
-  }
-  .rm-biz-kpi { display:flex; flex-direction:column; gap:4px; }
-  .rm-biz-kpi-label { font-size:10px; font-weight:700; letter-spacing:1px; text-transform:uppercase; color:rgba(255,255,255,0.28); }
-  .rm-biz-kpi-val { font-size:22px; font-weight:800; color:#fff; letter-spacing:-0.5px; }
-  .rm-biz-kpi-sub { font-size:11px; color:rgba(255,255,255,0.35); }
-  .rm-biz-kpi.highlight .rm-biz-kpi-val { color:#22C55E; }
-  .rm-biz-note { font-size:11px; color:rgba(255,255,255,0.28); margin:8px 20px 16px; font-style:italic; line-height:1.5; }
 </style>
 </head>
 <body>
@@ -1358,68 +1324,103 @@
   <div class="container">
     <div class="section-label">Runbook Map</div>
     <h2>Every use-case. Every agent. One dashboard.</h2>
-    <p class="section-sub">See how your runbooks connect, how each one performs across different AI agents, and which ones need attention — at a glance.</p>
-    <div style="margin-top:40px">
-      <div class="rm-dash" id="rmDash">
-        <!-- HEADER -->
-        <div class="rm-hdr">
-          <div class="rm-hdr-l">
-            <span class="rm-title">Runbook Map</span>
-            <span class="rm-live">Live</span>
-          </div>
-          <div class="rm-view-toggle">
-            <button class="rm-vtab active" data-view="technical">Technical</button>
-            <button class="rm-vtab" data-view="biz">Business Impact</button>
-          </div>
-          <div class="rm-hdr-r">
-            <span class="rm-stat"><b>8</b> use-cases</span>
-            <span class="rm-stat"><b>4</b> agents</span>
-            <span class="rm-stat">avg readiness <b>L2.4</b></span>
-            <span class="rm-stat">last run <b>2h ago</b></span>
-          </div>
+    <p class="section-sub">See how each job-to-be-done performs across different AI agents — and where runbooks take broken tasks to near-perfect one-shot rates.</p>
+    <div class="rmap-wrap">
+      <div class="rmap-top">
+        <div class="rmap-brand">
+          <span class="rmap-mk"><i></i><i></i><i></i><i></i></span>
+          <span class="rmap-ttl">Runbook Map</span><span class="rmap-live">● Live</span>
         </div>
-
-        <!-- BODY: technical view -->
-        <div class="rm-view-panel" id="rm-view-technical">
-        <div class="rm-body">
-          <div class="rm-sidebar" id="rmSidebar">
-            <div class="rm-plbl">Use-cases</div>
-          </div>
-          <div class="rm-mapwrap">
-            <div class="rm-plbl">Connection Map <span class="rm-plbl-note">node = runbook · edge label = token cost range</span></div>
-            <svg id="rmSvg" viewBox="0 0 560 340" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet"></svg>
-          </div>
-        </div>
-
-        <!-- MATRIX -->
-        <div class="rm-matrixwrap">
-          <div class="rm-plbl">Readiness Matrix <span class="rm-plbl-note">% = agent success rate per use-case</span></div>
-          <table class="rm-mtable" id="rmMtable"></table>
-        </div>
-        </div><!-- /rm-view-panel technical -->
-
-        <!-- BODY: business impact view -->
-        <div class="rm-view-panel rm-hidden" id="rm-view-biz">
-          <div class="rm-biz-wrap">
-            <table class="rm-biztable" id="rmBizTable">
-              <thead>
-                <tr>
-                  <th>USE-CASE</th>
-                  <th>PRI</th>
-                  <th>USER COVERAGE</th>
-                  <th>ARR AT STAKE</th>
-                  <th>ONE-SHOT NOW</th>
-                  <th>TARGET</th>
-                  <th>AVG TOKENS</th>
-                  <th>SAVED ARR</th>
-                </tr>
-              </thead>
-              <tbody id="rmBizBody"></tbody>
-            </table>
-          </div>
-          <div class="rm-biz-summary" id="rmBizSummary"></div>
-        </div>
+        <span class="rmap-meta">8 jobs · 3 agents · execution-graded · last run 2h ago</span>
       </div>
+      <div class="rmap-card">
+        <table>
+          <thead>
+            <tr>
+              <th>Job-to-be-done</th>
+              <th>Linked doc</th>
+              <th class="c">Opus&nbsp;4.8</th>
+              <th class="c">GPT-5.5</th>
+              <th class="c">Gemini&nbsp;3.1</th>
+              <th class="c">Readiness</th>
+              <th class="c">After runbook</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="fix">
+              <td class="rmap-job">Migrate users &amp; grants</td><td class="rmap-doc">/docs/migration</td>
+              <td class="rmap-m"><div class="rmap-mcell rmap-r"><span class="rmap-pct">44%</span><span class="rmap-bar"><i style="width:44%"></i></span></div></td>
+              <td class="rmap-m"><div class="rmap-mcell rmap-r"><span class="rmap-pct">17%</span><span class="rmap-bar"><i style="width:17%"></i></span></div></td>
+              <td class="rmap-m"><div class="rmap-mcell rmap-r"><span class="rmap-pct">38%</span><span class="rmap-bar"><i style="width:38%"></i></span></div></td>
+              <td style="text-align:center"><span class="rmap-lvl rmap-l1">L1</span></td>
+              <td style="text-align:center"><span class="rmap-after">→ 96% ✓</span></td>
+            </tr>
+            <tr class="fix">
+              <td class="rmap-job">Schema migration</td><td class="rmap-doc">/docs/schema</td>
+              <td class="rmap-m"><div class="rmap-mcell rmap-a"><span class="rmap-pct">58%</span><span class="rmap-bar"><i style="width:58%"></i></span></div></td>
+              <td class="rmap-m"><div class="rmap-mcell rmap-r"><span class="rmap-pct">24%</span><span class="rmap-bar"><i style="width:24%"></i></span></div></td>
+              <td class="rmap-m"><div class="rmap-mcell rmap-a"><span class="rmap-pct">51%</span><span class="rmap-bar"><i style="width:51%"></i></span></div></td>
+              <td style="text-align:center"><span class="rmap-lvl rmap-l1">L1</span></td>
+              <td style="text-align:center"><span class="rmap-after">→ 92% ✓</span></td>
+            </tr>
+            <tr class="fix">
+              <td class="rmap-job">Configure webhooks</td><td class="rmap-doc">/docs/webhooks</td>
+              <td class="rmap-m"><div class="rmap-mcell rmap-a"><span class="rmap-pct">66%</span><span class="rmap-bar"><i style="width:66%"></i></span></div></td>
+              <td class="rmap-m"><div class="rmap-mcell rmap-a"><span class="rmap-pct">55%</span><span class="rmap-bar"><i style="width:55%"></i></span></div></td>
+              <td class="rmap-m"><div class="rmap-mcell rmap-a"><span class="rmap-pct">61%</span><span class="rmap-bar"><i style="width:61%"></i></span></div></td>
+              <td style="text-align:center"><span class="rmap-lvl rmap-l2">L2</span></td>
+              <td style="text-align:center"><span class="rmap-after">→ 97% ✓</span></td>
+            </tr>
+            <tr>
+              <td class="rmap-job">Row-level security</td><td class="rmap-doc">/docs/rls</td>
+              <td class="rmap-m"><div class="rmap-mcell rmap-a"><span class="rmap-pct">72%</span><span class="rmap-bar"><i style="width:72%"></i></span></div></td>
+              <td class="rmap-m"><div class="rmap-mcell rmap-a"><span class="rmap-pct">60%</span><span class="rmap-bar"><i style="width:60%"></i></span></div></td>
+              <td class="rmap-m"><div class="rmap-mcell rmap-a"><span class="rmap-pct">66%</span><span class="rmap-bar"><i style="width:66%"></i></span></div></td>
+              <td style="text-align:center"><span class="rmap-lvl rmap-l2">L2</span></td>
+              <td style="text-align:center"><span class="rmap-next">next</span></td>
+            </tr>
+            <tr>
+              <td class="rmap-job">Bulk import</td><td class="rmap-doc">/docs/bulk</td>
+              <td class="rmap-m"><div class="rmap-mcell rmap-a"><span class="rmap-pct">69%</span><span class="rmap-bar"><i style="width:69%"></i></span></div></td>
+              <td class="rmap-m"><div class="rmap-mcell rmap-a"><span class="rmap-pct">52%</span><span class="rmap-bar"><i style="width:52%"></i></span></div></td>
+              <td class="rmap-m"><div class="rmap-mcell rmap-a"><span class="rmap-pct">64%</span><span class="rmap-bar"><i style="width:64%"></i></span></div></td>
+              <td style="text-align:center"><span class="rmap-lvl rmap-l2">L2</span></td>
+              <td style="text-align:center"><span class="rmap-next">next</span></td>
+            </tr>
+            <tr>
+              <td class="rmap-job">Full-text search</td><td class="rmap-doc">/docs/search</td>
+              <td class="rmap-m"><div class="rmap-mcell rmap-g"><span class="rmap-pct">91%</span><span class="rmap-bar"><i style="width:91%"></i></span></div></td>
+              <td class="rmap-m"><div class="rmap-mcell rmap-g"><span class="rmap-pct">84%</span><span class="rmap-bar"><i style="width:84%"></i></span></div></td>
+              <td class="rmap-m"><div class="rmap-mcell rmap-g"><span class="rmap-pct">88%</span><span class="rmap-bar"><i style="width:88%"></i></span></div></td>
+              <td style="text-align:center"><span class="rmap-lvl rmap-l3">L3</span></td>
+              <td style="text-align:center"><span class="rmap-none">not needed</span></td>
+            </tr>
+            <tr>
+              <td class="rmap-job">Create DB + schema</td><td class="rmap-doc">/docs/quickstart</td>
+              <td class="rmap-m"><div class="rmap-mcell rmap-g"><span class="rmap-pct">96%</span><span class="rmap-bar"><i style="width:96%"></i></span></div></td>
+              <td class="rmap-m"><div class="rmap-mcell rmap-g"><span class="rmap-pct">92%</span><span class="rmap-bar"><i style="width:92%"></i></span></div></td>
+              <td class="rmap-m"><div class="rmap-mcell rmap-g"><span class="rmap-pct">95%</span><span class="rmap-bar"><i style="width:95%"></i></span></div></td>
+              <td style="text-align:center"><span class="rmap-lvl rmap-l4">L4</span></td>
+              <td style="text-align:center"><span class="rmap-none">not needed</span></td>
+            </tr>
+            <tr>
+              <td class="rmap-job">Authenticate</td><td class="rmap-doc">/docs/auth</td>
+              <td class="rmap-m"><div class="rmap-mcell rmap-g"><span class="rmap-pct">98%</span><span class="rmap-bar"><i style="width:98%"></i></span></div></td>
+              <td class="rmap-m"><div class="rmap-mcell rmap-g"><span class="rmap-pct">95%</span><span class="rmap-bar"><i style="width:95%"></i></span></div></td>
+              <td class="rmap-m"><div class="rmap-mcell rmap-g"><span class="rmap-pct">97%</span><span class="rmap-bar"><i style="width:97%"></i></span></div></td>
+              <td style="text-align:center"><span class="rmap-lvl rmap-l4">L4</span></td>
+              <td style="text-align:center"><span class="rmap-none">not needed</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="rmap-legend">
+        <span class="rmap-lg"><span class="rmap-lvl rmap-l1">L1</span> Unfunctional</span>
+        <span class="rmap-lg"><span class="rmap-lvl rmap-l2">L2</span> Semi-functional</span>
+        <span class="rmap-lg"><span class="rmap-lvl rmap-l3">L3</span> Fully-functional</span>
+        <span class="rmap-lg"><span class="rmap-lvl rmap-l4">L4</span> Optimized</span>
+      </div>
+      <p class="rmap-foot"><b>Success rate per job, by model — graded by real execution (exit codes / API state), not an LLM's opinion.</b> Each job links to the doc that breaks it → we add a runbook there → re-measure (before → after). Green stays green — no runbook needed. <i>Illustrative.</i></p>
     </div>
   </div>
 </section>
@@ -1820,427 +1821,6 @@ document.querySelectorAll('.step').forEach(step => {
   window.addEventListener('resize', resize);
 })();
 
-/* ═══════════════════════════ RUNBOOK MAP DASHBOARD ═══════════════════════════ */
-(function buildRunbookMap() {
-  const root = document.getElementById('rmDash');
-  if (!root) return;
-
-  const UC = [
-    { id:'auth',     label:'Authenticate',  short:'Auth',   level:4, tokens:'1–2k',  x:75,  y:170 },
-    { id:'create',   label:'Create Index',  short:'Create', level:3, tokens:'3–6k',  x:205, y:95  },
-    { id:'webhooks', label:'Webhooks',      short:'Hooks',  level:1, tokens:'4–8k',  x:205, y:250 },
-    { id:'search',   label:'Search Query',  short:'Search', level:3, tokens:'2–4k',  x:350, y:120 },
-    { id:'bulk',     label:'Bulk Import',   short:'Bulk',   level:2, tokens:'8–15k', x:350, y:215 },
-    { id:'delete',   label:'Delete Index',  short:'Delete', level:1, tokens:'2–4k',  x:350, y:285 },
-    { id:'update',   label:'Update Doc',    short:'Update', level:2, tokens:'3–5k',  x:475, y:90  },
-    { id:'export',   label:'Export Data',   short:'Export', level:3, tokens:'5–10k', x:475, y:200 }
-  ];
-
-  const EDGES = [
-    { f:'auth',    t:'create',   lbl:'1–3k' },
-    { f:'auth',    t:'webhooks', lbl:'4–8k' },
-    { f:'create',  t:'search',   lbl:'2–4k' },
-    { f:'create',  t:'bulk',     lbl:'8–15k'},
-    { f:'create',  t:'export',   lbl:'5–8k' },
-    { f:'create',  t:'delete',   lbl:'2–4k' },
-    { f:'bulk',    t:'search',   lbl:'2–3k' },
-    { f:'search',  t:'update',   lbl:'3–5k' },
-    { f:'webhooks',t:'search',   lbl:'2–4k' }
-  ];
-
-  const AGENTS = ['Claude 3.5', 'GPT-4o', 'Gemini 1.5', 'Llama 3.3'];
-
-  const MATRIX = {
-    auth:     [98, 91, 96, 78],
-    create:   [94, 71, 82, 44],
-    search:   [91, 84, 88, 61],
-    bulk:     [61, 38, 59, 22],
-    update:   [73, 65, 70, 38],
-    delete:   [42, 31, 38, 18],
-    export:   [88, 72, 79, 51],
-    webhooks: [35, 28, 32, 12]
-  };
-
-  const LCOL = { 1:'#EF4444', 2:'#F59E0B', 3:'#22C55E', 4:'#3B82F6' };
-  const LNAME = { 1:'Unfunctional', 2:'Semi-functional', 3:'Fully-functional', 4:'Optimized' };
-  const R = 26;
-  const ARROW_OFFSET = 14;
-
-  const ucById = {};
-  UC.forEach(u => { ucById[u.id] = u; });
-
-  function scoreColor(s) {
-    if (s >= 90) return '#22C55E';
-    if (s >= 70) return '#84CC16';
-    if (s >= 50) return '#F59E0B';
-    return '#EF4444';
-  }
-
-  /* ───── SIDEBAR ───── */
-  const sidebar = document.getElementById('rmSidebar');
-  UC.forEach(u => {
-    const col = LCOL[u.level];
-    const item = document.createElement('div');
-    item.className = 'rm-ucitem';
-    item.dataset.id = u.id;
-    item.innerHTML = `
-      <span class="rm-ucdot" style="background:${col}"></span>
-      <div class="rm-ucinfo">
-        <div class="rm-ucname">${u.label}</div>
-        <div class="rm-uctok">${u.tokens} tok</div>
-      </div>
-      <span class="rm-badge" style="background:${col}33;color:${col}">L${u.level}</span>
-    `;
-    item.addEventListener('click', () => setSelected(u.id));
-    sidebar.appendChild(item);
-  });
-
-  /* ───── SVG ───── */
-  const svg = document.getElementById('rmSvg');
-  const SVGNS = 'http://www.w3.org/2000/svg';
-
-  // defs
-  const defs = document.createElementNS(SVGNS, 'defs');
-  defs.innerHTML = `
-    <marker id="rm-arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M 0 0 L 10 5 L 0 10 z" fill="rgba(255,255,255,0.3)"/>
-    </marker>
-    <marker id="rm-arr-sel" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M 0 0 L 10 5 L 0 10 z" fill="rgba(232,86,42,0.75)"/>
-    </marker>
-  `;
-  svg.appendChild(defs);
-
-  // edges group (rendered first, behind nodes)
-  const edgesG = document.createElementNS(SVGNS, 'g');
-  edgesG.setAttribute('id', 'rmEdges');
-  svg.appendChild(edgesG);
-
-  const edgeEls = [];
-  EDGES.forEach((e, i) => {
-    const a = ucById[e.f], b = ucById[e.t];
-    const dx = b.x - a.x, dy = b.y - a.y;
-    const len = Math.sqrt(dx*dx + dy*dy);
-    const ux = dx / len, uy = dy / len;
-    const sx = a.x + ux * (R + 2);
-    const sy = a.y + uy * (R + 2);
-    const ex = b.x - ux * (R + ARROW_OFFSET);
-    const ey = b.y - uy * (R + ARROW_OFFSET);
-    let mx = (sx + ex) / 2;
-    let my = (sy + ey) / 2;
-
-    // curve only for create→export to clear other labels
-    let pathD;
-    let labelX, labelY;
-    if (e.f === 'create' && e.t === 'export') {
-      // perpendicular offset (right side relative to direction)
-      const px = -uy, py = ux;
-      const cOff = 28;
-      const cx = mx + px * cOff;
-      const cy = my + py * cOff;
-      pathD = `M ${sx} ${sy} Q ${cx} ${cy} ${ex} ${ey}`;
-      // approximate label at quadratic midpoint t=0.5
-      labelX = 0.25 * sx + 0.5 * cx + 0.25 * ex;
-      labelY = 0.25 * sy + 0.5 * cy + 0.25 * ey - 5;
-    } else {
-      pathD = `M ${sx} ${sy} L ${ex} ${ey}`;
-      labelX = mx;
-      labelY = my - 5;
-    }
-
-    const path = document.createElementNS(SVGNS, 'path');
-    path.setAttribute('d', pathD);
-    path.setAttribute('fill', 'none');
-    path.setAttribute('stroke', 'rgba(255,255,255,0.15)');
-    path.setAttribute('stroke-width', '1');
-    path.setAttribute('marker-end', 'url(#rm-arr)');
-    path.dataset.f = e.f;
-    path.dataset.t = e.t;
-    edgesG.appendChild(path);
-
-    const lbl = document.createElementNS(SVGNS, 'text');
-    lbl.setAttribute('x', labelX);
-    lbl.setAttribute('y', labelY);
-    lbl.setAttribute('text-anchor', 'middle');
-    lbl.setAttribute('font-size', '9');
-    lbl.setAttribute('font-family', "'JetBrains Mono', monospace");
-    lbl.setAttribute('fill', 'rgba(255,255,255,0.28)');
-    lbl.textContent = e.lbl;
-    lbl.dataset.f = e.f;
-    lbl.dataset.t = e.t;
-    edgesG.appendChild(lbl);
-
-    edgeEls.push({ path, lbl, f: e.f, t: e.t });
-  });
-
-  // nodes group
-  const nodesG = document.createElementNS(SVGNS, 'g');
-  nodesG.setAttribute('id', 'rmNodes');
-  svg.appendChild(nodesG);
-
-  const nodeEls = {};
-  UC.forEach(u => {
-    const col = LCOL[u.level];
-    const g = document.createElementNS(SVGNS, 'g');
-    g.style.cursor = 'pointer';
-    g.dataset.id = u.id;
-
-    const halo = document.createElementNS(SVGNS, 'circle');
-    halo.setAttribute('cx', u.x);
-    halo.setAttribute('cy', u.y);
-    halo.setAttribute('r', R + 5);
-    halo.setAttribute('fill', 'none');
-    halo.setAttribute('stroke', col);
-    halo.setAttribute('stroke-width', '0');
-    halo.setAttribute('opacity', '0.6');
-    g.appendChild(halo);
-
-    const circle = document.createElementNS(SVGNS, 'circle');
-    circle.setAttribute('cx', u.x);
-    circle.setAttribute('cy', u.y);
-    circle.setAttribute('r', R);
-    circle.setAttribute('fill', col + '22');
-    circle.setAttribute('stroke', col);
-    circle.setAttribute('stroke-width', '1.5');
-    g.appendChild(circle);
-
-    const lbl = document.createElementNS(SVGNS, 'text');
-    lbl.setAttribute('x', u.x);
-    lbl.setAttribute('y', u.y + 4);
-    lbl.setAttribute('text-anchor', 'middle');
-    lbl.setAttribute('font-size', '9');
-    lbl.setAttribute('font-weight', '700');
-    lbl.setAttribute('fill', '#fff');
-    lbl.setAttribute('font-family', "'Inter', sans-serif");
-    lbl.style.pointerEvents = 'none';
-    lbl.textContent = u.short;
-    g.appendChild(lbl);
-
-    const badgeRect = document.createElementNS(SVGNS, 'rect');
-    badgeRect.setAttribute('x', u.x - 10);
-    badgeRect.setAttribute('y', u.y + R + 5);
-    badgeRect.setAttribute('width', 20);
-    badgeRect.setAttribute('height', 12);
-    badgeRect.setAttribute('rx', 2);
-    badgeRect.setAttribute('fill', col + '33');
-    g.appendChild(badgeRect);
-
-    const badgeText = document.createElementNS(SVGNS, 'text');
-    badgeText.setAttribute('x', u.x);
-    badgeText.setAttribute('y', u.y + R + 14);
-    badgeText.setAttribute('text-anchor', 'middle');
-    badgeText.setAttribute('font-size', '8');
-    badgeText.setAttribute('font-weight', '700');
-    badgeText.setAttribute('fill', col);
-    badgeText.setAttribute('font-family', "'Inter', sans-serif");
-    badgeText.style.pointerEvents = 'none';
-    badgeText.textContent = 'L' + u.level;
-    g.appendChild(badgeText);
-
-    g.addEventListener('click', () => setSelected(u.id));
-
-    nodesG.appendChild(g);
-    nodeEls[u.id] = { g, halo, circle };
-  });
-
-  /* ───── MATRIX ───── */
-  const mtable = document.getElementById('rmMtable');
-  let thead = '<thead><tr><th>USE-CASE</th>';
-  AGENTS.forEach(a => { thead += `<th>${a.toUpperCase()}</th>`; });
-  thead += '</tr></thead>';
-  let tbody = '<tbody>';
-  UC.forEach(u => {
-    const col = LCOL[u.level];
-    const scores = MATRIX[u.id] || [];
-    tbody += `<tr data-id="${u.id}">`;
-    tbody += `<td><div class="rm-muc"><span class="rm-ucdot" style="background:${col}"></span><span class="rm-muc-name">${u.label}</span></div></td>`;
-    scores.forEach(s => {
-      const c = scoreColor(s);
-      tbody += `<td><div class="rm-score"><div class="rm-barbg"><div class="rm-bar" style="width:${s}%;background:${c}"></div></div><span class="rm-pct" style="color:${c}">${s}%</span></div></td>`;
-    });
-    tbody += '</tr>';
-  });
-  tbody += '</tbody>';
-  mtable.innerHTML = thead + tbody;
-
-  // matrix row click
-  mtable.querySelectorAll('tbody tr').forEach(tr => {
-    tr.style.cursor = 'pointer';
-    tr.addEventListener('click', () => setSelected(tr.dataset.id));
-  });
-
-  /* ───── SELECTION ───── */
-  let selected = null;
-
-  function setSelected(id) {
-    selected = (selected === id) ? null : id;
-
-    // sidebar
-    sidebar.querySelectorAll('.rm-ucitem').forEach(el => {
-      el.classList.toggle('sel', el.dataset.id === selected);
-    });
-
-    // matrix
-    mtable.querySelectorAll('tbody tr').forEach(tr => {
-      tr.classList.toggle('sel', tr.dataset.id === selected);
-    });
-
-    // nodes
-    Object.keys(nodeEls).forEach(nid => {
-      const ne = nodeEls[nid];
-      const u = ucById[nid];
-      const col = LCOL[u.level];
-      if (nid === selected) {
-        ne.circle.setAttribute('fill', col + '44');
-        ne.circle.setAttribute('stroke', '#E8562A');
-        ne.circle.setAttribute('stroke-width', '2.5');
-        ne.halo.setAttribute('stroke', '#E8562A');
-        ne.halo.setAttribute('stroke-width', '1.5');
-      } else {
-        ne.circle.setAttribute('fill', col + '22');
-        ne.circle.setAttribute('stroke', col);
-        ne.circle.setAttribute('stroke-width', '1.5');
-        ne.halo.setAttribute('stroke-width', '0');
-      }
-    });
-
-    // edges
-    edgeEls.forEach(e => {
-      const connected = selected && (e.f === selected || e.t === selected);
-      if (selected === null) {
-        e.path.setAttribute('stroke', 'rgba(255,255,255,0.15)');
-        e.path.setAttribute('stroke-width', '1');
-        e.path.setAttribute('marker-end', 'url(#rm-arr)');
-        e.lbl.setAttribute('fill', 'rgba(255,255,255,0.28)');
-      } else if (connected) {
-        e.path.setAttribute('stroke', 'rgba(232,86,42,0.65)');
-        e.path.setAttribute('stroke-width', '1.5');
-        e.path.setAttribute('marker-end', 'url(#rm-arr-sel)');
-        e.lbl.setAttribute('fill', 'rgba(232,86,42,0.7)');
-      } else {
-        e.path.setAttribute('stroke', 'rgba(255,255,255,0.06)');
-        e.path.setAttribute('stroke-width', '1');
-        e.path.setAttribute('marker-end', 'url(#rm-arr)');
-        e.lbl.setAttribute('fill', 'rgba(255,255,255,0.1)');
-      }
-    });
-  }
-})();
-
-/* ═══════════════════════════ RUNBOOK MAP: BUSINESS IMPACT ═══════════════════════════ */
-(function(){
-  const BIZ = [
-    { id:'create-db',  label:'Create DB + schema',         pri:3, users:68, arr:340, curShot:12, tgtShot:85, tokens:'6–18k' },
-    { id:'connect-be', label:'Connect DB to backend',      pri:3, users:71, arr:355, curShot:8,  tgtShot:90, tokens:'4–12k' },
-    { id:'pg-migrate', label:'Migrate from Postgres',      pri:3, users:55, arr:275, curShot:5,  tgtShot:78, tokens:'12–35k'},
-    { id:'fts',        label:'Full-text search setup',     pri:2, users:45, arr:225, curShot:35, tgtShot:95, tokens:'3–8k'  },
-    { id:'rls',        label:'Row-level security config',  pri:2, users:32, arr:160, curShot:18, tgtShot:82, tokens:'5–14k' },
-    { id:'webhook',    label:'Webhook + Slack notification',pri:2, users:38, arr:190, curShot:22, tgtShot:88, tokens:'4–10k' },
-    { id:'replicas',   label:'Read replicas setup',        pri:1, users:18, arr:90,  curShot:28, tgtShot:85, tokens:'3–7k'  },
-    { id:'col-migrate',label:'Zero-downtime column add',   pri:1, users:15, arr:75,  curShot:40, tgtShot:92, tokens:'2–6k'  },
-  ];
-
-  const LCOL = { 1:'#EF4444', 2:'#F59E0B', 3:'#22C55E', 4:'#3B82F6' };
-
-  function stars(n) {
-    let s = '';
-    for (let i = 3; i >= 1; i--) {
-      s += `<span class="rm-biz-star${i > n ? ' dim' : ''}">★</span>`;
-    }
-    return `<div class="rm-biz-pri">${s}</div>`;
-  }
-
-  function buildBizTable() {
-    const tbody = document.getElementById('rmBizBody');
-    if (!tbody) return;
-
-    let totalArr = 0, savedArr = 0, totalArrCur = 0;
-
-    BIZ.forEach(uc => {
-      const saved = Math.round(uc.arr * (uc.tgtShot - uc.curShot) / 100);
-      savedArr += saved;
-      totalArr += uc.arr;
-      totalArrCur += Math.round(uc.arr * uc.curShot / 100);
-
-      const barWidth = 80;
-      const nowPx = (uc.curShot / 100) * barWidth;
-      const tgtPx = (uc.tgtShot / 100) * barWidth;
-
-      // maturity level roughly maps to one-shot level
-      const lvl = uc.curShot >= 80 ? 4 : uc.curShot >= 50 ? 3 : uc.curShot >= 25 ? 2 : 1;
-      const lc = LCOL[lvl];
-
-      const tr = document.createElement('tr');
-      tr.innerHTML = `
-        <td><div class="rm-biz-name"><div class="rm-ucdot" style="background:${lc}"></div>${uc.label}</div></td>
-        <td>${stars(uc.pri)}</td>
-        <td><span class="rm-biz-pct" style="color:rgba(255,255,255,0.65)">${uc.users}%</span></td>
-        <td><span class="rm-biz-arr">$${uc.arr}k</span></td>
-        <td>
-          <div class="rm-oneshot-bar">
-            <div class="rm-os-track">
-              <div class="rm-os-now" style="width:${nowPx}px"></div>
-              <div class="rm-os-tgt" style="left:${tgtPx}px"></div>
-            </div>
-            <span class="rm-os-label">${uc.curShot}% → ${uc.tgtShot}%</span>
-          </div>
-        </td>
-        <td><span class="rm-biz-pct" style="color:#22C55E">${uc.tgtShot}%</span></td>
-        <td><span class="rm-tok">${uc.tokens}</span></td>
-        <td><span class="rm-biz-saved">+$${saved}k</span></td>
-      `;
-      tbody.appendChild(tr);
-    });
-
-    // Summary KPIs
-    const summary = document.getElementById('rmBizSummary');
-    if (!summary) return;
-    const curPct = Math.round(totalArrCur / totalArr * 100);
-    const tgtPct = Math.round((totalArr - savedArr + totalArrCur) / totalArr * 100);
-    summary.innerHTML = `
-      <div class="rm-biz-kpi">
-        <div class="rm-biz-kpi-label">ARR at stake</div>
-        <div class="rm-biz-kpi-val">$${(totalArr/1000).toFixed(1)}M</div>
-        <div class="rm-biz-kpi-sub">across ${BIZ.length} use-cases</div>
-      </div>
-      <div class="rm-biz-kpi">
-        <div class="rm-biz-kpi-label">Current one-shot capture</div>
-        <div class="rm-biz-kpi-val" style="color:#F59E0B">${curPct}%</div>
-        <div class="rm-biz-kpi-sub">avg across all LLMs</div>
-      </div>
-      <div class="rm-biz-kpi">
-        <div class="rm-biz-kpi-label">With Docka runbooks</div>
-        <div class="rm-biz-kpi-val" style="color:#22C55E">${tgtPct}%</div>
-        <div class="rm-biz-kpi-sub">target one-shot rate</div>
-      </div>
-      <div class="rm-biz-kpi highlight">
-        <div class="rm-biz-kpi-label">Estimated ARR saved</div>
-        <div class="rm-biz-kpi-val">$${(savedArr/1000).toFixed(1)}M</div>
-        <div class="rm-biz-kpi-sub">from one-shot optimization</div>
-      </div>
-    `;
-
-    // Note below summary
-    const note = document.createElement('div');
-    note.className = 'rm-biz-note';
-    note.textContent = 'ARR saved = delta between current one-shot rate and target × ARR at stake per use-case. One-shot = agent completes the task without human-in-the-loop intervention. Token costs excluded from this estimate.';
-    summary.after(note);
-  }
-
-  // View toggle
-  document.querySelectorAll('.rm-vtab').forEach(btn => {
-    btn.addEventListener('click', () => {
-      document.querySelectorAll('.rm-vtab').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      const view = btn.dataset.view;
-      document.querySelectorAll('.rm-view-panel').forEach(p => p.classList.add('rm-hidden'));
-      const target = document.getElementById('rm-view-' + view);
-      if (target) target.classList.remove('rm-hidden');
-    });
-  });
-
-  buildBizTable();
-})();
 </script>
 
 </body>
