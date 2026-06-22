@@ -834,6 +834,25 @@
   .uc-ex::before { content: '"'; position: absolute; left: 14px; top: 13px; color: var(--orange); font-size: 18px; font-style: normal; line-height: 1; }
   @media (max-width: 768px) { .usecase-list { grid-template-columns: 1fr; } .step-row { grid-template-columns: 40px 1fr; gap: 16px; } }
 
+  /* ── WHY DOCKA (final CTA) ── */
+  .why-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: start; }
+  .why-left h2 { font-size: clamp(28px, 3.5vw, 46px); font-weight: 900; letter-spacing: -2.5px; line-height: 1.05; margin-bottom: 40px; }
+  .why-left h2 span { color: var(--orange); }
+  .why-point { display: flex; gap: 14px; margin-bottom: 24px; align-items: flex-start; }
+  .why-num { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--ink-dim); min-width: 30px; padding-top: 3px; }
+  .why-content h4 { font-size: 15px; font-weight: 700; color: var(--ink); margin-bottom: 3px; }
+  .why-content p  { font-size: 13px; color: var(--ink-muted); line-height: 1.55; }
+  .dark-form-card { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.10); border-radius: 16px; padding: 30px 26px; }
+  .dark-form-card h3 { font-size: 16px; font-weight: 700; margin-bottom: 6px; }
+  .dark-form-card .form-sub { font-size: 13px; color: var(--ink-muted); margin-bottom: 22px; line-height: 1.5; }
+  .form-label { display: block; font-size: 12px; font-weight: 600; margin-bottom: 5px; color: rgba(255,255,255,0.6); }
+  .dark-input { width: 100%; padding: 11px 14px; border: 1px solid var(--border-strong); border-radius: 6px; font-size: 14px; font-family: inherit; background: rgba(255,255,255,0.06); color: var(--ink); outline: none; margin-bottom: 14px; transition: border-color 0.15s; }
+  .dark-input:focus { border-color: rgba(255,255,255,0.35); }
+  .dark-input::placeholder { color: var(--ink-dim); }
+  .dark-note { font-size: 12px; color: var(--ink-dim); margin-top: 10px; text-align: center; line-height: 1.5; }
+  .dark-success { display: none; padding: 12px 16px; background: rgba(34,197,94,0.15); border: 1px solid rgba(34,197,94,0.3); border-radius: 6px; font-size: 14px; color: #4ade80; text-align: center; margin-top: 10px; }
+  @media (max-width: 768px) { .why-grid { grid-template-columns: 1fr; } }
+
 </style>
 </head>
 <body>
@@ -1535,18 +1554,78 @@
 <div class="divider"></div>
 
 <!-- ═══════════════════════════ FINAL CTA ═══════════════════════════ -->
-<section class="final-cta" id="cta">
+<section class="final-cta" id="cta" style="text-align:left;padding:96px 0">
   <div class="container">
-    <h2>See exactly which use-cases your agents can one-shot — and which ones are burning tokens.</h2>
-    <p>Start with a Scan (1–2 use-cases, ~1 week) or a full Audit (your complete JTBD list, 3 weeks). Either way: a Runbook Map, a readiness score, and runbooks for your worst gaps.</p>
-    <form class="cta-form" onsubmit="event.preventDefault(); alert('Thanks! We\\'ll be in touch.');">
-      <input type="email" placeholder="you@company.com" required>
-      <button type="submit">Get Started →</button>
-    </form>
+    <div class="why-grid">
+      <div class="why-left">
+        <h2>Why runbooks. <span>Why Docka.</span></h2>
+        <div class="why-point">
+          <div class="why-num">01</div>
+          <div class="why-content">
+            <h4>First runbooks covering core use cases in 14 days</h4>
+            <p>No engineering from your team. We handle everything.</p>
+          </div>
+        </div>
+        <div class="why-point">
+          <div class="why-num">02</div>
+          <div class="why-content">
+            <h4>Free audit: which APIs and flows to prioritize for AI agents</h4>
+            <p>A concrete roadmap for your engineering team, not guesswork.</p>
+          </div>
+        </div>
+        <div class="why-point">
+          <div class="why-num">03</div>
+          <div class="why-content">
+            <h4>Outcompete your category</h4>
+            <p>Be the first 100% AI agent-ready product in your space, 10× faster than building it yourself.</p>
+          </div>
+        </div>
+        <div class="why-point">
+          <div class="why-num">04</div>
+          <div class="why-content">
+            <h4>Free agent-readiness map vs. your direct competitors</h4>
+            <p>Same use cases, same agents, side-by-side scoring. No strings attached.</p>
+          </div>
+        </div>
+        <div class="why-point">
+          <div class="why-num">05</div>
+          <div class="why-content">
+            <h4>External expertise on what actually works</h4>
+            <p>We bring best practices from across dozens of products, not just yours.</p>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="dark-form-card">
+          <h3>Get your free agent-readiness report</h3>
+          <p class="form-sub">Submit your product URL and we'll reply within 3 business days with the full report.</p>
+          <form id="ctaFormV5" onsubmit="submitCtaFormV5(event)">
+            <label class="form-label" for="ctaUrlV5">Product URL</label>
+            <input class="dark-input" id="ctaUrlV5" type="url" name="url" placeholder="https://yourproduct.com" required>
+            <label class="form-label" for="ctaEmailV5">Work email</label>
+            <input class="dark-input" id="ctaEmailV5" type="email" name="email" placeholder="you@company.com" required>
+            <button type="submit" style="display:block;width:100%;padding:13px 20px;border-radius:999px;font-size:15px;font-weight:700;cursor:pointer;text-align:center;border:none;background:var(--orange);color:#fff;font-family:inherit;transition:opacity 0.15s" onmouseover="this.style.opacity='.88'" onmouseout="this.style.opacity='1'">Request free audit →</button>
+            <p class="dark-note">No commitment. No sales call. We run the tests and send you the results.</p>
+          </form>
+          <div class="dark-success" id="ctaSuccessV5">Sent! We'll reply with your report within 3 business days.</div>
+        </div>
+      </div>
+    </div>
   </div>
 </section>
 
 <script>
+function submitCtaFormV5(e) {
+  e.preventDefault();
+  const url   = document.getElementById("ctaUrlV5").value;
+  const email = document.getElementById("ctaEmailV5").value;
+  const subject = encodeURIComponent("Agent-Readiness Audit Request");
+  const body    = encodeURIComponent("Product URL: " + url + "\nWork email: " + email + "\n\nPlease run the audit and send me the full report.");
+  window.location.href = "mailto:hello@docka.io?subject=" + subject + "&body=" + body;
+  document.getElementById("ctaFormV5").style.display = "none";
+  document.getElementById("ctaSuccessV5").style.display = "block";
+}
+
 /* ═══════════════════════════ NAV DROPDOWN ═══════════════════════════ */
 document.querySelectorAll('.nav-dropdown-trigger').forEach(trigger => {
   trigger.addEventListener('click', (e) => {
