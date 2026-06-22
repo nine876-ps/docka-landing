@@ -837,7 +837,7 @@
   /* ── WHY DOCKA (final CTA) ── */
   .why-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: start; }
   .why-left h2 { font-size: clamp(28px, 3.5vw, 46px); font-weight: 900; letter-spacing: -2.5px; line-height: 1.05; margin-bottom: 40px; }
-  .why-left h2 span { color: var(--orange); }
+  .why-left h2 span { color: var(--orange); white-space: nowrap; }
   .why-point { display: flex; gap: 14px; margin-bottom: 24px; align-items: flex-start; }
   .why-num { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--ink-dim); min-width: 30px; padding-top: 3px; }
   .why-content h4 { font-size: 15px; font-weight: 700; color: var(--ink); margin-bottom: 3px; }
@@ -968,7 +968,7 @@
 <section>
   <div class="container">
     <div class="section-label">Who It's For</div>
-    <h2>Built for API-first products. <span style="font-weight:400;color:var(--ink-muted)">Works for UI-heavy SaaS too.</span></h2>
+    <h2>Built for API-first products. <span style="font-weight:400;color:var(--ink-muted)">Works for UI-heavy SaaS&nbsp;too.</span></h2>
     <div class="audience-grid">
 
       <div class="audience-card" style="border-color:var(--orange)">

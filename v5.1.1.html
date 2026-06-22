@@ -34,7 +34,7 @@
 
   /* ── Utility ── */
   .container { max-width: 1120px; margin: 0 auto; padding: 0 24px; }
-  .hl { background: var(--orange); color: #fff; padding: 2px 8px; display: inline; line-height: 1.4; }
+  .hl { background: var(--orange); color: #fff; padding: 2px 8px; display: inline; line-height: 1.4; white-space: nowrap; }
   .hl-dark { background: var(--ink); color: #fff; padding: 2px 8px; display: inline; line-height: 1.4; }
 
   /* ── NAV ── */
@@ -458,7 +458,7 @@
   .why-docka { padding: 96px 0; }
   .why-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: start; }
   .why-left h2 { font-size: clamp(28px, 3.5vw, 46px); font-weight: 900; letter-spacing: -2.5px; line-height: 1.05; color: #fff; margin-bottom: 40px; }
-  .why-left h2 span { color: var(--orange); }
+  .why-left h2 span { color: var(--orange); white-space: nowrap; }
   .why-point { display: flex; gap: 14px; margin-bottom: 24px; align-items: flex-start; }
   .why-num { font-family: var(--mono); font-size: 12px; color: rgba(255,255,255,0.35); min-width: 30px; padding-top: 3px; }
   .why-content h4 { font-size: 15px; font-weight: 700; color: #fff; margin-bottom: 3px; }
@@ -640,7 +640,7 @@
 <section class="section-white">
   <div class="container">
     <span class="section-eyebrow">Who It's For</span>
-    <h2 style="font-size:clamp(24px,3vw,38px);font-weight:900;letter-spacing:-1.5px;line-height:1.1;margin-bottom:0">Built for API-first products. <span style="font-weight:400;color:var(--ink-muted)">Works for UI-heavy SaaS too.</span></h2>
+    <h2 style="font-size:clamp(24px,3vw,38px);font-weight:900;letter-spacing:-1.5px;line-height:1.1;margin-bottom:0">Built for API-first products. <span style="font-weight:400;color:var(--ink-muted)">Works for UI-heavy SaaS&nbsp;too.</span></h2>
     <div class="fw-grid">
 
       <div class="fw-card">
