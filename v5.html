@@ -611,54 +611,39 @@
   }
 
   /* ── HOW IT WORKS ── */
-  .flow {
-    display: flex;
-    align-items: stretch;
-    gap: 10px;
-    margin-top: 40px;
-    flex-wrap: wrap;
-    justify-content: center;
+  .steps-list { margin-top: 48px; }
+  .step-row {
+    display: grid;
+    grid-template-columns: 56px 1fr;
+    gap: 32px;
+    padding: 28px 0;
+    border-top: 1px solid var(--border);
+    align-items: start;
   }
-  .flow-box {
-    flex: 1;
-    min-width: 160px;
-    background: var(--bg-1);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 22px 18px;
-    font-size: 14px;
-    text-align: center;
-    color: var(--ink);
-    line-height: 1.45;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  .flow-box.highlight {
-    background: var(--orange);
-    border-color: var(--orange);
-    color: #fff;
-    font-weight: 600;
-  }
-  .flow-arrow {
-    display: flex;
-    align-items: center;
+  .step-row:last-child { border-bottom: 1px solid var(--border); }
+  .step-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    font-weight: 700;
     color: var(--orange);
-    font-size: 22px;
-    font-weight: 600;
+    letter-spacing: 1px;
+    padding-top: 5px;
   }
+  .step-content { display: flex; flex-direction: column; gap: 8px; }
+  .step-title { font-size: 19px; font-weight: 700; color: var(--ink); line-height: 1.3; }
+  .step-title.hl { color: var(--orange); }
+  .step-desc { font-size: 15px; color: var(--ink-muted); line-height: 1.65; max-width: 700px; }
   .flow-note {
-    margin-top: 24px;
+    margin-top: 40px;
+    padding: 20px 28px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid var(--border);
+    border-radius: 10px;
     color: var(--ink-muted);
-    font-size: 15px;
-    text-align: center;
-    max-width: 720px;
-    margin-left: auto;
-    margin-right: auto;
+    font-size: 14px;
     line-height: 1.65;
   }
   .flow-note strong { color: var(--ink); font-weight: 700; }
-  .flow-note em { color: var(--orange); font-style: italic; }
 
   /* ── WHY US placeholder ── */
   .tbd-card {
@@ -847,10 +832,7 @@
     position: relative; padding-left: 32px;
   }
   .uc-ex::before { content: '"'; position: absolute; left: 14px; top: 13px; color: var(--orange); font-size: 18px; font-style: normal; line-height: 1; }
-  /* flow step labels */
-  .flow-step { font-family: var(--mono); font-size: 10px; color: var(--orange); font-weight: 700; margin-bottom: 6px; letter-spacing: 1px; }
-  .flow-hint { font-size: 11px; color: rgba(255,255,255,0.35); margin-top: 6px; font-weight: 400; font-style: italic; }
-  @media (max-width: 768px) { .usecase-list { grid-template-columns: 1fr; } }
+  @media (max-width: 768px) { .usecase-list { grid-template-columns: 1fr; } .step-row { grid-template-columns: 40px 1fr; gap: 16px; } }
 
 </style>
 </head>
@@ -1086,8 +1068,8 @@
 <section>
   <div class="container">
     <div class="section-label">What We Measure</div>
-    <h2>Eight technical pillars, each one a failure mode.</h2>
-    <p class="section-sub">Agent Readiness evaluates products across eight pillars. Each one addresses a specific failure mode observed in production. Click through to see what each pillar catches.</p>
+    <h2>Eight dimensions where products fail agents in production.</h2>
+    <p class="section-sub">These are the failure modes we surface across every use-case we measure. Each one maps to a specific pattern we've observed: agents looping, burning tokens, or silently producing wrong state.</p>
 
     <div class="measure-wrap">
       <div class="tab-list">
@@ -1127,43 +1109,43 @@
       <div class="tab-panel">
         <div class="tab-panel-content active" id="t1">
           <h3>API Coverage</h3>
-          <p class="coming-soon">Content coming soon — this pillar is currently being evaluated.</p>
-          <div class="without"><strong>Without this:</strong> agents call undocumented endpoints or hit gaps where the docs lie about what's available.</div>
+          <p>Do your APIs expose everything an agent needs to complete the use-case — including preconditions, intermediate states, and cleanup paths? We run baseline use-cases and record exactly which endpoints agents hit, in what order, and which calls return unexpected responses or gaps.</p>
+          <div class="without"><strong>Failure mode:</strong> agents follow docs that don't match the actual API, hit undocumented endpoints, or reach a step with no machine-readable path forward. The task stalls — not because the agent is wrong, but because the product doesn't expose what's needed.</div>
         </div>
         <div class="tab-panel-content" id="t2">
           <h3>Authentication Flows</h3>
-          <p class="coming-soon">Content coming soon — this pillar is currently being evaluated.</p>
-          <div class="without"><strong>Without this:</strong> agents loop on expired tokens, retry with wrong scopes, and fail silently.</div>
+          <p>Can an agent authenticate and maintain a valid session for the full duration of a use-case — without asking a human for credentials or re-auth mid-task? We measure whether auth succeeds in one shot and whether the agent recovers when tokens expire during a long-running task.</p>
+          <div class="without"><strong>Failure mode:</strong> agents loop on expired tokens, retry with wrong scopes, or pause waiting for a human to re-authenticate — turning a one-shot task into an interactive session. The user sees a broken workflow; the product gets the blame.</div>
         </div>
         <div class="tab-panel-content" id="t3">
           <h3>Error Handling</h3>
-          <p class="coming-soon">Content coming soon — this pillar is currently being evaluated.</p>
-          <div class="without"><strong>Without this:</strong> ambiguous error codes turn recoverable failures into permanent dead-ends.</div>
+          <p>Are your error codes specific enough for an agent to decide what to do next — retry, abort, or escalate? We deliberately trigger error paths in baseline runs and observe whether the agent recovers correctly or loops trying variations of the same failing call.</p>
+          <div class="without"><strong>Failure mode:</strong> a <code>200 OK</code> that hides a failure, or a <code>500</code> with no context, gives the agent no signal to act on. It retries blindly, burning tokens on guesses. In NocoDB baselines, this pattern was responsible for the worst token spikes — up to 376k on a single use-case.</div>
         </div>
         <div class="tab-panel-content" id="t4">
           <h3>Rate Limiting</h3>
-          <p class="coming-soon">Content coming soon — this pillar is currently being evaluated.</p>
-          <div class="without"><strong>Without this:</strong> agents hammer your API into 429-spirals and never back off correctly.</div>
+          <p>Is your backoff behavior documented and predictable enough for an agent to handle without human oversight? We observe retry patterns and token cost spikes in baseline runs — unexplained cost spikes often trace back to unhandled <code>429</code>s with no documented backoff strategy.</p>
+          <div class="without"><strong>Failure mode:</strong> agents hit rate limits, receive a <code>429</code>, and enter retry spirals that burn context and time. Without documented backoff guidance, the agent has no basis for deciding when to stop — it exhausts context before the task completes.</div>
         </div>
         <div class="tab-panel-content" id="t5">
           <h3>Runbook Completeness</h3>
-          <p class="coming-soon">Content coming soon — this pillar is currently being evaluated.</p>
-          <div class="without"><strong>Without this:</strong> agents improvise task paths and produce non-deterministic results.</div>
+          <p>Does a machine-readable runbook exist for this use-case — with preconditions, step sequence, expected API responses, and a binary exit criterion? This is the core intervention: we measure baseline success, write the runbook, and re-measure. The delta is the value.</p>
+          <div class="without"><strong>Failure mode:</strong> without a runbook, agents improvise the task path on every run. No two executions are identical. Some succeed, most don't — and you can't tell which until a user reports the failure. NocoDB baseline: 7 of 15 use-cases failed. With runbooks: 0 of 15.</div>
         </div>
         <div class="tab-panel-content" id="t6">
           <h3>State Management</h3>
-          <p class="coming-soon">Content coming soon — this pillar is currently being evaluated.</p>
-          <div class="without"><strong>Without this:</strong> agents lose track of session state and create duplicates or skip critical steps.</div>
+          <p>Are preconditions documented and side effects predictable — so the agent knows what state it needs to start from and what state it needs to produce? We verify end state after every run via API or database query. The success criterion is always a measurable state change, never model opinion.</p>
+          <div class="without"><strong>Failure mode:</strong> agents create duplicates, miss required preconditions, or leave partial state that breaks subsequent runs. The API returns <code>200</code>, so there's no visible error — but the database has the wrong rows. This is the hardest class of failure to detect without execution-graded measurement.</div>
         </div>
         <div class="tab-panel-content" id="t7">
           <h3>Context Quality</h3>
-          <p class="coming-soon">Content coming soon — this pillar is currently being evaluated.</p>
-          <div class="without"><strong>Without this:</strong> agents waste context on irrelevant docs and miss the parts they need.</div>
+          <p>Is the right information reachable for agents in minimal fetches — without pulling irrelevant docs or navigating your documentation tree from scratch? Token cost per use-case is a direct proxy: bloated token counts mean agents are fetching too much to find what they need.</p>
+          <div class="without"><strong>Failure mode:</strong> agents waste their context budget on irrelevant pages and miss the specific parameters they need. Manticore percolate use-case: 91k tokens on raw docs → 12k with a targeted runbook. The difference is not a smarter model — it's a cleaner signal.</div>
         </div>
         <div class="tab-panel-content" id="t8">
           <h3>Observability</h3>
-          <p class="coming-soon">Content coming soon — this pillar is currently being evaluated.</p>
-          <div class="without"><strong>Without this:</strong> you only learn an agent is failing after a customer reports it.</div>
+          <p>Can you tell — right now — which of your use-cases are failing for agents, and which specific doc pages are causing the breaks? The Runbook Map is the observability layer: every use-case has a readiness level, a linked doc page, and a re-run cadence. When your API changes, we re-measure automatically.</p>
+          <div class="without"><strong>Failure mode:</strong> without continuous re-measurement, a model update or a doc change silently degrades a use-case that was previously green. You only find out when a user reports it — if they ever do. By then, the context is gone and the failure pattern has repeated across sessions.</div>
         </div>
       </div>
     </div>
@@ -1314,39 +1296,45 @@
     <div class="section-label">How It Works</div>
     <h2>From use-cases to a live readiness map — in days, not months.</h2>
 
-    <div class="flow">
-      <div class="flow-box">
-        <div class="flow-step">01</div>
-        Diagnose
-        <div class="flow-hint">You send use-cases — or we extract them from your docs + GitHub issues</div>
+    <div class="steps-list">
+      <div class="step-row">
+        <div class="step-num">01</div>
+        <div class="step-content">
+          <div class="step-title">Diagnose</div>
+          <div class="step-desc">You send your use-cases — or we extract them from your docs and GitHub issues. No setup required, just a URL.</div>
+        </div>
       </div>
-      <div class="flow-arrow">→</div>
-      <div class="flow-box">
-        <div class="flow-step">02</div>
-        Baseline
-        <div class="flow-hint">Each runs against Claude, GPT, Gemini × 3–5 times in a fresh sandbox, raw docs only</div>
+      <div class="step-row">
+        <div class="step-num">02</div>
+        <div class="step-content">
+          <div class="step-title">Baseline</div>
+          <div class="step-desc">Each use-case runs against Claude, GPT, and Gemini × 3–5 times in a fresh sandbox — raw docs only, no hints. This is your starting point: success rate, token cost, one-shot rate per model.</div>
+        </div>
       </div>
-      <div class="flow-arrow">→</div>
-      <div class="flow-box highlight">
-        <div class="flow-step">03</div>
-        Map the gaps
-        <div class="flow-hint">L1–L4 readiness per use-case · linked to the exact doc page where the agent breaks</div>
+      <div class="step-row">
+        <div class="step-num">03</div>
+        <div class="step-content">
+          <div class="step-title hl">Map the gaps</div>
+          <div class="step-desc">Every use-case gets an L1–L4 readiness level, linked to the specific doc page where the agent breaks. You see exactly what's failing, where, and on which models.</div>
+        </div>
       </div>
-      <div class="flow-arrow">→</div>
-      <div class="flow-box">
-        <div class="flow-step">04</div>
-        Remediate
-        <div class="flow-hint">Runbooks for red rows · published where agents pick them up automatically — no install</div>
+      <div class="step-row">
+        <div class="step-num">04</div>
+        <div class="step-content">
+          <div class="step-title">Remediate</div>
+          <div class="step-desc">We write runbooks for the red rows and publish them where agents pick them up automatically — no install, no SDK, no changes to your product.</div>
+        </div>
       </div>
-      <div class="flow-arrow">→</div>
-      <div class="flow-box">
-        <div class="flow-step">05</div>
-        Re-measure
-        <div class="flow-hint">Same use-cases re-run with runbooks · before → after delta per model</div>
+      <div class="step-row">
+        <div class="step-num">05</div>
+        <div class="step-content">
+          <div class="step-title">Re-measure</div>
+          <div class="step-desc">The same use-cases re-run with runbooks in context. You see the before → after delta per model: success rate, token cost, one-shot rate. The map turns green.</div>
+        </div>
       </div>
     </div>
 
-    <p class="flow-note">The agent is <strong>blind</strong> — it doesn't know it's being tested. Fresh sandbox every run. We grade by actual state change — API response, database rows, exit codes — not what the model says it did. Use-cases that already one-shot on raw docs? We say so and leave them alone.</p>
+    <div class="flow-note">The agent is <strong>blind</strong> — it doesn't know it's being tested. Fresh sandbox every run. We grade by actual state change — API response, database rows, exit codes — not what the model says it did. Use-cases that already one-shot on raw docs? We say so and leave them alone.</div>
 
     <div class="usecase-examples">
       <div class="usecase-examples-label">Example use-cases from real API-first products</div>
