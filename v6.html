@@ -645,8 +645,44 @@
   </div>
 </section>
 
+<!-- ════════════════ REAL NUMBERS ════════════════ -->
+<section class="section-white">
+  <div class="container">
+    <span class="section-eyebrow">Real Numbers</span>
+    <h2 style="font-size:clamp(24px,3vw,38px);font-weight:900;letter-spacing:-1.5px;line-height:1.1;margin-bottom:8px">Measured before and after. On real products.</h2>
+    <p style="color:var(--ink-muted);font-size:17px;max-width:740px;line-height:1.6">NocoDB: 15 use-cases, 3 models, 5 runs each. 7 of 15 failed on raw docs — token costs from 57k to 376k. With runbooks in context: 0 of 15 failed, all within 21k–29k tokens. Manticore percolate: 91k → 12k tokens.</p>
+
+    <div class="metrics-grid">
+      <div class="metric-card">
+        <div class="metric-value">7→0</div>
+        <div class="metric-label">Failures fixed</div>
+        <p class="metric-desc">NocoDB: 7 of 15 use-cases failed on raw docs. With runbooks: 0 of 15 failed.</p>
+      </div>
+      <div class="metric-card">
+        <div class="metric-value">18×</div>
+        <div class="metric-label">Token reduction</div>
+        <p class="metric-desc">Worst case: 376k tokens on a single use-case → 21k with a runbook. Average: 8–18× reduction.</p>
+      </div>
+      <div class="metric-card">
+        <div class="metric-value">14d</div>
+        <div class="metric-label">First runbooks</div>
+        <p class="metric-desc">First runbooks covering your core use-cases delivered in 14 days. No engineering from your team.</p>
+      </div>
+    </div>
+
+    <div class="chart-wrap">
+      <canvas id="evalChart" width="800" height="320"></canvas>
+      <div class="chart-legend">
+        <span><span class="ldot" style="background:#EF4444"></span> Failed on raw docs</span>
+        <span><span class="ldot" style="background:#C5C2BC"></span> Passed on raw docs</span>
+        <span><span class="ldot" style="background:#E8562A"></span> With runbook (all pass)</span>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- ════════════════ SOLUTION ════════════════ -->
-<section class="solution-sect section-white">
+<section class="solution-sect section-bg">
   <div class="container">
     <div class="prob-stmt-inner">
       <span class="section-eyebrow">The solution</span>
@@ -668,7 +704,7 @@
 </section>
 
 <!-- ════════════════ WHAT IS A RUNBOOK ════════════════ -->
-<section class="section-bg">
+<section class="section-white">
   <div class="container">
     <div class="runbook-grid">
       <div>
@@ -865,7 +901,7 @@
 </section>
 
 <!-- ════════════════ 90% STAT ════════════════ -->
-<section class="section-bg" style="padding:72px 0">
+<section class="section-white" style="padding:72px 0">
   <div class="container">
     <div class="prob-stmt-inner" style="text-align:center">
       <div style="font-family:var(--mono);font-size:80px;font-weight:900;color:var(--orange);letter-spacing:-4px;line-height:1;margin-bottom:18px">90%</div>
@@ -1101,44 +1137,8 @@
   </div>
 </section>
 
-<!-- ════════════════ REAL NUMBERS ════════════════ -->
-<section class="section-white">
-  <div class="container">
-    <span class="section-eyebrow">Real Numbers</span>
-    <h2 style="font-size:clamp(24px,3vw,38px);font-weight:900;letter-spacing:-1.5px;line-height:1.1;margin-bottom:8px">Measured before and after. On real products.</h2>
-    <p style="color:var(--ink-muted);font-size:17px;max-width:740px;line-height:1.6">NocoDB: 15 use-cases, 3 models, 5 runs each. 7 of 15 failed on raw docs — token costs from 57k to 376k. With runbooks in context: 0 of 15 failed, all within 21k–29k tokens. Manticore percolate: 91k → 12k tokens.</p>
-
-    <div class="metrics-grid">
-      <div class="metric-card">
-        <div class="metric-value">7→0</div>
-        <div class="metric-label">Failures fixed</div>
-        <p class="metric-desc">NocoDB: 7 of 15 use-cases failed on raw docs. With runbooks: 0 of 15 failed.</p>
-      </div>
-      <div class="metric-card">
-        <div class="metric-value">18×</div>
-        <div class="metric-label">Token reduction</div>
-        <p class="metric-desc">Worst case: 376k tokens on a single use-case → 21k with a runbook. Average: 8–18× reduction.</p>
-      </div>
-      <div class="metric-card">
-        <div class="metric-value">14d</div>
-        <div class="metric-label">First runbooks</div>
-        <p class="metric-desc">First runbooks covering your core use-cases delivered in 14 days. No engineering from your team.</p>
-      </div>
-    </div>
-
-    <div class="chart-wrap">
-      <canvas id="evalChart" width="800" height="320"></canvas>
-      <div class="chart-legend">
-        <span><span class="ldot" style="background:#EF4444"></span> Failed on raw docs</span>
-        <span><span class="ldot" style="background:#C5C2BC"></span> Passed on raw docs</span>
-        <span><span class="ldot" style="background:#E8562A"></span> With runbook (all pass)</span>
-      </div>
-    </div>
-  </div>
-</section>
-
 <!-- ════════════════ FAQ ════════════════ -->
-<section class="section-bg">
+<section class="section-white">
   <div class="container">
     <span class="section-eyebrow">FAQ</span>
     <h2 style="font-size:clamp(24px,3vw,38px);font-weight:900;letter-spacing:-1.5px;line-height:1.1;margin-bottom:0">Questions we get on every call.</h2>
