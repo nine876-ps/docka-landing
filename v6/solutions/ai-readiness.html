@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Readiness Audit — Docka</title>
+<link rel="canonical" href="https://docka.io/solutions/ai-readiness">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #F2F1ED; --bg-white: #FFFFFF; --ink: #0A0A0A;
+    --ink-muted: rgba(10,10,10,0.5); --orange: #E8562A;
+    --border: #E5E3DD; --radius: 10px; --mono: 'JetBrains Mono', monospace;
+  }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--ink); font-size: 16px; line-height: 1.6; -webkit-font-smoothing: antialiased; }
+  .container { max-width: 1120px; margin: 0 auto; padding: 0 24px; }
+
+  /* NAV */
+  nav { position: sticky; top: 0; z-index: 100; background: var(--bg); border-bottom: 1px solid var(--border); height: 60px; display: flex; align-items: center; }
+  nav .container { display: flex; align-items: center; justify-content: space-between; width: 100%; }
+  .nav-logo { display: flex; align-items: center; gap: 8px; text-decoration: none; color: var(--ink); font-weight: 700; font-size: 17px; letter-spacing: -0.3px; }
+  .nav-logo-mark { width: 28px; height: 28px; background: var(--orange); border-radius: 4px; display: flex; align-items: center; justify-content: center; }
+  .nav-logo-mark svg { width: 16px; height: 16px; fill: #fff; }
+  .nav-links { display: flex; gap: 28px; list-style: none; }
+  .nav-links a { text-decoration: none; color: var(--ink-muted); font-size: 14px; font-weight: 500; transition: color 0.15s; }
+  .nav-links a:hover { color: var(--ink); }
+  .nav-dropdown { position: relative; display: flex; align-items: center; }
+  .nav-dropdown-trigger { text-decoration: none; color: var(--ink-muted); font-size: 14px; font-weight: 500; cursor: pointer; transition: color 0.15s; display: flex; align-items: center; gap: 4px; user-select: none; }
+  .nav-dropdown-trigger:hover { color: var(--ink); }
+  .nav-dropdown-trigger svg { width: 10px; height: 10px; stroke: currentColor; fill: none; stroke-width: 2; transition: transform 0.2s; }
+  .nav-dropdown.open .nav-dropdown-trigger svg { transform: rotate(180deg); }
+  .dropdown-menu { position: absolute; top: calc(100% + 8px); left: 0; background: #fff; border: 1px solid var(--border); border-radius: 14px; padding: 8px; min-width: 270px; box-shadow: 0 8px 40px rgba(0,0,0,0.10); opacity: 0; pointer-events: none; transform: translateY(-6px); transition: opacity 0.18s ease, transform 0.18s ease; z-index: 200; }
+  .nav-dropdown.open .dropdown-menu { opacity: 1; pointer-events: auto; transform: translateY(0); }
+  .dropdown-item { display: flex; align-items: center; gap: 14px; padding: 9px 10px; text-decoration: none; color: var(--ink); font-size: 15px; font-weight: 500; border-radius: 8px; transition: background 0.12s; }
+  .dropdown-item:hover { background: var(--bg); color: var(--ink); }
+  .dropdown-icon { width: 40px; height: 40px; background: #F2F1ED; border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .dropdown-icon svg { width: 20px; height: 20px; stroke: #0A0A0A; fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+  .nav-right { display: flex; align-items: center; gap: 16px; }
+  .nav-right .login { font-size: 14px; font-weight: 500; color: var(--ink-muted); text-decoration: none; }
+  .btn-pill { display: inline-flex; align-items: center; gap: 4px; padding: 8px 18px; border-radius: 999px; font-size: 14px; font-weight: 600; cursor: pointer; text-decoration: none; transition: opacity 0.15s; border: none; }
+  .btn-pill:hover { opacity: 0.85; }
+  .btn-pill-black { background: var(--ink); color: #fff; }
+
+  /* SECTIONS */
+  .section-gray { background: var(--bg) !important; }
+  .section-white { background: var(--bg-white) !important; }
+  .section-dark { background: #0A0A0A !important; color: #fff; }
+
+  /* HERO */
+  .hero { padding: 88px 0 80px; text-align: center; }
+  .eyebrow { display: inline-block; font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--orange); margin-bottom: 20px; }
+  .hero h1 { font-size: clamp(40px, 6vw, 72px); font-weight: 900; letter-spacing: -2.5px; line-height: 1.05; max-width: 780px; margin: 0 auto 20px; }
+  .hero-subtitle { font-size: 17px; color: var(--ink-muted); max-width: 520px; margin: 0 auto 40px; line-height: 1.65; }
+
+  /* FEATURES */
+  .features { padding: 88px 0; }
+  .fw-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+  .fw-card { }
+  .fw-visual { position: relative; height: 180px; border-radius: var(--radius); overflow: hidden; background: #C8D8EC; margin-bottom: 14px; }
+  .fw-visual::before { content: ''; position: absolute; inset: 0; background-image: radial-gradient(circle, rgba(255,255,255,0.35) 1px, transparent 1px); background-size: 18px 18px; }
+  .fw-label-box { position: absolute; top: 14px; left: 14px; z-index: 1; background: #fff; padding: 5px 10px; border-radius: 3px; font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--ink-muted); }
+  .fw-title-box { position: absolute; bottom: 16px; left: 14px; z-index: 1; background: #fff; padding: 10px 14px; border-radius: 3px; font-size: clamp(16px, 2vw, 22px); font-weight: 900; letter-spacing: -0.5px; line-height: 1.2; max-width: 78%; }
+  .fw-accent-tr { position: absolute; top: 0; right: 0; width: 22px; height: 22px; background: #9CAFD4; }
+  .fw-accents-bl { position: absolute; bottom: 0; left: 0; display: flex; }
+  .fw-a1 { width: 20px; height: 20px; background: #C5D849; }
+  .fw-a2 { width: 20px; height: 20px; background: #F4A0B5; }
+  .fw-card-desc { font-size: 14px; color: var(--ink-muted); line-height: 1.65; }
+
+  /* CTA */
+  .cta-section { padding: 96px 0; text-align: center; }
+  .cta-section h2 { font-size: clamp(28px, 4vw, 52px); font-weight: 900; letter-spacing: -2px; color: #fff; margin-bottom: 16px; line-height: 1.08; }
+  .cta-section p { font-size: 17px; color: rgba(255,255,255,0.6); margin-bottom: 36px; }
+  .cta-form { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+  .cta-form input[type="email"] { padding: 12px 18px; border-radius: 999px; border: 1px solid rgba(255,255,255,0.15); background: rgba(255,255,255,0.08); color: #fff; font-size: 15px; font-family: 'Inter', sans-serif; outline: none; min-width: 260px; }
+  .cta-form input[type="email"]::placeholder { color: rgba(255,255,255,0.4); }
+  .cta-form button { padding: 12px 24px; border-radius: 999px; border: none; background: var(--orange); color: #fff; font-size: 15px; font-weight: 700; cursor: pointer; font-family: 'Inter', sans-serif; transition: opacity 0.15s; }
+  .cta-form button:hover { opacity: 0.88; }
+
+  @media (max-width: 640px) { .fw-grid { grid-template-columns: 1fr; } .nav-links { display: none; } }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="container">
+    <a href="../index.html" class="nav-logo">
+      <div class="nav-logo-mark">
+        <svg viewBox="0 0 16 16"><rect x="2" y="2" width="5" height="5" rx="1"/><rect x="9" y="2" width="5" height="5" rx="1"/><rect x="2" y="9" width="5" height="5" rx="1"/><rect x="9" y="9" width="5" height="5" rx="1"/></svg>
+      </div>
+      Docka
+    </a>
+    <ul class="nav-links">
+      <li class="nav-dropdown">
+        <a href="#" class="nav-dropdown-trigger">Solutions
+          <svg viewBox="0 0 10 6"><polyline points="1,1 5,5 9,1"/></svg>
+        </a>
+        <div class="dropdown-menu">
+          <a href="runbooks.html" class="dropdown-item">
+            <div class="dropdown-icon"><svg viewBox="0 0 24 24"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="8" x2="16" y2="8"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="8" y1="16" x2="13" y2="16"/></svg></div>
+            <span>Runbooks</span>
+          </a>
+          <a href="runbook-map.html" class="dropdown-item">
+            <div class="dropdown-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="5" r="2"/><circle cx="5" cy="19" r="2"/><circle cx="19" cy="19" r="2"/><line x1="12" y1="7" x2="5.5" y2="17"/><line x1="12" y1="7" x2="18.5" y2="17"/><line x1="7" y1="19" x2="17" y2="19"/></svg></div>
+            <span>Runbook Map</span>
+          </a>
+          <a href="ai-readiness.html" class="dropdown-item">
+            <div class="dropdown-icon"><svg viewBox="0 0 24 24"><polyline points="22,12 18,12 15,21 9,3 6,12 2,12"/></svg></div>
+            <span>AI Readiness Audit</span>
+          </a>
+          <a href="maintenance.html" class="dropdown-item">
+            <div class="dropdown-icon"><svg viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg></div>
+            <span>Maintenance</span>
+          </a>
+        </div>
+      </li>
+      <li><a href="../index.html#how">How it works</a></li>
+      <li><a href="../index.html#pricing">Pricing</a></li>
+    </ul>
+    <div class="nav-right">
+      <a href="#" class="login">Log in</a>
+      <a href="#cta" class="btn-pill btn-pill-black">Get started →</a>
+    </div>
+  </div>
+</nav>
+
+<section class="hero section-gray">
+  <div class="container">
+    <div class="eyebrow">Free audit</div>
+    <h1>AI Readiness Audit</h1>
+    <p class="hero-subtitle">We test 20–40 real user workflows against all major AI agents and show you exactly where your product stands.</p>
+    <a href="#cta" class="btn-pill btn-pill-black">Get started →</a>
+  </div>
+</section>
+
+<section class="features section-white">
+  <div class="container">
+    <div class="fw-grid">
+
+      <div class="fw-card">
+        <div class="fw-visual">
+          <div class="fw-label-box">METHOD</div>
+          <div class="fw-title-box">Real agent testing</div>
+          <div class="fw-accent-tr"></div>
+          <div class="fw-accents-bl"><div class="fw-a1"></div><div class="fw-a2"></div></div>
+        </div>
+        <p class="fw-card-desc">We run your actual product through ChatGPT, Claude, and Gemini — not simulations.</p>
+      </div>
+
+      <div class="fw-card">
+        <div class="fw-visual">
+          <div class="fw-label-box">OUTPUT</div>
+          <div class="fw-title-box">Workflow scoring</div>
+          <div class="fw-accent-tr"></div>
+          <div class="fw-accents-bl"><div class="fw-a1"></div><div class="fw-a2"></div></div>
+        </div>
+        <p class="fw-card-desc">Every tested workflow gets an ARS score. You see which pass, which fail, and why.</p>
+      </div>
+
+      <div class="fw-card">
+        <div class="fw-visual">
+          <div class="fw-label-box">CONTEXT</div>
+          <div class="fw-title-box">Competitor benchmarks</div>
+          <div class="fw-accent-tr"></div>
+          <div class="fw-accents-bl"><div class="fw-a1"></div><div class="fw-a2"></div></div>
+        </div>
+        <p class="fw-card-desc">See how your agent-readiness compares to direct competitors in your category.</p>
+      </div>
+
+      <div class="fw-card">
+        <div class="fw-visual">
+          <div class="fw-label-box">RESULT</div>
+          <div class="fw-title-box">Actionable next steps</div>
+          <div class="fw-accent-tr"></div>
+          <div class="fw-accents-bl"><div class="fw-a1"></div><div class="fw-a2"></div></div>
+        </div>
+        <p class="fw-card-desc">A concrete prioritized list of what to fix — not a vague report.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="cta-section section-dark" id="cta">
+  <div class="container">
+    <h2>Book your free AI Readiness Audit</h2>
+    <p>20–40 workflows tested. Full competitor comparison. Free.</p>
+    <form class="cta-form" onsubmit="return false;">
+      <input type="email" placeholder="Work email">
+      <button type="submit">Get started →</button>
+    </form>
+  </div>
+</section>
+
+<script>
+(function(){
+  document.querySelectorAll('.nav-dropdown-trigger').forEach(trigger => {
+    trigger.addEventListener('click', e => {
+      e.preventDefault();
+      const dropdown = trigger.closest('.nav-dropdown');
+      const wasOpen = dropdown.classList.contains('open');
+      document.querySelectorAll('.nav-dropdown').forEach(d => d.classList.remove('open'));
+      if (!wasOpen) dropdown.classList.add('open');
+    });
+  });
+  document.addEventListener('click', e => {
+    if (!e.target.closest('.nav-dropdown')) {
+      document.querySelectorAll('.nav-dropdown').forEach(d => d.classList.remove('open'));
+    }
+  });
+})();
+</script>
+</body>
+</html>
