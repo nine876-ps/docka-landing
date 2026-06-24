@@ -280,6 +280,15 @@
     border-radius: 4px;
     color: var(--ink);
   }
+  /* ── SOLUTION ── */
+  .solution-sect { padding: 80px 0 96px; }
+  .solution-h2 { font-size: clamp(26px, 3vw, 40px); font-weight: 900; letter-spacing: -1.5px; line-height: 1.08; margin-bottom: 40px; }
+  .solution-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; max-width: 880px; }
+  .sol-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 36px 32px; }
+  .sol-card-num { font-family: var(--mono); font-size: 11px; font-weight: 700; color: var(--orange); letter-spacing: 1px; margin-bottom: 14px; }
+  .sol-card h3 { font-size: 19px; font-weight: 800; letter-spacing: -0.4px; margin-bottom: 10px; }
+  .sol-card p { font-size: 15px; color: var(--ink-muted); line-height: 1.65; }
+  @media(max-width:640px) { .solution-grid { grid-template-columns: 1fr; } }
 
   /* ── PROBLEM ── */
   .problem-grid {
@@ -930,14 +939,33 @@
 
 <div class="divider"></div>
 
-<!-- ═══════════════════════════ INVISIBLE BOTTLENECK ═══════════════════════════ -->
+<!-- ═══════════════════════════ BOTTLENECK ═══════════════════════════ -->
 <section class="bottleneck-section">
   <div class="container">
-    <div class="section-label">THE INVISIBLE BOTTLENECK</div>
-    <h2 class="bottleneck-heading">The agent is not broken.<br>Your product environment is.</h2>
+    <div class="section-label">THE PROBLEM</div>
+    <h2 class="bottleneck-heading">Agent tasks fail — or burn 100× the tokens they should.</h2>
     <div class="bottleneck-body">
-      <p>Teams building AI-native products hit a wall: their agent works in demos, then silently loops and fails in production. They switch models. Same result.</p>
-      <p>The root cause is exposure, not the model. Workflows documented for humans. Error codes the agent can't act on. APIs that return <code>200 OK</code> on failure. No machine-readable definition of "task succeeded." Until there is, every agent session starts from scratch — and stalls at the same edge cases.</p>
+      <p>When a user tries to complete a task through an agent, two things go wrong: the task doesn't finish at all, or it burns hundreds of thousands of tokens doing what should take hundreds. As more of your users reach for agents, this scales with them — one broken flow × your entire user base × every session.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════ SOLUTION ═══════════════════════════ -->
+<section class="bottleneck-section solution-sect">
+  <div class="container">
+    <div class="section-label">THE SOLUTION</div>
+    <h2 class="bottleneck-heading solution-h2">Two things fix it.</h2>
+    <div class="solution-grid">
+      <div class="sol-card">
+        <div class="sol-card-num">01 — AGENT READINESS MAP</div>
+        <h3>Know exactly where agents fail in your product</h3>
+        <p>A scored view of your key use cases: which ones complete reliably, which ones loop, which ones silently fail. You see the gaps — and their severity — before your users do.</p>
+      </div>
+      <div class="sol-card">
+        <div class="sol-card-num">02 — RUNBOOKS</div>
+        <h3>Make every use case solvable, cheap, and close to one-shot</h3>
+        <p>Machine-readable execution guides for every failing flow. Agents complete tasks in one step instead of twenty. Token cost drops 5–18×. Zero engineering from your team.</p>
+      </div>
     </div>
   </div>
 </section>
